@@ -188,6 +188,23 @@ namespace Experilous
 			}
 		}
 
+		public static void DeleteAsset(Object asset)
+		{
+			if (AssetDatabase.Contains(asset))
+			{
+				var assetPath = AssetDatabase.GetAssetPath(asset);
+				var assets = AssetDatabase.LoadAllAssetsAtPath(assetPath);
+				if (assets.Length == 1)
+				{
+					AssetDatabase.DeleteAsset(assetPath);
+				}
+				else if (assets.Length > 1)
+				{
+					Object.DestroyImmediate(asset, true);
+				}
+			}
+		}
+
 		public static void SelectAsset(Object asset)
 		{
 			Selection.activeObject = asset;
