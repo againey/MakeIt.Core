@@ -228,131 +228,51 @@ namespace Experilous
 			}
 		}
 
-		public static void CreateCompositeAsset(IEnumerable<Object> assets, string path)
+		public static void CreatePathFolders(string path)
 		{
-			if (assets == null) throw new System.ArgumentNullException("assets");
-
-			var assetEnumerator = assets.GetEnumerator();
-			if (!assetEnumerator.MoveNext()) throw new System.ArgumentException("The assets collection cannot be empty.", "assets");
-
-			var root = assetEnumerator.Current;
-			var rootName = root.name;
-			AssetDatabase.CreateAsset(assetEnumerator.Current, path);
-
-			while (assetEnumerator.MoveNext())
+			var folderNames = GetCanonicalPath(Path.GetDirectoryName(path)).Split('/');
+			var currentPath = canonicalProjectPath;
+			foreach (var folderName in folderNames)
 			{
-				AssetDatabase.AddObjectToAsset(assetEnumerator.Current, root);
-			}
-
-			root.name = rootName;
-			EditorUtility.SetDirty(root);
-			AssetDatabase.SaveAssets();
-		}
-
-		public static void CreateCompositeAsset(IEnumerable<TypedAsset> assets, string path)
-		{
-			if (assets == null) throw new System.ArgumentNullException("assets");
-
-			var assetEnumerator = assets.GetEnumerator();
-			if (!assetEnumerator.MoveNext()) throw new System.ArgumentException("The assets collection cannot be empty.", "assets");
-
-			var root = assetEnumerator.Current.asset;
-			var rootName = root.name;
-			AssetDatabase.CreateAsset(assetEnumerator.Current.asset, path);
-
-			while (assetEnumerator.MoveNext())
-			{
-				assetEnumerator.Current.asset.hideFlags = HideFlags.HideInHierarchy;
-				AssetDatabase.AddObjectToAsset(assetEnumerator.Current.asset, root);
-			}
-
-			root.name = rootName;
-			EditorUtility.SetDirty(root);
-			AssetDatabase.SaveAssets();
-		}
-
-		public static void UpdateCompositeAsset(ICollection<TypedAsset> assets, string path)
-		{
-			if (assets == null) throw new System.ArgumentNullException("assets");
-
-			var existingAssets = AssetDatabase.LoadAllAssetsAtPath(path);
-			if (existingAssets == null || existingAssets.Length == 0) throw new System.InvalidOperationException(string.Format("No existing assets found at \"{0}\".", path));
-
-			UpdateCompositeAsset(assets, path, existingAssets);
-		}
-
-		private static void UpdateCompositeAsset(ICollection<TypedAsset> assets, string path, Object[] existingAssets)
-		{
-			if (assets == null) throw new System.ArgumentNullException("assets");
-
-			Object root = null;
-			string rootName = null;
-
-			List<Object> persistedAssets = new List<Object>();
-
-			foreach (var existingAsset in existingAssets)
-			{
-				if (existingAsset != null)
+				var extendedPath = GetCanonicalPath(Path.Combine(currentPath, folderName));
+				if (!Directory.Exists(extendedPath))
 				{
-					var matchFound = false;
-					foreach (var typedAsset in assets)
-					{
-						if (typedAsset.asset.name == existingAsset.name && existingAsset.GetType().IsInstanceOfType(typedAsset.type))
-						{
-							matchFound = true;
-							if (root == null) root = existingAsset;
-							EditorUtility.CopySerialized(typedAsset.asset, existingAsset);
-							EditorUtility.SetDirty(existingAsset);
-							persistedAssets.Add(typedAsset.asset);
-							break;
-						}
-					}
+					AssetDatabase.CreateFolder(TrimProjectPath(currentPath), folderName);
+				}
+				currentPath = extendedPath;
+			}
+		}
 
-					if (!matchFound)
-					{
-						Object.DestroyImmediate(existingAsset, true);
-					}
+		public static bool RecursivelyDeleteEmptyFolders(string path, bool deleteRootFolderIfEmpty = true)
+		{
+			var isEmpty = true;
+
+			foreach (var folderPath in Directory.GetDirectories(Path.Combine(canonicalProjectPath, path)))
+			{
+				if (!RecursivelyDeleteEmptyFolders(TrimProjectPath(folderPath), true))
+				{
+					isEmpty = false;
 				}
 			}
 
-			foreach (var typedAsset in assets)
+			if (isEmpty && Directory.GetFiles(path).Length > 0)
 			{
-				if (!persistedAssets.Contains(typedAsset.asset))
+				isEmpty = false;
+			}
+
+			if (isEmpty && deleteRootFolderIfEmpty)
+			{
+				FileUtil.DeleteFileOrDirectory(path);
+				var folderMetadataPath = path + ".meta";
+				if (File.Exists(folderMetadataPath))
 				{
-					if (root == null)
-					{
-						root = typedAsset.asset;
-						rootName = root.name;
-						AssetDatabase.CreateAsset(root, path);
-					}
-					else
-					{
-						typedAsset.asset.hideFlags = HideFlags.HideInHierarchy;
-						AssetDatabase.AddObjectToAsset(typedAsset.asset, root);
-						EditorUtility.SetDirty(root);
-					}
+					FileUtil.DeleteFileOrDirectory(folderMetadataPath);
 				}
-			}
-
-			if (rootName != null)
-			{
-				root.name = rootName;
-				EditorUtility.SetDirty(root);
-			}
-
-			AssetDatabase.SaveAssets();
-		}
-
-		public static void UpdateOrCreateCompositeAsset(ICollection<TypedAsset> assets, string path)
-		{
-			var existingAssets = AssetDatabase.LoadAllAssetsAtPath(path);
-			if (existingAssets == null || existingAssets.Length == 0)
-			{
-				CreateCompositeAsset(assets, path);
+				return true;
 			}
 			else
 			{
-				UpdateCompositeAsset(assets, path, existingAssets);
+				return false;
 			}
 		}
 	}
