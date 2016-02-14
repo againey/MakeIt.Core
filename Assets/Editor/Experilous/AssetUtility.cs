@@ -228,6 +228,32 @@ namespace Experilous
 			}
 		}
 
+		public static string GenerateAvailableAssetPath(string path, string format = "{0}/{1} ({2}){3}", int startingIndex = 1)
+		{
+			var absolutePath = GetCanonicalPath(Path.Combine(canonicalProjectPath, path));
+
+			if (!File.Exists(absolutePath) && !Directory.Exists(absolutePath))
+			{
+				return path;
+			}
+
+			var folderPath = Path.GetDirectoryName(absolutePath);
+			var fileName = Path.GetFileNameWithoutExtension(absolutePath);
+			var extension = Path.GetExtension(absolutePath);
+
+			int index = startingIndex;
+			do
+			{
+				var formattedPath = string.Format(format, folderPath, fileName, index, extension);
+				if (!File.Exists(formattedPath) && !Directory.Exists(formattedPath))
+				{
+					return TrimProjectPath(		formattedPath);
+				}
+			} while (index++ < int.MaxValue);
+
+			throw new System.InvalidOperationException(string.Format("No path could be found with the requested format that is not already in use.  Original:  \"{0}\"", path));
+		}
+
 		public static void CreatePathFolders(string path)
 		{
 			var folderNames = GetCanonicalPath(Path.GetDirectoryName(path)).Split('/');
@@ -245,6 +271,11 @@ namespace Experilous
 
 		public static bool RecursivelyDeleteEmptyFolders(string path, bool deleteRootFolderIfEmpty = true)
 		{
+			if (!Directory.Exists(path))
+			{
+				return true;
+			}
+
 			var isEmpty = true;
 
 			foreach (var folderPath in Directory.GetDirectories(Path.Combine(canonicalProjectPath, path)))
