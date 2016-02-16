@@ -163,8 +163,29 @@ namespace Experilous
 			return GetCanonicalPath(Path.Combine(canonicalProjectPath, AssetDatabase.GetAssetPath(asset)));
 		}
 
+		public static string GetDataRelativeAssetFolder(Object asset)
+		{
+			return TrimDataPath(GetFullCanonicalAssetFolder(asset));
+		}
+
+		public static string GetProjectRelativeAssetFolder(Object asset)
+		{
+			return TrimProjectPath(GetFullCanonicalAssetFolder(asset));
+		}
+
+		public static string GetFullCanonicalAssetFolder(Object asset)
+		{
+			if (!AssetDatabase.Contains(asset))
+			{
+				throw new System.InvalidOperationException();
+			}
+
+			return GetCanonicalPath(Path.GetDirectoryName(Path.Combine(canonicalProjectPath, AssetDatabase.GetAssetPath(asset))));
+		}
+
 		public static string GetCanonicalPath(string path)
 		{
+			// Some Unity APIs require Unix-style path separators, so use them in the canonical representation of paths.
 			return path
 				.Replace('\\', '/')
 				.Trim('\\', '/');
@@ -193,14 +214,21 @@ namespace Experilous
 			if (AssetDatabase.Contains(asset))
 			{
 				var assetPath = AssetDatabase.GetAssetPath(asset);
-				var assets = AssetDatabase.LoadAllAssetsAtPath(assetPath);
-				if (assets.Length == 1)
+				if (asset is GameObject)
 				{
 					AssetDatabase.DeleteAsset(assetPath);
 				}
-				else if (assets.Length > 1)
+				else
 				{
-					Object.DestroyImmediate(asset, true);
+					var assets = AssetDatabase.LoadAllAssetsAtPath(assetPath);
+					if (assets.Length == 1)
+					{
+						AssetDatabase.DeleteAsset(assetPath);
+					}
+					else if (assets.Length > 1)
+					{
+						Object.DestroyImmediate(asset, true);
+					}
 				}
 			}
 		}
