@@ -13,15 +13,6 @@ namespace Experilous
 			return (p0 * s0 + p1 * s1) / d;
 		}
 
-		public static Vector3 SlerpSphericalVectors(Vector3 p0, Vector3 p1, float t, float sphereRadius)
-		{
-			var omega = Mathf.Acos(Vector3.Dot(p0, p1) / (sphereRadius * sphereRadius));
-			var d = Mathf.Sin(omega);
-			var s0 = Mathf.Sin((1f - t) * omega);
-			var s1 = Mathf.Sin(t * omega);
-			return (p0 * s0 + p1 * s1) * (sphereRadius / d);
-		}
-
 		public static float AngleBetweenUnitVectors(Vector3 lhs, Vector3 rhs)
 		{
 			return Mathf.Atan2(Vector3.Cross(lhs, rhs).magnitude, Vector3.Dot(lhs, rhs));
