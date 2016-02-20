@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using UnityEngine;
+using System.Text.RegularExpressions;
 
 namespace Experilous
 {
@@ -87,6 +88,45 @@ namespace Experilous
 		public static TAttribute GetAttribute<TAttribute>(System.Reflection.FieldInfo field) where TAttribute : System.Attribute
 		{
 			return GetAttribute<TAttribute>(field.GetCustomAttributes(true));
+		}
+
+		public static void DisableAndThrowOnMissingClassInstance<TField>(this MonoBehaviour component, TField field, string message) where TField : class
+		{
+#if UNITY_EDITOR
+			if (field == null && UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+#else
+			if (field == null)
+#endif
+			{
+				component.enabled = false;
+				throw new MissingReferenceException(message);
+			}
+		}
+
+		public static void DisableAndThrowOnMissingReference<TField>(this MonoBehaviour component, TField field, string message) where TField : Object
+		{
+#if UNITY_EDITOR
+			if (field == null && UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+#else
+			if (field == null)
+#endif
+			{
+				component.enabled = false;
+				throw new MissingReferenceException(message);
+			}
+		}
+
+		public static void DisableAndThrowOnMissingComponent<TField>(this MonoBehaviour component, TField field, string message) where TField : Component
+		{
+#if UNITY_EDITOR
+			if (field == null && UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
+#else
+			if (field == null)
+#endif
+			{
+				component.enabled = false;
+				throw new MissingComponentException(message);
+			}
 		}
 	}
 }
