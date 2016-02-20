@@ -281,9 +281,9 @@ namespace Experilous
 			throw new System.InvalidOperationException(string.Format("No path could be found with the requested format that is not already in use.  Original:  \"{0}\"", path));
 		}
 
-		public static void CreatePathFolders(string path)
+		public static void CreatePathFolders(string path, bool pathIncludesFileName = true)
 		{
-			var folderNames = GetCanonicalPath(Path.GetDirectoryName(path)).Split('/');
+			var folderNames = GetCanonicalPath(pathIncludesFileName ? Path.GetDirectoryName(path) : path).Split('/');
 			var currentPath = canonicalProjectPath;
 			foreach (var folderName in folderNames)
 			{
