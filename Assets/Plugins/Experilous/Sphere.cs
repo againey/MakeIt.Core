@@ -3,6 +3,9 @@ using System;
 
 namespace Experilous
 {
+	/// <summary>
+	/// A simple representation of a sphere with a given origin and radius.
+	/// </summary>
 	[Serializable]
 	public struct Sphere
 	{
