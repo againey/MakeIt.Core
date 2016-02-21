@@ -3,6 +3,15 @@ using System;
 
 namespace Experilous
 {
+	/// <summary>
+	/// A simple plane class that is serializable.
+	/// </summary>
+	/// <remarks>
+	/// <para><see cref="UnityEngine.Plane"/> is not serializable, which complicates its usage in classes
+	/// which contain planes as member fields which need to be serialized.  Instead of storing the individual
+	/// plane fields directly in the class and constructing a Plane instance from them when needed, this
+	/// serialized plane class can be used as the member field type.</para>
+	/// </remarks>
 	[Serializable]
 	public struct SerializablePlane
 	{
@@ -61,7 +70,7 @@ namespace Experilous
 
 		public bool Raycast(Ray ray, out float enter)
 		{
-			if (!MathUtility.GetIntersectionParameter(this, ray, out enter))
+			if (!GeometryUtility.GetIntersectionParameter(this, ray, out enter))
 			{
 				return false;
 			}

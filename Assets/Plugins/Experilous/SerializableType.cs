@@ -4,6 +4,9 @@ using System;
 
 namespace Experilous
 {
+	/// <summary>
+	/// A representation of <see cref="System.Type"/> that can be serialized by Unity.
+	/// </summary>
 	[Serializable]
 	public struct SerializableType : ISerializationCallbackReceiver, IEquatable<SerializableType>, IEquatable<Type>
 	{

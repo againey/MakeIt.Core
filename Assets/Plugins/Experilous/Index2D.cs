@@ -2,6 +2,9 @@
 
 namespace Experilous
 {
+	/// <summary>
+	/// An integer-based two-dimensional index.
+	/// </summary>
 	[Serializable]
 	public struct Index2D
 	{

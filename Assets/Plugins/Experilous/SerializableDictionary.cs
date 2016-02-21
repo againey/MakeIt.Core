@@ -4,6 +4,11 @@ using System;
 
 namespace Experilous
 {
+	/// <summary>
+	/// A dictionary class that can be serialized by Unity.
+	/// </summary>
+	/// <typeparam name="TKey">The key type by which elements are organized and retrieved.</typeparam>
+	/// <typeparam name="TValue">The type of the values that are associated with each key.</typeparam>
 	[Serializable]
 	public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
 	{

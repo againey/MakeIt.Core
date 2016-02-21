@@ -2,6 +2,11 @@
 
 namespace Experilous
 {
+	/// <summary>
+	/// A priority queue based on the heap data structure, providing constant-time access and logarithmic-time
+	/// removal of the highest priority item, and logarithmic insertion of items.
+	/// </summary>
+	/// <typeparam name="T">The type of the elements in the priority queue.</typeparam>
 	public class PriorityQueue<T> where T : IEquatable<T>
 	{
 		public delegate bool AreOrderedDelegate(T lhs, T rhs);
@@ -44,12 +49,12 @@ namespace Experilous
 			{
 				--_size;
 				_heap[0] = _heap[_size];
-				System.Array.Clear(_heap, _size, 1);
+				Array.Clear(_heap, _size, 1);
 				BubbleDown(0);
 			}
 			else if (_size == 1)
 			{
-				System.Array.Clear(_heap, 0, 1);
+				Array.Clear(_heap, 0, 1);
 				_size = 0;
 			}
 			else
@@ -137,7 +142,7 @@ namespace Experilous
 		private void ExtendHeap()
 		{
 			var extendedHeap = new T[_heap.Length * 2];
-			System.Array.Copy(_heap, extendedHeap, _size);
+			Array.Copy(_heap, extendedHeap, _size);
 			_heap = extendedHeap;
 		}
 	}
