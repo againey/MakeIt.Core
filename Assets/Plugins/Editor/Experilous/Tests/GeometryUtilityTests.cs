@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿#if UNITY_5_3
+using UnityEngine;
 using NUnit.Framework;
 
 namespace Experilous.Tests
@@ -858,3 +859,4 @@ namespace Experilous.Tests
 		#endregion
 	}
 }
+#endif

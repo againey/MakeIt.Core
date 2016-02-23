@@ -6,6 +6,21 @@ namespace Experilous
 	{
 		#region Vector Operations
 
+		public static Vector2 LerpUnclamped(Vector2 lhs, Vector2 rhs, float t)
+		{
+			return lhs * (1f - t) + rhs * t;
+		}
+
+		public static Vector3 LerpUnclamped(Vector3 lhs, Vector3 rhs, float t)
+		{
+			return lhs * (1f - t) + rhs * t;
+		}
+
+		public static Vector4 LerpUnclamped(Vector4 lhs, Vector4 rhs, float t)
+		{
+			return lhs * (1f - t) + rhs * t;
+		}
+
 		public static Vector3 SlerpUnitVectors(Vector3 p0, Vector3 p1, float t)
 		{
 			var omega = Mathf.Acos(Vector3.Dot(p0, p1));

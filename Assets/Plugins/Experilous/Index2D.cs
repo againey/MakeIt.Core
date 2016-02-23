@@ -6,7 +6,7 @@ namespace Experilous
 	/// An integer-based two-dimensional index.
 	/// </summary>
 	[Serializable]
-	public struct Index2D
+	public struct Index2D : IEquatable<Index2D>, IComparable<Index2D>
 	{
 		public int x;
 		public int y;
@@ -21,6 +21,35 @@ namespace Experilous
 		{
 			return new Index2D(x + dx, y + dy);
 		}
+
+		public int CompareTo(Index2D other)
+		{
+			if (y != other.y) return (y < other.y) ? -1 : +1;
+			if (x != other.x) return (x < other.x) ? -1 : +1;
+			return 0;
+		}
+
+		public bool Equals(Index2D other)
+		{
+			return this == other;
+		}
+
+		public override bool Equals(object obj)
+		{
+			return obj is Index2D && this == (Index2D)obj;
+		}
+
+		public override int GetHashCode()
+		{
+			return x.GetHashCode() ^ y.GetHashCode();
+		}
+
+		public static bool operator ==(Index2D lhs, Index2D rhs) { return lhs.x == rhs.x && lhs.y == rhs.y; }
+		public static bool operator !=(Index2D lhs, Index2D rhs) { return lhs.x != rhs.x || lhs.y != rhs.y; }
+		public static bool operator < (Index2D lhs, Index2D rhs) { return lhs.y < rhs.y || lhs.y == rhs.y && lhs.x <  rhs.x; }
+		public static bool operator <=(Index2D lhs, Index2D rhs) { return lhs.y < rhs.y || lhs.y == rhs.y && lhs.x <= rhs.x; }
+		public static bool operator > (Index2D lhs, Index2D rhs) { return lhs.y > rhs.y || lhs.y == rhs.y && lhs.x >  rhs.x; }
+		public static bool operator >=(Index2D lhs, Index2D rhs) { return lhs.y > rhs.y || lhs.y == rhs.y && lhs.x >= rhs.x; }
 
 		public override string ToString()
 		{
