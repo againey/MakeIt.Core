@@ -7,6 +7,7 @@
 \******************************************************************************/
 
 using UnityEngine;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Experilous
@@ -88,9 +89,27 @@ namespace Experilous
 			return null;
 		}
 
+		private static TAttribute[] GetAttributes<TAttribute>(object[] attributes) where TAttribute : System.Attribute
+		{
+			var matchingAttributes = new List<TAttribute>();
+			foreach (var attribute in attributes)
+			{
+				if (attribute is TAttribute)
+				{
+					matchingAttributes.Add((TAttribute)attribute);
+				}
+			}
+			return matchingAttributes.ToArray();
+		}
+
 		public static TAttribute GetAttribute<TAttribute>(System.Type type, bool inherit = true) where TAttribute : System.Attribute
 		{
 			return GetAttribute<TAttribute>(type.GetCustomAttributes(inherit));
+		}
+
+		public static TAttribute[] GetAttributes<TAttribute>(System.Type type, bool inherit = true) where TAttribute : System.Attribute
+		{
+			return GetAttributes<TAttribute>(type.GetCustomAttributes(inherit));
 		}
 
 		public static TAttribute GetAttribute<TAttribute>(System.Reflection.FieldInfo field) where TAttribute : System.Attribute
@@ -98,7 +117,12 @@ namespace Experilous
 			return GetAttribute<TAttribute>(field.GetCustomAttributes(true));
 		}
 
-		public static void DisableAndThrowOnMissingClassInstance<TField>(this MonoBehaviour component, TField field, string message) where TField : class
+		public static TAttribute[] GetAttributes<TAttribute>(System.Reflection.FieldInfo field) where TAttribute : System.Attribute
+		{
+			return GetAttributes<TAttribute>(field.GetCustomAttributes(true));
+		}
+
+		public static void DisableAndThrowOnUnassignedClassInstance<TField>(this MonoBehaviour component, TField field, string message) where TField : class
 		{
 #if UNITY_EDITOR
 			if (field == null && UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
@@ -107,11 +131,11 @@ namespace Experilous
 #endif
 			{
 				component.enabled = false;
-				throw new MissingReferenceException(message);
+				throw new UnassignedReferenceException(message);
 			}
 		}
 
-		public static void DisableAndThrowOnMissingReference<TField>(this MonoBehaviour component, TField field, string message) where TField : Object
+		public static void DisableAndThrowOnUnassignedReference<TField>(this MonoBehaviour component, TField field, string message) where TField : Object
 		{
 #if UNITY_EDITOR
 			if (field == null && UnityEditor.EditorApplication.isPlayingOrWillChangePlaymode)
@@ -120,7 +144,7 @@ namespace Experilous
 #endif
 			{
 				component.enabled = false;
-				throw new MissingReferenceException(message);
+				throw new UnassignedReferenceException(message);
 			}
 		}
 

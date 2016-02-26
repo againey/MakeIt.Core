@@ -380,6 +380,16 @@ namespace Experilous
 			plane.distance = -plane.distance;
 		}
 
+		public static Plane Shift(this Plane plane, float distance)
+		{
+			return new Plane(plane.normal, plane.distance - distance);
+		}
+
+		public static SerializablePlane Shift(this SerializablePlane plane, float distance)
+		{
+			return new SerializablePlane(plane.normal, plane.distance - distance);
+		}
+
 		#endregion
 
 		#region Ray Operations
