@@ -511,12 +511,38 @@ namespace Experilous
 			}
 		}
 
+		public static Vector2 AxisAlignedMin(Vector2 lhs, Vector2 rhs)
+		{
+			return new Vector2(
+				Mathf.Min(lhs.x, rhs.x),
+				Mathf.Min(lhs.y, rhs.y));
+		}
+
 		public static Vector3 AxisAlignedMin(Vector3 lhs, Vector3 rhs)
 		{
 			return new Vector3(
 				Mathf.Min(lhs.x, rhs.x),
 				Mathf.Min(lhs.y, rhs.y),
 				Mathf.Min(lhs.z, rhs.z));
+		}
+
+		public static Vector4 AxisAlignedMin(Vector4 lhs, Vector4 rhs)
+		{
+			return new Vector4(
+				Mathf.Min(lhs.x, rhs.x),
+				Mathf.Min(lhs.y, rhs.y),
+				Mathf.Min(lhs.z, rhs.z),
+				Mathf.Min(lhs.w, rhs.w));
+		}
+
+		public static Vector2 AxisAlignedMin(params Vector2[] vectors)
+		{
+			var min = vectors[0];
+			for (int i = 1; i < vectors.Length; ++i)
+			{
+				min = AxisAlignedMin(min, vectors[i]);
+			}
+			return min;
 		}
 
 		public static Vector3 AxisAlignedMin(params Vector3[] vectors)
@@ -529,6 +555,23 @@ namespace Experilous
 			return min;
 		}
 
+		public static Vector4 AxisAlignedMin(params Vector4[] vectors)
+		{
+			var min = vectors[0];
+			for (int i = 1; i < vectors.Length; ++i)
+			{
+				min = AxisAlignedMin(min, vectors[i]);
+			}
+			return min;
+		}
+
+		public static Vector2 AxisAlignedMax(Vector2 lhs, Vector2 rhs)
+		{
+			return new Vector2(
+				Mathf.Max(lhs.x, rhs.x),
+				Mathf.Max(lhs.y, rhs.y));
+		}
+
 		public static Vector3 AxisAlignedMax(Vector3 lhs, Vector3 rhs)
 		{
 			return new Vector3(
@@ -537,7 +580,36 @@ namespace Experilous
 				Mathf.Max(lhs.z, rhs.z));
 		}
 
+		public static Vector4 AxisAlignedMax(Vector4 lhs, Vector4 rhs)
+		{
+			return new Vector4(
+				Mathf.Max(lhs.x, rhs.x),
+				Mathf.Max(lhs.y, rhs.y),
+				Mathf.Max(lhs.z, rhs.z),
+				Mathf.Max(lhs.w, rhs.w));
+		}
+
+		public static Vector2 AxisAlignedMax(params Vector2[] vectors)
+		{
+			var max = vectors[0];
+			for (int i = 1; i < vectors.Length; ++i)
+			{
+				max = AxisAlignedMax(max, vectors[i]);
+			}
+			return max;
+		}
+
 		public static Vector3 AxisAlignedMax(params Vector3[] vectors)
+		{
+			var max = vectors[0];
+			for (int i = 1; i < vectors.Length; ++i)
+			{
+				max = AxisAlignedMax(max, vectors[i]);
+			}
+			return max;
+		}
+
+		public static Vector4 AxisAlignedMax(params Vector4[] vectors)
 		{
 			var max = vectors[0];
 			for (int i = 1; i < vectors.Length; ++i)
