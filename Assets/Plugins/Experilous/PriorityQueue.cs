@@ -104,6 +104,17 @@ namespace Experilous
 			throw new InvalidOperationException("The item provided cannot be reprioritized, as it was not found within the priority queue.");
 		}
 
+		public void Clear()
+		{
+			_size = 0;
+		}
+
+		public void Reset(AreOrderedDelegate areOrdered)
+		{
+			Clear();
+			_areOrdered = areOrdered;
+		}
+
 		private void BubbleUp(int index)
 		{
 			while (index > 0)
