@@ -12,22 +12,46 @@ namespace Experilous
 	{
 		#region Arithmetic
 
+		/// <summary>
+		/// An integer division remainder function which also handles negative numbers in a way that is ideal for working with wrapping ranges.
+		/// </summary>
+		/// <param name="index">The index within the range from 0 up to but not including <paramref name="range"/>, or within any positive or negative repetition of that range.</param>
+		/// <param name="range">The size of the range.</param>
+		/// <returns>The index that is strictly greater than or equal to 0 and less than <paramref name="range"/>, as if the input <paramref name="index"/> had been shifted by <paramref name="range"/> the necessary number of times to fall within that range.</returns>
 		public static int Modulo(int index, int range)
 		{
 			var remainder = index % range;
 			return (remainder >= 0) ? remainder : remainder + range;
 		}
 
+		/// <summary>
+		/// Quick test to determine if the input integer is even.
+		/// </summary>
+		/// <param name="n">The integer to test.</param>
+		/// <returns>True if <paramref name="n"/> is even, false if it is odd.</returns>
+		/// <remarks>Assumes that signed integers are represented using two's complement.</remarks>
 		public static bool IsEven(int n)
 		{
 			return (n & 1) == 0;
 		}
 
+		/// <summary>
+		/// Quick test to determine if the input integer is odd.
+		/// </summary>
+		/// <param name="n">The integer to test.</param>
+		/// <returns>True if <paramref name="n"/> is odd, false if it is even.</returns>
+		/// <remarks>Assumes that signed integers are represented using two's complement.</remarks>
 		public static bool IsOdd(int n)
 		{
 			return (n & 1) == 1;
 		}
 
+		/// <summary>
+		/// Quick test to determine if the two input integers both have the same sign.  Zero is considered positive.
+		/// </summary>
+		/// <param name="n">The integer to test.</param>
+		/// <returns>True if <paramref name="n"/> is even, false if it is odd.</returns>
+		/// <remarks>Assumes that signed integers are represented using two's complement.</remarks>
 		public static bool HaveSameSign(int a, int b)
 		{
 			return (a ^ b) >= 0;

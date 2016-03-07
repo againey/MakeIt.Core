@@ -31,6 +31,9 @@ namespace Experilous
 			_areOrdered = areOrdered;
 		}
 
+		/// <summary>
+		/// The element in the queue with the highest priority.
+		/// </summary>
 		public T front
 		{
 			get
@@ -40,8 +43,15 @@ namespace Experilous
 			}
 		}
 
+		/// <summary>
+		/// The number of elements in the queue.
+		/// </summary>
 		public int Count { get { return _size; } }
 
+		/// <summary>
+		/// Adds an element to the queue.  It's position in the queue will be determined by the <see cref="AreOrderedDelegate"/> functor provided during construction of the queue.
+		/// </summary>
+		/// <param name="item">The item to be added to the queue.</param>
 		public void Push(T item)
 		{
 			var index = _size;
@@ -51,6 +61,9 @@ namespace Experilous
 			BubbleUp(index);
 		}
 
+		/// <summary>
+		/// Removes the highest priority element from the queue.
+		/// </summary>
 		public void Pop()
 		{
 			if (_size > 1)
@@ -71,6 +84,10 @@ namespace Experilous
 			}
 		}
 
+		/// <summary>
+		/// Recomputes the priority of the indicated item using the <see cref="AreOrderedDelegate"/> functor provided during construction of the queue, and repositions the item accordingly within the internal data structure.
+		/// </summary>
+		/// <param name="item">The item to be reprioritized.</param>
 		public void Reprioritize(T item)
 		{
 			for (int index = 0; index < _size; ++index)
@@ -104,11 +121,23 @@ namespace Experilous
 			throw new InvalidOperationException("The item provided cannot be reprioritized, as it was not found within the priority queue.");
 		}
 
+		/// <summary>
+		/// Removes all elements from the queue.
+		/// </summary>
+		/// <remarks>This does not deallocate any memory used by the internal data structure.
+		/// It therefore enables reuse of the priority queue instance to cut down on the cost
+		/// of allocation and garbage collection.</remarks>
 		public void Clear()
 		{
 			_size = 0;
 		}
 
+		/// <summary>
+		/// Removes all elements from the queue, and sets a new <see cref="AreOrderedDelegate"/> functor which will be applied to any elements pushed later on.
+		/// </summary>
+		/// <remarks>This does not deallocate any memory used by the internal data structure.
+		/// It therefore enables reuse of the priority queue instance to cut down on the cost
+		/// of allocation and garbage collection.</remarks>
 		public void Reset(AreOrderedDelegate areOrdered)
 		{
 			Clear();

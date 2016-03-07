@@ -11,19 +11,58 @@ using System;
 
 namespace Experilous
 {
+	/// <summary>
+	/// A collection of strategies for how to adjust a size or a size and position pair in order
+	/// to obtain a two-dimensional region with a target aspect ratio.
+	/// </summary>
 	public enum AspectRatioPreservation
 	{
+		/// <summary>
+		/// Don't modify anything in an attempt to acquire the desired aspect ratio.
+		/// </summary>
 		None,
+
+		/// <summary>
+		/// Expand whichever dimension is too small in order to acquire the desired aspect ratio.
+		/// </summary>
 		Expand,
+
+		/// <summary>
+		/// Shrink whichever dimension is too large in order to acquire the desired aspect ratio.
+		/// </summary>
 		Shrink,
+
+		/// <summary>
+		/// Expand or shrink the horizontal dimension in order to acquire the desired aspect ratio.
+		/// </summary>
 		AdjustWidth,
+
+		/// <summary>
+		/// Expand or shrink the vertical dimension in order to acquire the desired aspect ratio.
+		/// </summary>
 		AdjustHeight,
+
+		/// <summary>
+		/// Expand or shrink the both the horizontal dimension and vertical dimension in equal proportion in order to acquire the desired aspect ratio.
+		/// </summary>
 		AdjustAverage,
+
+		/// <summary>
+		/// Expand or shrink the both the horizontal dimension and vertical dimension according to a specified proportion in order to acquire the desired aspect ratio.
+		/// </summary>
 		AdjustProportionally,
 	}
 
+	/// <summary>
+	/// Utility class for working with aspect ratios and two-dimensional sizes and positions relative to desired aspect ratios.
+	/// </summary>
 	public static class AspectRatioUtility
 	{
+		/// <summary>
+		/// Returns the aspect ratio (width-to-height) of the given two-dimensional size.
+		/// </summary>
+		/// <param name="size">The size whose aspect ratio is to be computed.</param>
+		/// <returns>The width-over-height aspect ratio of the given size.</returns>
 		public static float GetAspectRatio(Vector2 size)
 		{
 			return size.x / size.y;
