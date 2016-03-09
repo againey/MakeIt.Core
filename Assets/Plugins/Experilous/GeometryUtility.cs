@@ -62,10 +62,124 @@ namespace Experilous
 			return AngleBetweenSphericalVectors(lhs, rhs, sphereRadius) * sphereRadius;
 		}
 
-		public static Vector3 Scaled(this Vector3 v, float newMagnitude)
+		public static Vector2 WithMagnitude(this Vector2 v, float newMagnitude)
 		{
 			var originalMagnitude = v.magnitude;
 			return v * (newMagnitude / originalMagnitude);
+		}
+
+		public static Vector3 WithMagnitude(this Vector3 v, float newMagnitude)
+		{
+			var originalMagnitude = v.magnitude;
+			return v * (newMagnitude / originalMagnitude);
+		}
+
+		public static Vector4 WithMagnitude(this Vector4 v, float newMagnitude)
+		{
+			var originalMagnitude = v.magnitude;
+			return v * (newMagnitude / originalMagnitude);
+		}
+
+		public static Vector3 MultiplyComponents(this Vector2 v, Vector2 s)
+		{
+			v.Scale(s);
+			return v;
+		}
+
+		public static Vector3 MultiplyComponents(this Vector3 v, Vector3 s)
+		{
+			v.Scale(s);
+			return v;
+		}
+
+		public static Vector3 MultiplyComponents(this Vector4 v, Vector4 s)
+		{
+			v.Scale(s);
+			return v;
+		}
+
+		public static Vector3 DivideComponents(this Vector2 v, Vector2 d)
+		{
+			v.x /= d.x;
+			v.y /= d.y;
+			return v;
+		}
+
+		public static Vector3 DivideComponents(this Vector3 v, Vector3 d)
+		{
+			v.x /= d.x;
+			v.y /= d.y;
+			v.z /= d.z;
+			return v;
+		}
+
+		public static Vector3 DivideComponents(this Vector4 v, Vector4 d)
+		{
+			v.x /= d.x;
+			v.y /= d.y;
+			v.z /= d.z;
+			v.w /= d.w;
+			return v;
+		}
+
+		public static float MinComponent(this Vector2 v)
+		{
+			return Mathf.Min(v.x, v.y);
+		}
+
+		public static float MinComponent(this Vector3 v)
+		{
+			return Mathf.Min(Mathf.Min(v.x, v.y), v.z);
+		}
+
+		public static float MinComponent(this Vector4 v)
+		{
+			return Mathf.Min(Mathf.Min(Mathf.Min(v.x, v.y), v.z), v.w);
+		}
+
+		public static float MaxComponent(this Vector2 v)
+		{
+			return Mathf.Max(v.x, v.y);
+		}
+
+		public static float MaxComponent(this Vector3 v)
+		{
+			return Mathf.Max(Mathf.Max(v.x, v.y), v.z);
+		}
+
+		public static float MaxComponent(this Vector4 v)
+		{
+			return Mathf.Max(Mathf.Max(Mathf.Max(v.x, v.y), v.z), v.w);
+		}
+
+		public static float MinAbsComponent(this Vector2 v)
+		{
+			return Mathf.Min(Mathf.Abs(v.x), Mathf.Abs(v.y));
+		}
+
+		public static float MinAbsComponent(this Vector3 v)
+		{
+			return Mathf.Min(Mathf.Min(Mathf.Abs(v.x), Mathf.Abs(v.y)), Mathf.Abs(v.z));
+		}
+
+		public static float MinAbsComponent(this Vector4 v)
+		{
+			return Mathf.Min(Mathf.Min(Mathf.Min(Mathf.Abs(v.x), Mathf.Abs(v.y)), Mathf.Abs(v.z)), Mathf.Abs(v.w));
+		}
+
+		public static float MaxAbsComponent(this Vector2 v)
+		{
+			return Mathf.Max(Mathf.Abs(v.x), Mathf.Abs(v.y));
+		}
+
+		public static float MaxAbsComponent(this Vector3 v)
+		{
+			return Mathf.Max(Mathf.Max(Mathf.Abs(v.x), Mathf.Abs(v.y)), Mathf.Abs(v.z));
+		}
+
+		public static float MaxAbsComponent(this Vector4 v)
+		{
+			return Mathf.Max(Mathf.Max(Mathf.Max(Mathf.Abs(v.x), Mathf.Abs(v.y)), Mathf.Abs(v.z)), Mathf.Abs(v.w));
 		}
 
 		#endregion
@@ -206,7 +320,7 @@ namespace Experilous
 			//     c = Dot(p - q, p - q) - r^2
 			// The twos and fours of the above and the quadratic formula all end up cancelling out.
 
-			var delta = ray.origin - sphere.origin;
+			var delta = ray.origin - sphere.center;
 			var directionDeltaDot = Vector3.Dot(ray.direction, delta);
 			var directionDeltaSquared = directionDeltaDot * directionDeltaDot;
 			var deltaLengthSquared = Vector3.Dot(delta, delta);
@@ -243,7 +357,7 @@ namespace Experilous
 			//     c = Dot(p - q, p - q) - r^2
 			// The twos and fours of the above and the quadratic formula all end up cancelling out.
 
-			var delta = ray.origin - sphere.origin;
+			var delta = ray.origin - sphere.center;
 			var directionDeltaDot = Vector3.Dot(ray.direction, delta);
 			var directionDeltaSquared = directionDeltaDot * directionDeltaDot;
 			var directionLengthSquared = Vector3.Dot(ray.direction, ray.direction);
