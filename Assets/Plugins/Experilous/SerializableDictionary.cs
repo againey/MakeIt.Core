@@ -9,6 +9,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System;
+using System.Collections;
 
 namespace Experilous
 {
@@ -18,8 +19,9 @@ namespace Experilous
 	/// <typeparam name="TKey">The key type by which elements are organized and retrieved.</typeparam>
 	/// <typeparam name="TValue">The type of the values that are associated with each key.</typeparam>
 	[Serializable]
-	public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver
+	public class SerializableDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ISerializationCallbackReceiver
 	{
+		[NonSerialized] private Dictionary<TKey, TValue> _dictionary = new Dictionary<TKey, TValue>();
 		[SerializeField] private List<TKey> _keys = new List<TKey>();
 		[SerializeField] private List<TValue> _values = new List<TValue>();
 
@@ -56,6 +58,72 @@ namespace Experilous
 					}
 				}
 			}
+		}
+
+		public ICollection<TKey> Keys { get { return ((IDictionary<TKey, TValue>)_dictionary).Keys; } }
+		public ICollection<TValue> Values { get { return ((IDictionary<TKey, TValue>)_dictionary).Values; } }
+		public int Count { get { return ((IDictionary<TKey, TValue>)_dictionary).Count; } }
+		public bool IsReadOnly { get { return ((IDictionary<TKey, TValue>)_dictionary).IsReadOnly; } }
+
+		public TValue this[TKey key]
+		{
+			get { return ((IDictionary<TKey, TValue>)_dictionary)[key]; }
+			set { ((IDictionary<TKey, TValue>)_dictionary)[key] = value; }
+		}
+
+		public void Add(TKey key, TValue value)
+		{
+			((IDictionary<TKey, TValue>)_dictionary).Add(key, value);
+		}
+
+		public bool ContainsKey(TKey key)
+		{
+			return ((IDictionary<TKey, TValue>)_dictionary).ContainsKey(key);
+		}
+
+		public bool Remove(TKey key)
+		{
+			return ((IDictionary<TKey, TValue>)_dictionary).Remove(key);
+		}
+
+		public bool TryGetValue(TKey key, out TValue value)
+		{
+			return ((IDictionary<TKey, TValue>)_dictionary).TryGetValue(key, out value);
+		}
+
+		public void Add(KeyValuePair<TKey, TValue> item)
+		{
+			((IDictionary<TKey, TValue>)_dictionary).Add(item);
+		}
+
+		public void Clear()
+		{
+			((IDictionary<TKey, TValue>)_dictionary).Clear();
+		}
+
+		public bool Contains(KeyValuePair<TKey, TValue> item)
+		{
+			return ((IDictionary<TKey, TValue>)_dictionary).Contains(item);
+		}
+
+		public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+		{
+			((IDictionary<TKey, TValue>)_dictionary).CopyTo(array, arrayIndex);
+		}
+
+		public bool Remove(KeyValuePair<TKey, TValue> item)
+		{
+			return ((IDictionary<TKey, TValue>)_dictionary).Remove(item);
+		}
+
+		public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+		{
+			return ((IDictionary<TKey, TValue>)_dictionary).GetEnumerator();
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return ((IDictionary<TKey, TValue>)_dictionary).GetEnumerator();
 		}
 	}
 }
