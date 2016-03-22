@@ -337,5 +337,31 @@ namespace Experilous
 				return false;
 			}
 		}
+
+		public static void RemovePrefabInstancePropertyModifications(GameObject gameObject, System.Predicate<PropertyModification> predicate)
+		{
+			var modifications = PrefabUtility.GetPropertyModifications(gameObject);
+			int removeCount = 0;
+			for (int i = 0; i < modifications.Length; ++i)
+			{
+				if (predicate(modifications[i]))
+				{
+					modifications[i] = null;
+					++removeCount;
+				}
+			}
+			if (removeCount > 0)
+			{
+				var adjustedModifications = new PropertyModification[modifications.Length - removeCount];
+				for (int i = 0, j = 0; i < modifications.Length; ++i)
+				{
+					if (modifications[i] != null)
+					{
+						adjustedModifications[j++] = modifications[i];
+					}
+				}
+				PrefabUtility.SetPropertyModifications(gameObject, adjustedModifications);
+			}
+		}
 	}
 }

@@ -10,8 +10,10 @@ namespace Experilous
 {
 	public static class HierarchyUtility
 	{
-		public static void ForAllRigidbodyColliders(Transform transform, Action<Collider> action)
+		public static void ForAllRigidbodyColliders(Transform transform, bool includeInactive, Action<Collider> action)
 		{
+			if (!includeInactive && !transform.gameObject.activeInHierarchy) return;
+
 			foreach (var collider in transform.GetComponents<Collider>())
 			{
 				action(collider);
@@ -21,15 +23,17 @@ namespace Experilous
 			for (int i = 0; i < childCount; ++i)
 			{
 				var child = transform.GetChild(i);
-				if (child.GetComponent<Rigidbody>() == null)
+				if (child.GetComponent<Rigidbody>() == null && (includeInactive == true || child.gameObject.activeSelf))
 				{
-					ForAllRigidbodyColliders(child, action);
+					ForAllRigidbodyColliders(child, includeInactive, action);
 				}
 			}
 		}
 
-		public static void ForAllRigidbodyColliders(Transform transform, Action<Collider2D> action)
+		public static void ForAllRigidbodyColliders(Transform transform, bool includeInactive, Action<Collider2D> action)
 		{
+			if (!includeInactive && !transform.gameObject.activeInHierarchy) return;
+
 			foreach (var collider in transform.GetComponents<Collider2D>())
 			{
 				action(collider);
@@ -39,15 +43,17 @@ namespace Experilous
 			for (int i = 0; i < childCount; ++i)
 			{
 				var child = transform.GetChild(i);
-				if (child.GetComponent<Rigidbody2D>() == null)
+				if (child.GetComponent<Rigidbody2D>() == null && (includeInactive == true || child.gameObject.activeSelf))
 				{
-					ForAllRigidbodyColliders(child, action);
+					ForAllRigidbodyColliders(child, includeInactive, action);
 				}
 			}
 		}
 
-		public static void ForAllComponents<TComponent>(Transform transform, Action<TComponent> action) where TComponent : Component
+		public static void ForAllComponents<TComponent>(Transform transform, bool includeInactive, Action<TComponent> action) where TComponent : Component
 		{
+			if (!includeInactive && !transform.gameObject.activeInHierarchy) return;
+
 			foreach (var component in transform.GetComponents<TComponent>())
 			{
 				action(component);
@@ -56,7 +62,11 @@ namespace Experilous
 			int childCount = transform.childCount;
 			for (int i = 0; i < childCount; ++i)
 			{
-				ForAllComponents(transform.GetChild(i), action);
+				var child = transform.GetChild(i);
+				if (includeInactive == true || child.gameObject.activeSelf)
+				{
+					ForAllComponents(child, includeInactive, action);
+				}
 			}
 		}
 
@@ -64,7 +74,7 @@ namespace Experilous
 		{
 			var bounds = new Bounds();
 			bool initialized = false;
-			ForAllRigidbodyColliders(transform,
+			ForAllRigidbodyColliders(transform, false,
 				(Collider collider) =>
 				{
 					if (!initialized)
@@ -84,14 +94,15 @@ namespace Experilous
 		{
 			var bounds = new Sphere();
 			bool initialized = false;
-			ForAllRigidbodyColliders(transform,
+			ForAllRigidbodyColliders(transform, false,
 				(Collider collider) =>
 				{
 					var sphereCollider = collider as SphereCollider;
 					if (sphereCollider != null)
 					{
-						var worldCenter = transform.TransformPoint(sphereCollider.center);
-						var worldRadius = sphereCollider.radius * transform.lossyScale.MaxAbsComponent();
+						var colliderTransform = collider.transform;
+						var worldCenter = colliderTransform.TransformPoint(sphereCollider.center);
+						var worldRadius = sphereCollider.radius * colliderTransform.lossyScale.MaxAbsComponent();
 						if (!initialized)
 						{
 							bounds.center = worldCenter;
@@ -117,6 +128,7 @@ namespace Experilous
 						}
 					}
 				});
+
 			return bounds;
 		}
 
@@ -124,7 +136,7 @@ namespace Experilous
 		{
 			var bounds = new Bounds();
 			bool initialized = false;
-			ForAllRigidbodyColliders(transform,
+			ForAllRigidbodyColliders(transform, false,
 				(Collider2D collider) =>
 				{
 					if (!initialized)
@@ -144,14 +156,15 @@ namespace Experilous
 		{
 			var bounds = new Sphere();
 			bool initialized = false;
-			ForAllRigidbodyColliders(transform,
+			ForAllRigidbodyColliders(transform, false,
 				(Collider2D collider) =>
 				{
 					var circleCollider = collider as CircleCollider2D;
 					if (circleCollider != null)
 					{
-						var worldCenter = transform.TransformPoint(circleCollider.offset);
-						var worldRadius = circleCollider.radius * transform.lossyScale.MaxAbsComponent();
+						var colliderTransform = collider.transform;
+						var worldCenter = colliderTransform.TransformPoint(circleCollider.offset);
+						var worldRadius = circleCollider.radius * colliderTransform.lossyScale.MaxAbsComponent();
 						if (!initialized)
 						{
 							bounds.center = worldCenter;
@@ -184,21 +197,22 @@ namespace Experilous
 		{
 			var bounds = new Bounds();
 			bool initialized = false;
-			ForAllComponents(transform,
+			ForAllComponents(transform, false,
 				(Light light) =>
 				{
+					var lightTransform = light.transform;
 					Bounds lightBounds;
 					if (light.type == LightType.Point)
 					{
 						var lightDiameter = light.range * 2f;
-						lightBounds = new Bounds(transform.position, new Vector3(lightDiameter, lightDiameter, lightDiameter));
+						lightBounds = new Bounds(lightTransform.position, new Vector3(lightDiameter, lightDiameter, lightDiameter));
 					}
 					else if (light.type == LightType.Spot)
 					{
 						var radians = light.spotAngle * Mathf.Deg2Rad * 0.5f;
 						var sine = Mathf.Sin(radians);
 						var cosine = Mathf.Cos(radians);
-						var forward = transform.forward;
+						var forward = lightTransform.forward;
 						var ringRadius = sine * light.range;
 						var xRingExtent = Mathf.Sqrt(1f - forward.x * forward.x) * ringRadius;
 						var yRingExtent = Mathf.Sqrt(1f - forward.y * forward.y) * ringRadius;
@@ -230,7 +244,7 @@ namespace Experilous
 							zMin = -light.range;
 
 						lightBounds = new Bounds(
-							new Vector3((xMin + xMax) * 0.5f, (yMin + yMax) * 0.5f, (zMin + zMax) * 0.5f) + transform.position,
+							new Vector3((xMin + xMax) * 0.5f, (yMin + yMax) * 0.5f, (zMin + zMax) * 0.5f) + lightTransform.position,
 							new Vector3(xMax - xMin, yMax - yMin, zMax - zMin));
 					}
 					else
@@ -255,13 +269,14 @@ namespace Experilous
 		{
 			var bounds = new Sphere();
 			bool initialized = false;
-			ForAllComponents(transform,
+			ForAllComponents(transform, false,
 				(Light light) =>
 				{
+					var lightTransform = light.transform;
 					Sphere lightBounds;
 					if (light.type == LightType.Point)
 					{
-						lightBounds = new Sphere(transform.position, light.range);
+						lightBounds = new Sphere(lightTransform.position, light.range);
 					}
 					else if (light.type == LightType.Spot)
 					{
@@ -272,14 +287,14 @@ namespace Experilous
 						{
 							// The bounding sphere intersects both the outer circular ring at the far end of the spotlight cone and the apex of the cone.
 							var radius = (cosine + sine * sine / cosine) * light.range * 0.5f;
-							lightBounds = new Sphere(transform.position + transform.forward * radius, radius);
+							lightBounds = new Sphere(lightTransform.position + lightTransform.forward * radius, radius);
 						}
 						else
 						{
 							// The bounding sphere intersects only the outer circular ring at the far end of the spotlight cone.
 							var offset = cosine * light.range;
 							var radius = sine * light.range;
-							lightBounds = new Sphere(transform.position + transform.forward * offset, radius);
+							lightBounds = new Sphere(lightTransform.position + lightTransform.forward * offset, radius);
 						}
 					}
 					else
@@ -304,7 +319,7 @@ namespace Experilous
 		{
 			var bounds = new Bounds();
 			bool initialized = false;
-			ForAllComponents(transform,
+			ForAllComponents(transform, false,
 				(MeshRenderer meshRenderer) =>
 				{
 					if (!initialized)
@@ -322,30 +337,15 @@ namespace Experilous
 
 		public static Sphere GetMeshGroupSphereBounds(Transform transform)
 		{
-			var bounds = new Sphere();
-			bool initialized = false;
-			ForAllComponents(transform,
-				(MeshRenderer meshRenderer) =>
-				{
-					var meshBounds = meshRenderer.bounds;
-					if (!initialized)
-					{
-						bounds = new Sphere(meshBounds.center, meshBounds.extents.magnitude);
-						initialized = true;
-					}
-					else
-					{
-						bounds.Encapsulate(meshBounds);
-					}
-				});
-			return bounds;
+			var axisAlignedBoxBounds = GetMeshGroupAxisAlignedBoxBounds(transform);
+			return new Sphere(axisAlignedBoxBounds.center, axisAlignedBoxBounds.extents.magnitude);
 		}
 
 		public static Bounds GetSpriteGroupAxisAlignedBoxBounds(Transform transform)
 		{
 			var bounds = new Bounds();
 			bool initialized = false;
-			ForAllComponents(transform,
+			ForAllComponents(transform, false,
 				(SpriteRenderer spriteRenderer) =>
 				{
 					if (!initialized)
@@ -363,23 +363,8 @@ namespace Experilous
 
 		public static Sphere GetSpriteGroupSphereBounds(Transform transform)
 		{
-			var bounds = new Sphere();
-			bool initialized = false;
-			ForAllComponents(transform,
-				(SpriteRenderer spriteRenderer) =>
-				{
-					var spriteBounds = spriteRenderer.bounds;
-					if (!initialized)
-					{
-						bounds = new Sphere(spriteBounds.center, spriteBounds.extents.magnitude);
-						initialized = true;
-					}
-					else
-					{
-						bounds.Encapsulate(spriteBounds);
-					}
-				});
-			return bounds;
+			var axisAlignedBoxBounds = GetSpriteGroupAxisAlignedBoxBounds(transform);
+			return new Sphere(axisAlignedBoxBounds.center, axisAlignedBoxBounds.extents.magnitude);
 		}
 	}
 }
