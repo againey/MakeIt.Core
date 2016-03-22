@@ -43,7 +43,7 @@ namespace Experilous
 			var distanceSquared = delta.sqrMagnitude;
 			if (distanceSquared > radius * radius)
 			{
-				var distance = distanceSquared;
+				var distance = Mathf.Sqrt(distanceSquared);
 				var shiftDistance = (distance - radius) * 0.5f;
 				center += delta / Mathf.Sqrt(distanceSquared) * shiftDistance;
 				radius += shiftDistance;
