@@ -194,6 +194,18 @@ namespace Experilous
 				.Trim('\\', '/');
 		}
 
+		public static string GetFullScriptFolder(MonoBehaviour monoBehaviour)
+		{
+			var scriptAsset = MonoScript.FromMonoBehaviour(monoBehaviour);
+			return GetCanonicalPath(Path.GetDirectoryName(Path.Combine(canonicalProjectPath, AssetDatabase.GetAssetPath(scriptAsset))));
+		}
+
+		public static string GetFullScriptFolder(ScriptableObject scriptableObject)
+		{
+			var scriptAsset = MonoScript.FromScriptableObject(scriptableObject);
+			return GetCanonicalPath(Path.GetDirectoryName(Path.Combine(canonicalProjectPath, AssetDatabase.GetAssetPath(scriptAsset))));
+		}
+
 		public static void MoveOrRenameAsset(Object asset, string path, bool selectOnChange)
 		{
 			var currentAssetPath = GetProjectRelativeAssetPath(asset);
