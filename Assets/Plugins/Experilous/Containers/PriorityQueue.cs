@@ -4,14 +4,14 @@
 
 using System;
 
-namespace Experilous
+namespace Experilous.Containers
 {
 	/// <summary>
 	/// A priority queue based on the heap data structure, providing constant-time access and logarithmic-time
 	/// removal of the highest priority item, and logarithmic insertion of items.
 	/// </summary>
 	/// <typeparam name="T">The type of the elements in the priority queue.</typeparam>
-	public class PriorityQueue<T> where T : IEquatable<T>
+	public class PriorityQueue<T> : IPushPopContainer<T> where T : IEquatable<T>
 	{
 		public delegate bool AreOrderedDelegate(T lhs, T rhs);
 
@@ -20,8 +20,15 @@ namespace Experilous
 
 		private AreOrderedDelegate _areOrdered;
 
+		public PriorityQueue(AreOrderedDelegate areOrdered)
+		{
+			if (areOrdered == null) throw new ArgumentNullException("areOrdered");
+			_areOrdered = areOrdered;
+		}
+
 		public PriorityQueue(AreOrderedDelegate areOrdered, int initialCapacity)
 		{
+			if (areOrdered == null) throw new ArgumentNullException("areOrdered");
 			if (initialCapacity < 0) throw new ArgumentOutOfRangeException("initialCapacity", initialCapacity, "The initial capacity of the priority queue heap cannot be negative.");
 			if (initialCapacity > 0) _heap = new T[initialCapacity];
 			_areOrdered = areOrdered;
@@ -39,6 +46,14 @@ namespace Experilous
 			}
 		}
 
+		public bool isEmpty
+		{
+			get
+			{
+				return _size == 0;
+			}
+		}
+
 		/// <summary>
 		/// The number of elements in the queue.
 		/// </summary>
@@ -51,16 +66,34 @@ namespace Experilous
 		public void Push(T item)
 		{
 			var index = _size;
-			if (index >= _heap.Length) ExtendHeap();
+			if (_heap == null || index >= _heap.Length) ExtendHeap();
 			_heap[index] = item;
 			++_size;
 			BubbleUp(index);
 		}
 
 		/// <summary>
+		/// Removes and returns the highest priority element from the queue.
+		/// </summary>
+		public T Pop()
+		{
+			var item = front;
+			RemoveFront();
+			return item;
+		}
+
+		/// <summary>
+		/// Returns the highest priority element from the queue without removing it.
+		/// </summary>
+		public T Peek()
+		{
+			return front;
+		}
+
+		/// <summary>
 		/// Removes the highest priority element from the queue.
 		/// </summary>
-		public void Pop()
+		public void RemoveFront()
 		{
 			if (_size > 1)
 			{
@@ -76,7 +109,7 @@ namespace Experilous
 			}
 			else
 			{
-				throw new InvalidOperationException("The front element cannot be popped when the priority queue is empty.");
+				throw new InvalidOperationException("The front element cannot be removed when the priority queue is empty.");
 			}
 		}
 
@@ -136,6 +169,8 @@ namespace Experilous
 		/// of allocation and garbage collection.</remarks>
 		public void Reset(AreOrderedDelegate areOrdered)
 		{
+			if (areOrdered == null) throw new ArgumentNullException("areOrdered");
+
 			Clear();
 			_areOrdered = areOrdered;
 		}
