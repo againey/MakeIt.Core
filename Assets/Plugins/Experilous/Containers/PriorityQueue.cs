@@ -11,31 +11,23 @@ namespace Experilous.Containers
 	/// removal of the highest priority item, and logarithmic insertion of items.
 	/// </summary>
 	/// <typeparam name="T">The type of the elements in the priority queue.</typeparam>
-	public class PriorityQueue<T> : IPushPopContainer<T> where T : IEquatable<T>
+	public abstract class PriorityQueue<T> : IPeekableQueue<T> where T : IEquatable<T>
 	{
-		public delegate bool AreOrderedDelegate(T lhs, T rhs);
-
 		private T[] _heap;
 		private int _size;
 
-		private AreOrderedDelegate _areOrdered;
-
-		public PriorityQueue(AreOrderedDelegate areOrdered)
+		protected PriorityQueue()
 		{
-			if (areOrdered == null) throw new ArgumentNullException("areOrdered");
-			_areOrdered = areOrdered;
 		}
 
-		public PriorityQueue(AreOrderedDelegate areOrdered, int initialCapacity)
+		protected PriorityQueue(int initialCapacity)
 		{
-			if (areOrdered == null) throw new ArgumentNullException("areOrdered");
 			if (initialCapacity < 0) throw new ArgumentOutOfRangeException("initialCapacity", initialCapacity, "The initial capacity of the priority queue heap cannot be negative.");
 			if (initialCapacity > 0) _heap = new T[initialCapacity];
-			_areOrdered = areOrdered;
 		}
 
 		/// <summary>
-		/// The element in the queue with the highest priority.
+		/// The element in the queue with the highest priority, determined by a derived class's implementation of the <c>AreOrdered()</c> method.
 		/// </summary>
 		public T front
 		{
@@ -46,6 +38,9 @@ namespace Experilous.Containers
 			}
 		}
 
+		/// <summary>
+		/// Indicates if there are no items queued.
+		/// </summary>
 		public bool isEmpty
 		{
 			get
@@ -60,7 +55,7 @@ namespace Experilous.Containers
 		public int Count { get { return _size; } }
 
 		/// <summary>
-		/// Adds an element to the queue.  It's position in the queue will be determined by the <see cref="AreOrderedDelegate"/> functor provided during construction of the queue.
+		/// Adds an element to the queue.  It's position in the queue will be determined by a derived class's implementation of the <c>AreOrdered()</c> method.
 		/// </summary>
 		/// <param name="item">The item to be added to the queue.</param>
 		public void Push(T item)
@@ -73,7 +68,7 @@ namespace Experilous.Containers
 		}
 
 		/// <summary>
-		/// Removes and returns the highest priority element from the queue.
+		/// Removes and returns the highest priority element from the queue, determined by a derived class's implementation of the <c>AreOrdered()</c> method.
 		/// </summary>
 		public T Pop()
 		{
@@ -83,7 +78,7 @@ namespace Experilous.Containers
 		}
 
 		/// <summary>
-		/// Returns the highest priority element from the queue without removing it.
+		/// Returns the highest priority element from the queue without removing it, determined by a derived class's implementation of the <c>AreOrdered()</c> method.
 		/// </summary>
 		public T Peek()
 		{
@@ -91,7 +86,7 @@ namespace Experilous.Containers
 		}
 
 		/// <summary>
-		/// Removes the highest priority element from the queue.
+		/// Removes the highest priority element from the queue, determined by a derived class's implementation of the <c>AreOrdered()</c> method.
 		/// </summary>
 		public void RemoveFront()
 		{
@@ -135,7 +130,7 @@ namespace Experilous.Containers
 					else
 					{
 						var parentIndex = (index - 1) / 2;
-						if (_areOrdered(_heap[parentIndex], _heap[index]))
+						if (AreOrdered(_heap[parentIndex], _heap[index]))
 						{
 							BubbleDown(index);
 						}
@@ -161,26 +156,14 @@ namespace Experilous.Containers
 			_size = 0;
 		}
 
-		/// <summary>
-		/// Removes all elements from the queue, and sets a new <see cref="AreOrderedDelegate"/> functor which will be applied to any elements pushed later on.
-		/// </summary>
-		/// <remarks>This does not deallocate any memory used by the internal data structure.
-		/// It therefore enables reuse of the priority queue instance to cut down on the cost
-		/// of allocation and garbage collection.</remarks>
-		public void Reset(AreOrderedDelegate areOrdered)
-		{
-			if (areOrdered == null) throw new ArgumentNullException("areOrdered");
-
-			Clear();
-			_areOrdered = areOrdered;
-		}
+		protected abstract bool AreOrdered(T lhs, T rhs);
 
 		private void BubbleUp(int index)
 		{
 			while (index > 0)
 			{
 				var parentIndex = (index - 1) / 2;
-				if (_areOrdered(_heap[parentIndex], _heap[index])) break;
+				if (AreOrdered(_heap[parentIndex], _heap[index])) break;
 				Utility.Swap(ref _heap[index], ref _heap[parentIndex]);
 				index = parentIndex;
 			}
@@ -194,8 +177,8 @@ namespace Experilous.Containers
 			{
 				if (rightChildIndex < _size)
 				{
-					if (_areOrdered(_heap[index], _heap[leftChildIndex]) && _areOrdered(_heap[index], _heap[rightChildIndex])) break;
-					if (_areOrdered(_heap[leftChildIndex], _heap[rightChildIndex]))
+					if (AreOrdered(_heap[index], _heap[leftChildIndex]) && AreOrdered(_heap[index], _heap[rightChildIndex])) break;
+					if (AreOrdered(_heap[leftChildIndex], _heap[rightChildIndex]))
 					{
 						Utility.Swap(ref _heap[index], ref _heap[leftChildIndex]);
 						index = leftChildIndex;
@@ -210,7 +193,7 @@ namespace Experilous.Containers
 				}
 				else
 				{
-					if (_areOrdered(_heap[index], _heap[leftChildIndex])) break;
+					if (AreOrdered(_heap[index], _heap[leftChildIndex])) break;
 					Utility.Swap(ref _heap[index], ref _heap[leftChildIndex]);
 					index = leftChildIndex;
 					break;

@@ -6,15 +6,14 @@ namespace Experilous.Containers
 {
 	/// <summary>
 	/// A container supporting abstract push and pop actions for inserting
-	/// and removing elements in an implementation-defined order.
+	/// and removing elements in an implementation-defined order, and allowing
+	/// the front item to be accessed without popping it.
 	/// </summary>
 	/// <typeparam name="T">The type of the elements in the container.</typeparam>
-	public interface IPushPopContainer<T>
+	public interface IPeekableQueue<T> : IQueue<T>
 	{
-		bool isEmpty { get; }
-		int Count { get; }
-		void Push(T item);
-		T Pop();
-		void Clear();
+		T front { get; }
+		T Peek();
+		void RemoveFront();
 	}
 }

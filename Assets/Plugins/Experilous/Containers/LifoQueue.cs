@@ -9,15 +9,15 @@ using System.Collections.Generic;
 namespace Experilous.Containers
 {
 	/// <summary>
-	/// A last-in first-out container.
+	/// A last-in first-out queue-interface container.
 	/// </summary>
-	/// <typeparam name="T">The type of the elements in the stack.</typeparam>
+	/// <typeparam name="T">The type of the elements in the queue.</typeparam>
 	[Serializable]
-	public class Stack<T> : IPushPopContainer<T>
+	public class LifoQueue<T> : IPeekableQueue<T>
 	{
 		[SerializeField] private List<T> _items;
 
-		public Stack()
+		public LifoQueue()
 		{
 			_items = new List<T>();
 		}
