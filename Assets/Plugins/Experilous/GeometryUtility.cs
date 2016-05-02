@@ -178,6 +178,11 @@ namespace Experilous
 			return Mathf.Max(Mathf.Max(Mathf.Max(Mathf.Abs(v.x), Mathf.Abs(v.y)), Mathf.Abs(v.z)), Mathf.Abs(v.w));
 		}
 
+		public static float SinMagnitude(Vector2 lhs, Vector2 rhs)
+		{
+			return lhs.x * rhs.y - lhs.y * rhs.x;
+		}
+
 		#endregion
 
 		#region Plane/Line Intersection
