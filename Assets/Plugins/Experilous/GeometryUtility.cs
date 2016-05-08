@@ -183,6 +183,39 @@ namespace Experilous
 			return lhs.x * rhs.y - lhs.y * rhs.x;
 		}
 
+		public static Vector2 ProjectOnto(this Vector2 v, Vector2 target)
+		{
+			var targetUnit = target.normalized;
+			return Vector2.Dot(v, targetUnit) * targetUnit;
+		}
+
+		public static Vector2 ProjectOntoUnit(this Vector2 v, Vector2 target)
+		{
+			return Vector2.Dot(v, target) * target;
+		}
+
+		public static Vector3 ProjectOnto(this Vector3 v, Vector3 target)
+		{
+			var targetUnit = target.normalized;
+			return Vector3.Dot(v, targetUnit) * targetUnit;
+		}
+
+		public static Vector3 ProjectOntoUnit(this Vector3 v, Vector3 target)
+		{
+			return Vector3.Dot(v, target) * target;
+		}
+
+		public static Vector4 ProjectOnto(this Vector4 v, Vector4 target)
+		{
+			var targetUnit = target.normalized;
+			return Vector4.Dot(v, targetUnit) * targetUnit;
+		}
+
+		public static Vector4 ProjectOntoUnit(this Vector4 v, Vector4 target)
+		{
+			return Vector4.Dot(v, target) * target;
+		}
+
 		#endregion
 
 		#region Plane/Line Intersection
