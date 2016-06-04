@@ -476,21 +476,21 @@ namespace Experilous
 
 		public static void AdjustHeight(ref Vector2 min, ref Vector2 size, float targetAspectRatio)
 		{
-			var newHeight = size.x * targetAspectRatio;
+			var newHeight = size.x / targetAspectRatio;
 			min.y += (size.y - newHeight) * 0.5f;
 			size.y = newHeight;
 		}
 
 		public static void AdjustHeight(ref Vector2 min, ref Vector2 size, float targetAspectRatio, Vector2 anchor)
 		{
-			var newHeight = size.x * targetAspectRatio;
+			var newHeight = size.x / targetAspectRatio;
 			min.y += (size.y - newHeight) * anchor.y;
 			size.y = newHeight;
 		}
 
 		public static void AdjustHeight(ref Vector2 min, ref Vector2 size, float targetAspectRatio, Vector2 sourceAnchor, Vector2 targetAnchor)
 		{
-			var newHeight = size.x * targetAspectRatio;
+			var newHeight = size.x / targetAspectRatio;
 			min.y += size.y * sourceAnchor.y - newHeight * targetAnchor.y;
 			size.y = newHeight;
 		}
@@ -507,7 +507,7 @@ namespace Experilous
 		public static void AdjustAverage(ref Vector2 min, ref Vector2 size, float targetAspectRatio)
 		{
 			var newWidth = size.y * targetAspectRatio;
-			var newHeight = size.x * targetAspectRatio;
+			var newHeight = size.x / targetAspectRatio;
 
 			min.x += (size.x - newWidth) * 0.25f;
 			min.y += (size.y - newHeight) * 0.25f;
@@ -519,7 +519,7 @@ namespace Experilous
 		public static void AdjustAverage(ref Vector2 min, ref Vector2 size, float targetAspectRatio, Vector2 anchor)
 		{
 			var newWidth = size.y * targetAspectRatio;
-			var newHeight = size.x * targetAspectRatio;
+			var newHeight = size.x / targetAspectRatio;
 
 			min.x += (size.x - newWidth) * anchor.x * 0.5f;
 			min.y += (size.y - newHeight) * anchor.y * 0.5f;
@@ -531,7 +531,7 @@ namespace Experilous
 		public static void AdjustAverage(ref Vector2 min, ref Vector2 size, float targetAspectRatio, Vector2 sourceAnchor, Vector2 targetAnchor)
 		{
 			var newWidth = size.y * targetAspectRatio;
-			var newHeight = size.x * targetAspectRatio;
+			var newHeight = size.x / targetAspectRatio;
 
 			min.x += (size.x * sourceAnchor.x - newWidth * targetAnchor.x) * 0.5f;
 			min.y += (size.y * sourceAnchor.y - newHeight * targetAnchor.y) * 0.5f;
@@ -557,7 +557,7 @@ namespace Experilous
 			float adjustHeightWeight = 1f - adjustWidthWeight;
 
 			var newWidth = size.y * targetAspectRatio;
-			var newHeight = size.x * targetAspectRatio;
+			var newHeight = size.x / targetAspectRatio;
 
 			min.x += (size.x - newWidth) * 0.5f * adjustWidthWeight;
 			min.y += (size.y - newHeight) * 0.5f * adjustHeightWeight;
@@ -571,7 +571,7 @@ namespace Experilous
 			float adjustHeightWeight = 1f - adjustWidthWeight;
 
 			var newWidth = size.y * targetAspectRatio;
-			var newHeight = size.x * targetAspectRatio;
+			var newHeight = size.x / targetAspectRatio;
 
 			min.x += (size.x - newWidth) * anchor.x * adjustWidthWeight;
 			min.y += (size.y - newHeight) * anchor.y * adjustHeightWeight;
@@ -585,7 +585,7 @@ namespace Experilous
 			float adjustHeightWeight = 1f - adjustWidthWeight;
 
 			var newWidth = size.y * targetAspectRatio;
-			var newHeight = size.x * targetAspectRatio;
+			var newHeight = size.x / targetAspectRatio;
 
 			min.x += (size.x * sourceAnchor.x - newWidth * targetAnchor.x) * adjustWidthWeight;
 			min.y += (size.y * sourceAnchor.y - newHeight * targetAnchor.y) * adjustHeightWeight;
