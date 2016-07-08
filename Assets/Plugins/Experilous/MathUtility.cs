@@ -53,6 +53,11 @@ namespace Experilous
 			return (a ^ b) >= 0;
 		}
 
+		public static float LerpUnclamped(float a, float b, float t)
+		{
+			return (b - a) * t + a;
+		}
+
 		#endregion
 
 		#region Integer Base-2 Logarithms
