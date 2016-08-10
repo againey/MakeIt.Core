@@ -61,7 +61,14 @@ namespace Experilous.Containers
 		public void Push(T item)
 		{
 			var index = _size;
-			if (_heap == null || index >= _heap.Length) ExtendHeap();
+			if (_heap == null)
+			{
+				CreateHeap();
+			}
+			else if (index >= _heap.Length)
+			{
+				ExtendHeap();
+			}
 			_heap[index] = item;
 			++_size;
 			BubbleUp(index);
@@ -199,6 +206,11 @@ namespace Experilous.Containers
 					break;
 				}
 			}
+		}
+
+		private void CreateHeap()
+		{
+			_heap = new T[4];
 		}
 
 		private void ExtendHeap()
