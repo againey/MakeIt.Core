@@ -52,7 +52,7 @@ namespace Experilous
 	/// <summary>
 	/// Utility class for working with aspect ratios and two-dimensional sizes and positions relative to desired aspect ratios.
 	/// </summary>
-	public static class AspectRatioUtility
+	public static class AspectRatioTools
 	{
 		/// <summary>
 		/// Returns the aspect ratio (width-to-height) of the given two-dimensional size.

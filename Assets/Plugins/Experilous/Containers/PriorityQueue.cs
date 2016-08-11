@@ -171,7 +171,7 @@ namespace Experilous.Containers
 			{
 				var parentIndex = (index - 1) / 2;
 				if (AreOrdered(_heap[parentIndex], _heap[index])) break;
-				Utility.Swap(ref _heap[index], ref _heap[parentIndex]);
+				MiscTools.Swap(ref _heap[index], ref _heap[parentIndex]);
 				index = parentIndex;
 			}
 		}
@@ -187,12 +187,12 @@ namespace Experilous.Containers
 					if (AreOrdered(_heap[index], _heap[leftChildIndex]) && AreOrdered(_heap[index], _heap[rightChildIndex])) break;
 					if (AreOrdered(_heap[leftChildIndex], _heap[rightChildIndex]))
 					{
-						Utility.Swap(ref _heap[index], ref _heap[leftChildIndex]);
+						MiscTools.Swap(ref _heap[index], ref _heap[leftChildIndex]);
 						index = leftChildIndex;
 					}
 					else
 					{
-						Utility.Swap(ref _heap[index], ref _heap[rightChildIndex]);
+						MiscTools.Swap(ref _heap[index], ref _heap[rightChildIndex]);
 						index = rightChildIndex;
 					}
 					leftChildIndex = index * 2 + 1;
@@ -201,7 +201,7 @@ namespace Experilous.Containers
 				else
 				{
 					if (AreOrdered(_heap[index], _heap[leftChildIndex])) break;
-					Utility.Swap(ref _heap[index], ref _heap[leftChildIndex]);
+					MiscTools.Swap(ref _heap[index], ref _heap[leftChildIndex]);
 					index = leftChildIndex;
 					break;
 				}

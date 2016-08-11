@@ -42,8 +42,8 @@ namespace Experilous
 		public Vector2 GetUV(Vector3 position)
 		{
 			return new Vector2(
-				GeometryUtility.GetIntersectionParameter(vPlane, new ScaledRay(position, uNegAxis)),
-				GeometryUtility.GetIntersectionParameter(uPlane, new ScaledRay(position, vNegAxis)));
+				GeometryTools.GetIntersectionParameter(vPlane, new ScaledRay(position, uNegAxis)),
+				GeometryTools.GetIntersectionParameter(uPlane, new ScaledRay(position, vNegAxis)));
 		}
 	}
 }

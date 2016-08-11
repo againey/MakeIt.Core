@@ -104,7 +104,7 @@ namespace Experilous
 			if (firstPath == null || secondPath == null) return null;
 
 			// Guarantee that the first path is not longer than the second, for convenience below.
-			if (firstPath.Length > secondPath.Length) Utility.Swap(ref firstPath, ref secondPath);
+			if (firstPath.Length > secondPath.Length) MiscTools.Swap(ref firstPath, ref secondPath);
 
 			var lastConfirmedIndex = 0;
 			for (int i = 0; i < firstPath.Length; ++i)

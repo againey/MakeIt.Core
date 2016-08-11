@@ -4,7 +4,7 @@
 
 namespace Experilous
 {
-	public static class MathUtility
+	public static class MathTools
 	{
 		#region Arithmetic
 

@@ -11,7 +11,7 @@ using System.Threading;
 
 namespace Experilous
 {
-	public static class ThreadUtility
+	public static class ThreadTools
 	{
 		private static bool _mainThreadIdentified = false;
 		private static int _mainThreadId;
