@@ -6,7 +6,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System;
 
-namespace Experilous
+namespace Experilous.MakeIt.Utilities
 {
 	/// <summary>
 	/// A representation of <see cref="System.Type"/> that can be serialized by Unity.

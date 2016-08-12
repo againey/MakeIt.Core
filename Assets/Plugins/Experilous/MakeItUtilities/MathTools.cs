@@ -2,7 +2,7 @@
 * Copyright Andy Gainey                                                        *
 \******************************************************************************/
 
-namespace Experilous
+namespace Experilous.MakeIt.Utilities
 {
 	public static class MathTools
 	{

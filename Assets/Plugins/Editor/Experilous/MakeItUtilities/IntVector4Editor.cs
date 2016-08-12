@@ -5,7 +5,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace Experilous.Topological
+namespace Experilous.MakeIt.Utilities
 {
 	[CustomPropertyDrawer(typeof(IntVector4))]
 	public class IntVector4Editor : PropertyDrawer

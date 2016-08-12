@@ -5,7 +5,7 @@
 using System;
 using UnityEngine;
 
-namespace Experilous
+namespace Experilous.MakeIt.Utilities
 {
 	/// <summary>
 	/// A three-dimensional embedding of a two-dimensional parallelogram frame for defining the UV values of any three-dimensional position relative to that frame.

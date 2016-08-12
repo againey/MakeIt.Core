@@ -5,7 +5,7 @@
 using UnityEngine;
 using System;
 
-namespace Experilous
+namespace Experilous.MakeIt.Utilities
 {
 	/// <summary>
 	/// A simple representation of a sphere with a given origin and radius.

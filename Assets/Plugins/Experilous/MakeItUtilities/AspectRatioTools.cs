@@ -5,7 +5,7 @@
 using UnityEngine;
 using System;
 
-namespace Experilous
+namespace Experilous.MakeIt.Utilities
 {
 	/// <summary>
 	/// A collection of strategies for how to adjust a size or a size and position pair in order

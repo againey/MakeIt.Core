@@ -4,7 +4,7 @@
 
 using UnityEngine;
 
-namespace Experilous
+namespace Experilous.MakeIt.Utilities
 {
 	public static class GeometryTools
 	{

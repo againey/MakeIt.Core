@@ -4,7 +4,7 @@
 
 using System;
 
-namespace Experilous.Containers
+namespace Experilous.MakeIt.Utilities
 {
 	/// <summary>
 	/// A priority queue based on the heap data structure, providing constant-time access and logarithmic-time

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEditor;
 using System.IO;
 
-namespace Experilous
+namespace Experilous.MakeIt.Utilities
 {
 	public static class AssetUtility
 	{

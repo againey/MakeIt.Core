@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System;
 using System.Collections;
 
-namespace Experilous
+namespace Experilous.MakeIt.Utilities
 {
 	/// <summary>
 	/// A dictionary class that can be serialized by Unity.

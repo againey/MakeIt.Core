@@ -5,7 +5,7 @@
 using UnityEngine;
 using System;
 
-namespace Experilous
+namespace Experilous.MakeIt.Utilities
 {
 	/// <summary>
 	/// A ray with a direction vector that does not need to be a unit vector.

@@ -5,7 +5,7 @@
 using System;
 using UnityEngine;
 
-namespace Experilous
+namespace Experilous.MakeIt.Utilities
 {
 	/// <summary>
 	/// An integer-based two-dimensional index.

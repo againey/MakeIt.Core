@@ -3,10 +3,9 @@
 \******************************************************************************/
 
 #if UNITY_5_3
-using UnityEngine;
 using NUnit.Framework;
 
-namespace Experilous.Tests
+namespace Experilous.MakeIt.Utilities.Tests
 {
 	public class MathToolsTests
 	{

@@ -6,7 +6,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 
-namespace Experilous
+namespace Experilous.MakeIt.Utilities
 {
 	public static class HierarchyTools
 	{

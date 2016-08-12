@@ -9,7 +9,7 @@ using UnityEditor;
 
 using System.Threading;
 
-namespace Experilous
+namespace Experilous.MakeIt.Utilities
 {
 	public static class ThreadTools
 	{
