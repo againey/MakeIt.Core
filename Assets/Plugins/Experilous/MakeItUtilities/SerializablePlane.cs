@@ -74,7 +74,7 @@ namespace Experilous.MakeIt.Utilities
 
 		public bool Raycast(Ray ray, out float enter)
 		{
-			if (!GeometryTools.GetIntersectionParameter(this, ray, out enter))
+			if (!MIGeometry.GetIntersectionParameter(this, ray, out enter))
 			{
 				return false;
 			}

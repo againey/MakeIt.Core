@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace Experilous.MakeIt.Utilities
 {
-	public static class MiscTools
+	public static class MIUtilities
 	{
 		/// <summary>
 		/// Swap the values of two variables/fields.

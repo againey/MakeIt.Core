@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Experilous.MakeIt.Utilities
 {
-	public static class HierarchyTools
+	public static class MIGameObjectHierarchy
 	{
 		public static void ForAllRigidbodyColliders(Transform transform, Action<Collider> action)
 		{

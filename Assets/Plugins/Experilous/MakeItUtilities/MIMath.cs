@@ -4,7 +4,7 @@
 
 namespace Experilous.MakeIt.Utilities
 {
-	public static class MathTools
+	public static class MIMath
 	{
 		#region Arithmetic
 

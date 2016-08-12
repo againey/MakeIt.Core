@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Experilous.MakeIt.Utilities
 {
-	public static class GeometryTools
+	public static class MIGeometry
 	{
 		#region Vector Operations
 
@@ -844,9 +844,9 @@ namespace Experilous.MakeIt.Utilities
 		{
 			min = box.min;
 			max = box.max;
-			if (normal.x < 0) MiscTools.Swap(ref min.x, ref max.x);
-			if (normal.y < 0) MiscTools.Swap(ref min.y, ref max.y);
-			if (normal.z < 0) MiscTools.Swap(ref min.z, ref max.z);
+			if (normal.x < 0) MIUtilities.Swap(ref min.x, ref max.x);
+			if (normal.y < 0) MIUtilities.Swap(ref min.y, ref max.y);
+			if (normal.z < 0) MIUtilities.Swap(ref min.z, ref max.z);
 		}
 
 		public static bool IntersectsOrTouches(this Bounds box, Plane plane)

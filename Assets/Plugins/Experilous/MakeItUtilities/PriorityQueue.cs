@@ -171,7 +171,7 @@ namespace Experilous.MakeIt.Utilities
 			{
 				var parentIndex = (index - 1) / 2;
 				if (AreOrdered(_heap[parentIndex], _heap[index])) break;
-				MiscTools.Swap(ref _heap[index], ref _heap[parentIndex]);
+				MIUtilities.Swap(ref _heap[index], ref _heap[parentIndex]);
 				index = parentIndex;
 			}
 		}
@@ -187,12 +187,12 @@ namespace Experilous.MakeIt.Utilities
 					if (AreOrdered(_heap[index], _heap[leftChildIndex]) && AreOrdered(_heap[index], _heap[rightChildIndex])) break;
 					if (AreOrdered(_heap[leftChildIndex], _heap[rightChildIndex]))
 					{
-						MiscTools.Swap(ref _heap[index], ref _heap[leftChildIndex]);
+						MIUtilities.Swap(ref _heap[index], ref _heap[leftChildIndex]);
 						index = leftChildIndex;
 					}
 					else
 					{
-						MiscTools.Swap(ref _heap[index], ref _heap[rightChildIndex]);
+						MIUtilities.Swap(ref _heap[index], ref _heap[rightChildIndex]);
 						index = rightChildIndex;
 					}
 					leftChildIndex = index * 2 + 1;
@@ -201,7 +201,7 @@ namespace Experilous.MakeIt.Utilities
 				else
 				{
 					if (AreOrdered(_heap[index], _heap[leftChildIndex])) break;
-					MiscTools.Swap(ref _heap[index], ref _heap[leftChildIndex]);
+					MIUtilities.Swap(ref _heap[index], ref _heap[leftChildIndex]);
 					index = leftChildIndex;
 					break;
 				}
