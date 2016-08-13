@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace Experilous.Numerics.Tests
 {
-	public class AspectRatioUtilityTests
+	class AspectRatioUtilityTests
 	{
 		#region Private Helpers
 

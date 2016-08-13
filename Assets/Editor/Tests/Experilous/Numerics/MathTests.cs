@@ -7,7 +7,7 @@ using NUnit.Framework;
 
 namespace Experilous.Numerics.Tests
 {
-	public class MathTests
+	class MathTests
 	{
 		#region Arithmetic Tests
 

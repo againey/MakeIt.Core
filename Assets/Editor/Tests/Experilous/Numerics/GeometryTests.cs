@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace Experilous.Numerics.Tests
 {
-	public class GeometryTests
+	class GeometryTests
 	{
 		#region GetIntersectionParameter
 
