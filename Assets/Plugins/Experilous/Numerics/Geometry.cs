@@ -3,7 +3,7 @@
 \******************************************************************************/
 
 using UnityEngine;
-using Utilities = Experilous.Core.Utilities;
+using GeneralUtility = Experilous.Core.GeneralUtility;
 
 namespace Experilous.Numerics
 {
@@ -845,9 +845,9 @@ namespace Experilous.Numerics
 		{
 			min = box.min;
 			max = box.max;
-			if (normal.x < 0) Utilities.Swap(ref min.x, ref max.x);
-			if (normal.y < 0) Utilities.Swap(ref min.y, ref max.y);
-			if (normal.z < 0) Utilities.Swap(ref min.z, ref max.z);
+			if (normal.x < 0) GeneralUtility.Swap(ref min.x, ref max.x);
+			if (normal.y < 0) GeneralUtility.Swap(ref min.y, ref max.y);
+			if (normal.z < 0) GeneralUtility.Swap(ref min.z, ref max.z);
 		}
 
 		public static bool IntersectsOrTouches(this Bounds box, Plane plane)

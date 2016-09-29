@@ -3,7 +3,7 @@
 \******************************************************************************/
 
 using System;
-using Utilities = Experilous.Core.Utilities;
+using GeneralUtility = Experilous.Core.GeneralUtility;
 
 namespace Experilous.Containers
 {
@@ -172,7 +172,7 @@ namespace Experilous.Containers
 			{
 				var parentIndex = (index - 1) / 2;
 				if (AreOrdered(_heap[parentIndex], _heap[index])) break;
-				Utilities.Swap(ref _heap[index], ref _heap[parentIndex]);
+				GeneralUtility.Swap(ref _heap[index], ref _heap[parentIndex]);
 				index = parentIndex;
 			}
 		}
@@ -188,12 +188,12 @@ namespace Experilous.Containers
 					if (AreOrdered(_heap[index], _heap[leftChildIndex]) && AreOrdered(_heap[index], _heap[rightChildIndex])) break;
 					if (AreOrdered(_heap[leftChildIndex], _heap[rightChildIndex]))
 					{
-						Utilities.Swap(ref _heap[index], ref _heap[leftChildIndex]);
+						GeneralUtility.Swap(ref _heap[index], ref _heap[leftChildIndex]);
 						index = leftChildIndex;
 					}
 					else
 					{
-						Utilities.Swap(ref _heap[index], ref _heap[rightChildIndex]);
+						GeneralUtility.Swap(ref _heap[index], ref _heap[rightChildIndex]);
 						index = rightChildIndex;
 					}
 					leftChildIndex = index * 2 + 1;
@@ -202,7 +202,7 @@ namespace Experilous.Containers
 				else
 				{
 					if (AreOrdered(_heap[index], _heap[leftChildIndex])) break;
-					Utilities.Swap(ref _heap[index], ref _heap[leftChildIndex]);
+					GeneralUtility.Swap(ref _heap[index], ref _heap[leftChildIndex]);
 					index = leftChildIndex;
 					break;
 				}
