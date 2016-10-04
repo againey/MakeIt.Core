@@ -366,8 +366,8 @@ namespace Experilous.Numerics
 			if (square > 0f)
 			{
 				var squareRoot = Mathf.Sqrt(square);
-				t0 = -directionDeltaDot + squareRoot;
-				t1 = -directionDeltaDot - squareRoot;
+				t0 = -directionDeltaDot - squareRoot;
+				t1 = -directionDeltaDot + squareRoot;
 				return true;
 			}
 			else if (square == 0f)
@@ -404,8 +404,8 @@ namespace Experilous.Numerics
 			if (square > 0f)
 			{
 				var squareRoot = Mathf.Sqrt(square);
-				t0 = (-directionDeltaDot + squareRoot) / directionLengthSquared;
-				t1 = (-directionDeltaDot - squareRoot) / directionLengthSquared;
+				t0 = (-directionDeltaDot - squareRoot) / directionLengthSquared;
+				t1 = (-directionDeltaDot + squareRoot) / directionLengthSquared;
 				return true;
 			}
 			else if (square == 0f)
@@ -425,12 +425,7 @@ namespace Experilous.Numerics
 			float t0, t1;
 			if (GetIntersectionParameters(sphere, ray, out t0, out t1))
 			{
-				if (t0 >= 0f && t1 >= 0f)
-				{
-					intersection = ray.origin + ray.direction * Mathf.Min(t0, t1);
-					return true;
-				}
-				else if (t0 >= 0f)
+				if (t0 >= 0f)
 				{
 					intersection = ray.origin + ray.direction * t0;
 					return true;
@@ -453,22 +448,109 @@ namespace Experilous.Numerics
 			}
 		}
 
-		public static bool IntersectForwardExternal(Sphere sphere, ScaledRay ray, out Vector3 intersection)
+		public static bool Intersect(Sphere sphere, ScaledRay ray, out Vector3 intersection)
 		{
 			float t0, t1;
 			if (GetIntersectionParameters(sphere, ray, out t0, out t1))
 			{
-				if (t0 >= 0f && t1 >= 0f)
-				{
-					intersection = ray.origin + ray.direction * Mathf.Min(t0, t1);
-					return true;
-				}
-				else if (t0 >= 0f)
+				if (t0 >= 0f)
 				{
 					intersection = ray.origin + ray.direction * t0;
 					return true;
 				}
 				else if (t1 >= 0f)
+				{
+					intersection = ray.origin + ray.direction * t1;
+					return true;
+				}
+				else
+				{
+					intersection = Vector3.zero;
+					return false;
+				}
+			}
+			else
+			{
+				intersection = Vector3.zero;
+				return false;
+			}
+		}
+
+		public static bool IntersectForwardExternal(Sphere sphere, Ray ray, out Vector3 intersection)
+		{
+			float t0, t1;
+			if (GetIntersectionParameters(sphere, ray, out t0, out t1))
+			{
+				if (t0 >= 0f)
+				{
+					intersection = ray.origin + ray.direction * t0;
+					return true;
+				}
+				else
+				{
+					intersection = Vector3.zero;
+					return false;
+				}
+			}
+			else
+			{
+				intersection = Vector3.zero;
+				return false;
+			}
+		}
+
+		public static bool IntersectForwardExternal(Sphere sphere, ScaledRay ray, out Vector3 intersection)
+		{
+			float t0, t1;
+			if (GetIntersectionParameters(sphere, ray, out t0, out t1))
+			{
+				if (t0 >= 0f)
+				{
+					intersection = ray.origin + ray.direction * t0;
+					return true;
+				}
+				else
+				{
+					intersection = Vector3.zero;
+					return false;
+				}
+			}
+			else
+			{
+				intersection = Vector3.zero;
+				return false;
+			}
+		}
+
+		public static bool IntersectForwardInternal(Sphere sphere, Ray ray, out Vector3 intersection)
+		{
+			float t0, t1;
+			if (GetIntersectionParameters(sphere, ray, out t0, out t1))
+			{
+				if (t1 >= 0f)
+				{
+					intersection = ray.origin + ray.direction * t1;
+					return true;
+				}
+				else
+				{
+					intersection = Vector3.zero;
+					return false;
+				}
+			}
+			else
+			{
+				intersection = Vector3.zero;
+				return false;
+			}
+		}
+
+		public static bool IntersectForwardInternal(Sphere sphere, ScaledRay ray, out Vector3 intersection)
+		{
+			float t0, t1;
+			if (GetIntersectionParameters(sphere, ray, out t0, out t1))
+			{
+				if (t1 >= 0f)
 				{
 					intersection = ray.origin + ray.direction * t1;
 					return true;

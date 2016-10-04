@@ -861,6 +861,362 @@ namespace Experilous.Numerics.Tests
 		}
 
 		#endregion
+
+		[Test] public static void Intersect_SphereRay_NoIntersection()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(Vector3.zero, Vector3.forward), out intersection));
+		}
+
+		[Test] public static void Intersect_SphereRay_PosTangent()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(new Vector3(-1f, 1f, 0f), Vector3.right), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void Intersect_SphereRay_ZeroTangent()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0f), Vector3.right), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void Intersect_SphereRay_NegTangent()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(new Vector3(2f, 1f, 0f), Vector3.right), out intersection));
+		}
+
+		[Test] public static void Intersect_SphereRay_External()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, -2f), Vector3.forward), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void Intersect_SphereRay_SurfacePointingIn()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0f), Vector3.forward), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void Intersect_SphereRay_Internal()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0.5f), Vector3.forward), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void Intersect_SphereRay_SurfacePointingOut()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 2f), Vector3.forward), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void Intersect_SphereRay_NegExternal()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 3f), Vector3.forward), out intersection));
+		}
+
+		[Test] public static void Intersect_SphereScaledRay_NoIntersection()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(Vector3.zero, Vector3.forward * 1.5f), out intersection));
+		}
+
+		[Test] public static void Intersect_SphereScaledRay_PosTangent()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(-1f, 1f, 0f), Vector3.right * 1.5f), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void Intersect_SphereScaledRay_ZeroTangent()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0f), Vector3.right * 1.5f), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void Intersect_SphereScaledRay_NegTangent()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(2f, 1f, 0f), Vector3.right * 1.5f), out intersection));
+		}
+
+		[Test] public static void Intersect_SphereScaledRay_External()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, -2f), Vector3.forward * 1.5f), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void Intersect_SphereScaledRay_SurfacePointingIn()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0f), Vector3.forward * 1.5f), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void Intersect_SphereScaledRay_Internal()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0.5f), Vector3.forward * 1.5f), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void Intersect_SphereScaledRay_SurfacePointingOut()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 2f), Vector3.forward * 1.5f), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void Intersect_SphereScaledRay_NegExternal()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 3f), Vector3.forward * 1.5f), out intersection));
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereRay_NoIntersection()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(Vector3.zero, Vector3.forward), out intersection));
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereRay_PosTangent()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(-1f, 1f, 0f), Vector3.right), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereRay_ZeroTangent()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0f), Vector3.right), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereRay_NegTangent()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(2f, 1f, 0f), Vector3.right), out intersection));
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereRay_External()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, -2f), Vector3.forward), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereRay_SurfacePointingIn()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0f), Vector3.forward), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereRay_Internal()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0.5f), Vector3.forward), out intersection));
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereRay_SurfacePointingOut()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 2f), Vector3.forward), out intersection));
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereRay_NegExternal()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 3f), Vector3.forward), out intersection));
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereScaledRay_NoIntersection()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(Vector3.zero, Vector3.forward * 1.5f), out intersection));
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereScaledRay_PosTangent()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(-1f, 1f, 0f), Vector3.right * 1.5f), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereScaledRay_ZeroTangent()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0f), Vector3.right * 1.5f), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereScaledRay_NegTangent()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(2f, 1f, 0f), Vector3.right * 1.5f), out intersection));
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereScaledRay_External()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, -2f), Vector3.forward * 1.5f), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereScaledRay_SurfacePointingIn()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0f), Vector3.forward * 1.5f), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereScaledRay_Internal()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0.5f), Vector3.forward * 1.5f), out intersection));
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereScaledRay_SurfacePointingOut()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 2f), Vector3.forward * 1.5f), out intersection));
+		}
+
+		[Test] public static void IntersectForwardExternal_SphereScaledRay_NegExternal()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 3f), Vector3.forward * 1.5f), out intersection));
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereRay_NoIntersection()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(Vector3.zero, Vector3.forward), out intersection));
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereRay_PosTangent()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(-1f, 1f, 0f), Vector3.right), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereRay_ZeroTangent()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0f), Vector3.right), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereRay_NegTangent()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(2f, 1f, 0f), Vector3.right), out intersection));
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereRay_External()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, -2f), Vector3.forward), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereRay_SurfacePointingIn()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0f), Vector3.forward), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereRay_Internal()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0.5f), Vector3.forward), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereRay_SurfacePointingOut()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 2f), Vector3.forward), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereRay_NegExternal()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 3f), Vector3.forward), out intersection));
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereScaledRay_NoIntersection()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(Vector3.zero, Vector3.forward * 1.5f), out intersection));
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereScaledRay_PosTangent()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(-1f, 1f, 0f), Vector3.right * 1.5f), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereScaledRay_ZeroTangent()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0f), Vector3.right * 1.5f), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereScaledRay_NegTangent()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(2f, 1f, 0f), Vector3.right * 1.5f), out intersection));
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereScaledRay_External()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, -2f), Vector3.forward * 1.5f), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereScaledRay_SurfacePointingIn()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0f), Vector3.forward * 1.5f), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereScaledRay_Internal()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0.5f), Vector3.forward * 1.5f), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereScaledRay_SurfacePointingOut()
+		{
+			Vector3 intersection;
+			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 2f), Vector3.forward * 1.5f), out intersection));
+			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
+		}
+
+		[Test] public static void IntersectForwardInternal_SphereScaledRay_NegExternal()
+		{
+			Vector3 intersection;
+			Assert.IsFalse(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 3f), Vector3.forward * 1.5f), out intersection));
+		}
 	}
 }
 #endif
