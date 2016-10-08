@@ -46,6 +46,7 @@ namespace Experilous.Core
 			var pickerRect = new Rect(fieldRect.xMax - EditorStyles.objectField.padding.right, fieldRect.yMin, EditorStyles.objectField.padding.right, fieldRect.height);
 
 			GUIContent content = EditorGUIUtility.ObjectContent(obj, objType);
+#if !UNITY_5_4_OR_NEWER
 			if (obj == null)
 			{
 				content.text = string.Format("None ({0})", objType.GetPrettyName());
@@ -54,6 +55,7 @@ namespace Experilous.Core
 			{
 				content.text = string.Format("{0} ({1})", obj.name, obj.GetType().GetPrettyName());
 			}
+#endif
 
 			var controlID = GUIUtility.GetControlID(FocusType.Keyboard, fieldRect);
 
