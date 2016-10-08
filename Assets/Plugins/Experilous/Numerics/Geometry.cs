@@ -217,6 +217,36 @@ namespace Experilous.Numerics
 			return Vector4.Dot(v, target) * target;
 		}
 
+		public static bool Approximately(this Vector2 lhs, Vector2 rhs)
+		{
+			return Mathf.Approximately(lhs.x, rhs.x) && Mathf.Approximately(lhs.y, rhs.y);
+		}
+
+		public static bool Approximately(this Vector2 lhs, float x, float y)
+		{
+			return Mathf.Approximately(lhs.x, x) && Mathf.Approximately(lhs.y, y);
+		}
+
+		public static bool Approximately(this Vector3 lhs, Vector3 rhs)
+		{
+			return Mathf.Approximately(lhs.x, rhs.x) && Mathf.Approximately(lhs.y, rhs.y) && Mathf.Approximately(lhs.z, rhs.z);
+		}
+
+		public static bool Approximately(this Vector3 lhs, float x, float y, float z)
+		{
+			return Mathf.Approximately(lhs.x, x) && Mathf.Approximately(lhs.y, y) && Mathf.Approximately(lhs.z, z);
+		}
+
+		public static bool Approximately(this Vector4 lhs, Vector4 rhs)
+		{
+			return Mathf.Approximately(lhs.x, rhs.x) && Mathf.Approximately(lhs.y, rhs.y) && Mathf.Approximately(lhs.z, rhs.z) && Mathf.Approximately(lhs.w, rhs.w);
+		}
+
+		public static bool Approximately(this Vector4 lhs, float x, float y, float z, float w)
+		{
+			return Mathf.Approximately(lhs.x, x) && Mathf.Approximately(lhs.y, y) && Mathf.Approximately(lhs.z, z) && Mathf.Approximately(lhs.w, w);
+		}
+
 		#endregion
 
 		#region Plane/Line Intersection
