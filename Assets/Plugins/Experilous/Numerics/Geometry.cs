@@ -186,8 +186,7 @@ namespace Experilous.Numerics
 
 		public static Vector2 ProjectOnto(this Vector2 v, Vector2 target)
 		{
-			var targetUnit = target.normalized;
-			return Vector2.Dot(v, targetUnit) * targetUnit;
+			return Vector2.Dot(v, target) / Vector2.Dot(target, target) * target;
 		}
 
 		public static Vector2 ProjectOntoUnit(this Vector2 v, Vector2 target)
@@ -197,8 +196,7 @@ namespace Experilous.Numerics
 
 		public static Vector3 ProjectOnto(this Vector3 v, Vector3 target)
 		{
-			var targetUnit = target.normalized;
-			return Vector3.Dot(v, targetUnit) * targetUnit;
+			return Vector3.Dot(v, target) / Vector3.Dot(target, target) * target;
 		}
 
 		public static Vector3 ProjectOntoUnit(this Vector3 v, Vector3 target)
@@ -208,8 +206,7 @@ namespace Experilous.Numerics
 
 		public static Vector4 ProjectOnto(this Vector4 v, Vector4 target)
 		{
-			var targetUnit = target.normalized;
-			return Vector4.Dot(v, targetUnit) * targetUnit;
+			return Vector4.Dot(v, target) / Vector4.Dot(target, target) * target;
 		}
 
 		public static Vector4 ProjectOntoUnit(this Vector4 v, Vector4 target)
@@ -243,6 +240,16 @@ namespace Experilous.Numerics
 		}
 
 		public static bool Approximately(this Vector4 lhs, float x, float y, float z, float w)
+		{
+			return Mathf.Approximately(lhs.x, x) && Mathf.Approximately(lhs.y, y) && Mathf.Approximately(lhs.z, z) && Mathf.Approximately(lhs.w, w);
+		}
+
+		public static bool Approximately(this Quaternion lhs, Quaternion rhs)
+		{
+			return Mathf.Approximately(lhs.x, rhs.x) && Mathf.Approximately(lhs.y, rhs.y) && Mathf.Approximately(lhs.z, rhs.z) && Mathf.Approximately(lhs.w, rhs.w);
+		}
+
+		public static bool Approximately(this Quaternion lhs, float x, float y, float z, float w)
 		{
 			return Mathf.Approximately(lhs.x, x) && Mathf.Approximately(lhs.y, y) && Mathf.Approximately(lhs.z, z) && Mathf.Approximately(lhs.w, w);
 		}
