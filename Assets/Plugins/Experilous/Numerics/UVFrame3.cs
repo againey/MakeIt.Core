@@ -13,11 +13,33 @@ namespace Experilous.Numerics
 	[Serializable]
 	public struct UVFrame3
 	{
+		/// <summary>
+		/// The plane along which the main U axis lies.
+		/// </summary>
 		public SerializablePlane uPlane;
+
+		/// <summary>
+		/// The plane along which the main V axis lies.
+		/// </summary>
 		public SerializablePlane vPlane;
+
+		/// <summary>
+		/// The scaled direction, parallel to the U plane, in which U values decrease.
+		/// </summary>
 		public Vector3 uNegAxis;
+
+		/// <summary>
+		/// The scaled direction, parallel to the V plane, in which V values decrease.
+		/// </summary>
 		public Vector3 vNegAxis;
 
+		/// <summary>
+		/// Construct a UV frame with the given U and V planes and scaled negative U and V axes.
+		/// </summary>
+		/// <param name="uPlane">The plane along with the main U axis lies.</param>
+		/// <param name="vPlane">The plane along with the main V axis lies.</param>
+		/// <param name="uNegAxis">The scaled direction, parallel to the U plane, in which U values decrease.</param>
+		/// <param name="vNegAxis">The scaled direction, parallel to the V plane, in which V values decrease.</param>
 		public UVFrame3(SerializablePlane uPlane, SerializablePlane vPlane, Vector3 uNegAxis, Vector3 vNegAxis)
 		{
 			this.uPlane = uPlane;
@@ -26,6 +48,13 @@ namespace Experilous.Numerics
 			this.vNegAxis = vNegAxis;
 		}
 
+		/// <summary>
+		/// Construct a UV frame with the given U and V planes and scaled negative U and V axes.
+		/// </summary>
+		/// <param name="uPlane">The plane along with the main U axis lies.</param>
+		/// <param name="vPlane">The plane along with the main V axis lies.</param>
+		/// <param name="uNegAxis">The scaled direction, parallel to the U plane, in which U values decrease.</param>
+		/// <param name="vNegAxis">The scaled direction, parallel to the V plane, in which V values decrease.</param>
 		public UVFrame3(Plane uPlane, Plane vPlane, Vector3 uNegAxis, Vector3 vNegAxis)
 		{
 			this.uPlane = new SerializablePlane(uPlane.normal, uPlane.distance);
@@ -35,10 +64,10 @@ namespace Experilous.Numerics
 		}
 
 		/// <summary>
-		/// Given a three-dimensional position, calculates the UV coordinate of that position relative to this parallelogram frame.
+		/// Calculates the UV coordinate of a given position relative to the current UV frame.
 		/// </summary>
 		/// <param name="position">The position in three-dimensional space.</param>
-		/// <returns>The UV coordinate of <paramref name="position"/> relative to this frame.</returns>
+		/// <returns>The UV coordinate of <paramref name="position"/> relative to the current UV frame.</returns>
 		public Vector2 GetUV(Vector3 position)
 		{
 			return new Vector2(
