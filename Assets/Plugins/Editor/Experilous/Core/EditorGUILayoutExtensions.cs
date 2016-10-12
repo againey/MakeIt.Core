@@ -7,34 +7,88 @@ using UnityEditor;
 
 namespace Experilous.Core
 {
-	[InitializeOnLoad]
+	/// <summary>
+	/// Static class of extensions for working with the editor GUI layout system.
+	/// </summary>
 	public static class EditorGUILayoutExtensions
 	{
+		/// <summary>
+		/// Display an object field in the inspector, one with a popup selection window that can filter based on the object type specified.
+		/// </summary>
+		/// <typeparam name="TObject">The type of object to be allowed.</typeparam>
+		/// <param name="obj">The current object assigned to the field.</param>
+		/// <param name="allowSceneObjects">Allow objects in scenes to be assigned to this field.</param>
+		/// <param name="options">Layout options.</param>
+		/// <returns>The object assigned to the field.</returns>
 		public static TObject ObjectField<TObject>(TObject obj, bool allowSceneObjects, params GUILayoutOption[] options) where TObject : Object
 		{
 			return (TObject)ObjectField(obj, typeof(TObject), allowSceneObjects, options);
 		}
 
+		/// <summary>
+		/// Display an object field in the inspector, one with a popup selection window that can filter based on the object type specified.
+		/// </summary>
+		/// <typeparam name="TObject">The type of object to be allowed.</typeparam>
+		/// <param name="label">The label to use in the inspector next to the object field.</param>
+		/// <param name="obj">The current object assigned to the field.</param>
+		/// <param name="allowSceneObjects">Allow objects in scenes to be assigned to this field.</param>
+		/// <param name="options">Layout options.</param>
+		/// <returns>The object assigned to the field.</returns>
 		public static TObject ObjectField<TObject>(string label, TObject obj, bool allowSceneObjects, params GUILayoutOption[] options) where TObject : Object
 		{
 			return (TObject)ObjectField(label, obj, typeof(TObject), allowSceneObjects, options);
 		}
 
+		/// <summary>
+		/// Display an object field in the inspector, one with a popup selection window that can filter based on the object type specified.
+		/// </summary>
+		/// <typeparam name="TObject">The type of object to be allowed.</typeparam>
+		/// <param name="label">The label to use in the inspector next to the object field.</param>
+		/// <param name="obj">The current object assigned to the field.</param>
+		/// <param name="allowSceneObjects">Allow objects in scenes to be assigned to this field.</param>
+		/// <param name="options">Layout options.</param>
+		/// <returns>The object assigned to the field.</returns>
 		public static TObject ObjectField<TObject>(GUIContent label, TObject obj, bool allowSceneObjects, params GUILayoutOption[] options) where TObject : Object
 		{
 			return (TObject)ObjectField(label, obj, typeof(TObject), allowSceneObjects, options);
 		}
 
+		/// <summary>
+		/// Display an object field in the inspector, one with a popup selection window that can filter based on the object type specified.
+		/// </summary>
+		/// <param name="obj">The current object assigned to the field.</param>
+		/// <param name="objType">The type of object to be allowed.</param>
+		/// <param name="allowSceneObjects">Allow objects in scenes to be assigned to this field.</param>
+		/// <param name="options">Layout options.</param>
+		/// <returns>The object assigned to the field.</returns>
 		public static Object ObjectField(Object obj, System.Type objType, bool allowSceneObjects, params GUILayoutOption[] options)
 		{
 			return ObjectField((GUIContent)null, obj, objType, allowSceneObjects, options);
 		}
 
+		/// <summary>
+		/// Display an object field in the inspector, one with a popup selection window that can filter based on the object type specified.
+		/// </summary>
+		/// <param name="label">The label to use in the inspector next to the object field.</param>
+		/// <param name="obj">The current object assigned to the field.</param>
+		/// <param name="objType">The type of object to be allowed.</param>
+		/// <param name="allowSceneObjects">Allow objects in scenes to be assigned to this field.</param>
+		/// <param name="options">Layout options.</param>
+		/// <returns>The object assigned to the field.</returns>
 		public static Object ObjectField(string label, Object obj, System.Type objType, bool allowSceneObjects, params GUILayoutOption[] options)
 		{
 			return ObjectField(string.IsNullOrEmpty(label) ? (GUIContent)null : new GUIContent(label), obj, objType, allowSceneObjects, options);
 		}
 
+		/// <summary>
+		/// Display an object field in the inspector, one with a popup selection window that can filter based on the object type specified.
+		/// </summary>
+		/// <param name="label">The label to use in the inspector next to the object field.</param>
+		/// <param name="obj">The current object assigned to the field.</param>
+		/// <param name="objType">The type of object to be allowed.</param>
+		/// <param name="allowSceneObjects">Allow objects in scenes to be assigned to this field.</param>
+		/// <param name="options">Layout options.</param>
+		/// <returns>The object assigned to the field.</returns>
 		public static Object ObjectField(GUIContent label, Object obj, System.Type objType, bool allowSceneObjects, params GUILayoutOption[] options)
 		{
 			bool hasLabel = label != null && !string.IsNullOrEmpty(label.text);
