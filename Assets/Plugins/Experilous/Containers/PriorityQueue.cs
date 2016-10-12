@@ -17,10 +17,17 @@ namespace Experilous.Containers
 		private T[] _heap;
 		private int _size;
 
+		/// <summary>
+		/// Constructs an empty priority queue.
+		/// </summary>
 		protected PriorityQueue()
 		{
 		}
 
+		/// <summary>
+		/// Constructs an empty priority queue with space reserved to store at least <paramref name="initialCapacity"/> elements.
+		/// </summary>
+		/// <param name="initialCapacity">The minimum number of elements for which storage should be reserved immediately.</param>
 		protected PriorityQueue(int initialCapacity)
 		{
 			if (initialCapacity < 0) throw new ArgumentOutOfRangeException("initialCapacity", initialCapacity, "The initial capacity of the priority queue heap cannot be negative.");
@@ -164,6 +171,12 @@ namespace Experilous.Containers
 			_size = 0;
 		}
 
+		/// <summary>
+		/// Abstract function for comparing two elements to determine their appropriate order.
+		/// </summary>
+		/// <param name="lhs">The first item to compare.</param>
+		/// <param name="rhs">The second item to compare.</param>
+		/// <returns>True if the first item ought to come before the second item, and false if the second item should come first instead.</returns>
 		protected abstract bool AreOrdered(T lhs, T rhs);
 
 		private void BubbleUp(int index)
