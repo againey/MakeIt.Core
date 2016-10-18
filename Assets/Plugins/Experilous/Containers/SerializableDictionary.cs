@@ -40,7 +40,7 @@ namespace Experilous.Containers
 		}
 
 		/// <summary>
-		/// Called after Unity serializes the data within the dictionary.
+		/// Called after Unity deserializes the data within the dictionary.
 		/// </summary>
 		/// <remarks><para>This function rebuilds the dictionary from the lists that Unity knows how to deserialize.</para></remarks>
 		public void OnAfterDeserialize()

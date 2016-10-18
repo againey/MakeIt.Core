@@ -141,7 +141,7 @@ namespace Experilous.Core
 		}
 
 		/// <summary>
-		/// Called after Unity serializes the assembly qualified type name.
+		/// Called after Unity deserializes the assembly qualified type name.
 		/// </summary>
 		/// <remarks><para>This function gets the appropriate <see cref="System.Type"/> based on the deserialized assembly qualified name.</para></remarks>
 		public void OnAfterDeserialize()
