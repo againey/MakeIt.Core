@@ -80,7 +80,7 @@ namespace Experilous.Containers
 		public int Count { get { return ((IDictionary<TKey, TValue>)_dictionary).Count; } }
 
 		/// <summary>
-		/// Whether this dictionary is read-only and thus cannot have items interted into or removed from it.
+		/// Whether this dictionary is read-only and thus cannot have items inserted into or removed from it.
 		/// </summary>
 		public bool IsReadOnly { get { return ((IDictionary<TKey, TValue>)_dictionary).IsReadOnly; } }
 
