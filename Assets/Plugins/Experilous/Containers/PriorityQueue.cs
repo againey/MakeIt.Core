@@ -35,7 +35,7 @@ namespace Experilous.Containers
 		}
 
 		/// <summary>
-		/// The element in the queue with the highest priority, determined by a derived class's implementation of the <c>AreOrdered()</c> method.
+		/// The element in the queue with the highest priority, determined by a derived class's implementation of the <see cref="AreOrdered"/> method.
 		/// </summary>
 		public T front
 		{
@@ -63,7 +63,7 @@ namespace Experilous.Containers
 		public int Count { get { return _size; } }
 
 		/// <summary>
-		/// Adds an element to the queue.  It's position in the queue will be determined by a derived class's implementation of the <c>AreOrdered()</c> method.
+		/// Adds an element to the queue.  It's position in the queue will be determined by a derived class's implementation of the <see cref="AreOrdered"/> method.
 		/// </summary>
 		/// <param name="item">The item to be added to the queue.</param>
 		public void Push(T item)
@@ -83,8 +83,9 @@ namespace Experilous.Containers
 		}
 
 		/// <summary>
-		/// Removes and returns the highest priority element from the queue, determined by a derived class's implementation of the <c>AreOrdered()</c> method.
+		/// Removes and returns the highest priority element from the queue, determined by a derived class's implementation of the <see cref="AreOrdered"/> method.
 		/// </summary>
+		/// <returns>The highest priority element in the queue.</returns>
 		public T Pop()
 		{
 			var item = front;
@@ -93,15 +94,16 @@ namespace Experilous.Containers
 		}
 
 		/// <summary>
-		/// Returns the highest priority element from the queue without removing it, determined by a derived class's implementation of the <c>AreOrdered()</c> method.
+		/// Returns the highest priority element from the queue without removing it, determined by a derived class's implementation of the <see cref="AreOrdered"/> method.
 		/// </summary>
+		/// <returns>The highest priority element in the queue.</returns>
 		public T Peek()
 		{
 			return front;
 		}
 
 		/// <summary>
-		/// Removes the highest priority element from the queue, determined by a derived class's implementation of the <c>AreOrdered()</c> method.
+		/// Removes the highest priority element from the queue, determined by a derived class's implementation of the <see cref="AreOrdered"/> method.
 		/// </summary>
 		public void RemoveFront()
 		{
@@ -124,7 +126,7 @@ namespace Experilous.Containers
 		}
 
 		/// <summary>
-		/// Recomputes the priority of the indicated item using the <see cref="AreOrderedDelegate"/> functor provided during construction of the queue, and repositions the item accordingly within the internal data structure.
+		/// Recomputes the priority of the indicated item using an overriden <see cref="AreOrdered"/> method provided by the derived class, and repositions the item accordingly within the internal data structure.
 		/// </summary>
 		/// <param name="item">The item to be reprioritized.</param>
 		public void Reprioritize(T item)

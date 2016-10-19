@@ -37,6 +37,7 @@ namespace Experilous.Containers
 		/// Initializes the priority queue with the specified ordering delegate and a specified initial capacity.
 		/// </summary>
 		/// <param name="areOrdered">The delegate that will indicate if two items are ordered properly.</param>
+		/// <param name="initialCapacity">The number of items for which underlying storage capacity will be allocated immediately.</param>
 		public DelegateOrderedPriorityQueue(AreOrderedDelegate areOrdered, int initialCapacity)
 			: base(initialCapacity)
 		{

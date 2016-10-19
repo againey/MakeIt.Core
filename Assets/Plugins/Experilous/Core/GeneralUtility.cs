@@ -8,6 +8,9 @@ using System.Text.RegularExpressions;
 
 namespace Experilous.Core
 {
+	/// <summary>
+	/// A static utility class with generic functionality not belonging in any more specific utility class.
+	/// </summary>
 	public static class GeneralUtility
 	{
 		/// <summary>
@@ -29,7 +32,7 @@ namespace Experilous.Core
 		/// <param name="type">The type for which a pretty name should be generated.</param>
 		/// <param name="includeNamespaces">Whether the full namespace of the type should be included, or just the immdiate typename itself.</param>
 		/// <param name="useBuiltInNames">Whether to use built-in C# names for primitive types, or use the full type name found in the .NET library.</param>
-		/// <returns></returns>
+		/// <returns>The C#-style type name for the specified type.</returns>
 		public static string GetPrettyName(this System.Type type, bool includeNamespaces = false, bool useBuiltInNames = true)
 		{
 			if (useBuiltInNames)

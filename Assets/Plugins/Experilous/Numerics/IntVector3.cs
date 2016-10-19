@@ -137,6 +137,7 @@ namespace Experilous.Numerics
 		/// Convert an IntVector2 instance to an IntVector3 instance by copying the first two components and setting the third to zero.
 		/// </summary>
 		/// <param name="v">The vector to convert.</param>
+		/// <returns>The converted IntVector3.</returns>
 		public static implicit operator IntVector3(IntVector2 v)
 		{
 			return new IntVector3(v.x, v.y, 0);
@@ -146,6 +147,7 @@ namespace Experilous.Numerics
 		/// Convert an IntVector4 instance to an IntVector3 instance by copying the first three components and ignoring the fourth.
 		/// </summary>
 		/// <param name="v">The vector to convert.</param>
+		/// <returns>The converted IntVector3.</returns>
 		public static implicit operator IntVector3(IntVector4 v)
 		{
 			return new IntVector3(v.x, v.y, v.z);
@@ -155,6 +157,7 @@ namespace Experilous.Numerics
 		/// Convert a Vector2 instance to an IntVector3 instance by copying the first two components (converting them from float to int in the process) and setting the third to zero.
 		/// </summary>
 		/// <param name="v">The vector to convert.</param>
+		/// <returns>The converted IntVector3.</returns>
 		public static explicit operator IntVector3(Vector2 v)
 		{
 			return new IntVector3((int)v.x, (int)v.y, 0);
@@ -164,6 +167,7 @@ namespace Experilous.Numerics
 		/// Convert a Vector2 instance to an IntVector3 instance by copying the components (converting them from float to int in the process).
 		/// </summary>
 		/// <param name="v">The vector to convert.</param>
+		/// <returns>The converted IntVector3.</returns>
 		public static explicit operator IntVector3(Vector3 v)
 		{
 			return new IntVector3((int)v.x, (int)v.y, (int)v.z);
@@ -173,6 +177,7 @@ namespace Experilous.Numerics
 		/// Convert a Vector2 instance to an IntVector3 instance by copying the first two components (converting them from float to int in the process) and ignoring the fourth.
 		/// </summary>
 		/// <param name="v">The vector to convert.</param>
+		/// <returns>The converted IntVector3.</returns>
 		public static explicit operator IntVector3(Vector4 v)
 		{
 			return new IntVector3((int)v.x, (int)v.y, (int)v.z);
@@ -181,7 +186,8 @@ namespace Experilous.Numerics
 		/// <summary>
 		/// Convert an IntVector3 instance to a Vector2 instance by copying the first two components (converting them from int to float in the process) and ignoring the third.
 		/// </summary>
-		/// <param name="v"></param>
+		/// <param name="v">The vector to convert.</param>
+		/// <returns>The converted Vector2.</returns>
 		public static implicit operator Vector2(IntVector3 v)
 		{
 			return new Vector2(v.x, v.y);
@@ -190,7 +196,8 @@ namespace Experilous.Numerics
 		/// <summary>
 		/// Convert an IntVector3 instance to a Vector3 instance by copying the components (converting them from int to float in the process).
 		/// </summary>
-		/// <param name="v"></param>
+		/// <param name="v">The vector to convert.</param>
+		/// <returns>The converted Vector3.</returns>
 		public static implicit operator Vector3(IntVector3 v)
 		{
 			return new Vector3(v.x, v.y, v.z);
@@ -199,7 +206,8 @@ namespace Experilous.Numerics
 		/// <summary>
 		/// Convert an IntVector3 instance to a Vector2 instance by copying the first two components (converting them from int to float in the process) and setting the fourth to zero.
 		/// </summary>
-		/// <param name="v"></param>
+		/// <param name="v">The vector to convert.</param>
+		/// <returns>The converted Vector4.</returns>
 		public static implicit operator Vector4(IntVector3 v)
 		{
 			return new Vector4(v.x, v.y, v.z, 0f);

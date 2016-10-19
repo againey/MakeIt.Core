@@ -62,7 +62,7 @@ namespace Experilous.Numerics
 		/// <param name="p0">The starting vector of the interpolation, when <paramref name="t"/> is zero.</param>
 		/// <param name="p1">The ending vector of the interpolation, when <paramref name="t"/> is one.</param>
 		/// <param name="t">The position at which the interpolation is done.  Typically in the range [0, 1], but all values are valid.</param>
-		/// <returns></returns>
+		/// <returns>The result of performing a spherical linear interpolation from <paramref name="p0"/> to <paramref name="p1"/> at position <paramref name="t"/>.</returns>
 		public static Vector3 SlerpUnitVectors(Vector3 p0, Vector3 p1, float t)
 		{
 			var omega = Mathf.Acos(Vector3.Dot(p0, p1));

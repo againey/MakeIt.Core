@@ -14,6 +14,10 @@ namespace Experilous.Core
 	public struct SerializableType : ISerializationCallbackReceiver, IEquatable<SerializableType>, IEquatable<Type>
 	{
 		[SerializeField] private string _assemblyQualifiedTypeName;
+
+		/// <summary>
+		/// The type to be serialized that this wrapper represents.
+		/// </summary>
 		[NonSerialized] public Type type;
 
 		/// <summary>
@@ -41,6 +45,7 @@ namespace Experilous.Core
 		/// Implicitly convert a serializable type to the <see cref="System.Type"/> that it represents.
 		/// </summary>
 		/// <param name="serializableType">The serializable type to be converted.</param>
+		/// <returns>The type represented by the converted serializable type.</returns>
 		public static implicit operator Type(SerializableType serializableType)
 		{
 			return serializableType.type;
@@ -50,6 +55,7 @@ namespace Experilous.Core
 		/// Implicitly convert a <see cref="System.Type"/> to a serializable type.
 		/// </summary>
 		/// <param name="type">The type to be convert.</param>
+		/// <returns>The serializable type which represents the converted type.</returns>
 		public static implicit operator SerializableType(Type type)
 		{
 			return new SerializableType(type);

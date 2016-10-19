@@ -56,6 +56,7 @@ namespace Experilous.Numerics
 		/// Converts the given ray to a scaled ray.
 		/// </summary>
 		/// <param name="ray">The ray to be converted.</param>
+		/// <returns>The converted scaled ray.</returns>
 		/// <remarks><para>Since the ray to be converted has more rigid requirements on its state,
 		/// the conversion is nothing more than a simple assignment of fields.</para></remarks>
 		public static implicit operator ScaledRay(Ray ray)
@@ -67,6 +68,7 @@ namespace Experilous.Numerics
 		/// Converts the given scaled ray to a ray with a unit vector direction.
 		/// </summary>
 		/// <param name="ray">The scaled ray to be converted.</param>
+		/// <returns>The converted Ray.</returns>
 		/// <remarks><para>Since the ray to be converted has less rigid requirements on its state,
 		/// the conversion might include a normalizatio of the ray direction.</para></remarks>
 		public static explicit operator Ray(ScaledRay ray)

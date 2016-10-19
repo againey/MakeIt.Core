@@ -84,6 +84,7 @@ namespace Experilous.Numerics
 		/// Converts a serializable plane into a regular plane.
 		/// </summary>
 		/// <param name="plane">The serializable plane to be converted.</param>
+		/// <returns>The converted plane.</returns>
 		public static implicit operator Plane(SerializablePlane plane)
 		{
 			return new Plane(plane.normal, plane.distance);
@@ -93,6 +94,7 @@ namespace Experilous.Numerics
 		/// Converts a regular plane into a serializable plane.
 		/// </summary>
 		/// <param name="plane">The regular plane to be converted.</param>
+		/// <returns>The converted serializable plane.</returns>
 		public static implicit operator SerializablePlane(Plane plane)
 		{
 			return new SerializablePlane(plane.normal, plane.distance);
