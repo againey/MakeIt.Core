@@ -1238,6 +1238,17 @@ namespace Experilous.Numerics
 			return new SerializablePlane(plane.normal, plane.distance - distance);
 		}
 
+		/// <summary>
+		/// Determines the closest point on the surface of the plane to the given point.
+		/// </summary>
+		/// <param name="plane">The plane onto which the given point will be projected.</param>
+		/// <param name="point">The point to which the closest point of the surface is to be found.</param>
+		/// <returns>The point on the surface of the plane closest to the given point.</returns>
+		public static Vector3 ClosestPoint(this Plane plane, Vector3 point)
+		{
+			return point - Vector3.Dot(point + plane.normal * plane.distance, plane.normal) * plane.normal;
+		}
+
 		#endregion
 
 		#region Ray Operations
