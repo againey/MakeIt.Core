@@ -4,6 +4,9 @@
 
 namespace Experilous.Numerics
 {
+	/// <summary>
+	/// A general mathematics utility class.
+	/// </summary>
 	public static class Math
 	{
 		#region Arithmetic
@@ -45,14 +48,24 @@ namespace Experilous.Numerics
 		/// <summary>
 		/// Quick test to determine if the two input integers both have the same sign.  Zero is considered positive.
 		/// </summary>
-		/// <param name="n">The integer to test.</param>
-		/// <returns>True if <paramref name="n"/> is even, false if it is odd.</returns>
+		/// <param name="a">The integer to compare.</param>
+		/// <param name="b">The integer to compare.</param>
+		/// <returns>True if both are non-negative or if both are negative, false if one is negative while the other is not.</returns>
 		/// <remarks>Assumes that signed integers are represented using two's complement.</remarks>
 		public static bool HaveSameSign(int a, int b)
 		{
 			return (a ^ b) >= 0;
 		}
 
+		/// <summary>
+		/// Performs a linear interpolation from <paramref name="a"/> to <paramref name="b"/> using the interpolation parameter <paramref name="t"/>, which does not get clamped to the range [0, 1] first.
+		/// </summary>
+		/// <param name="a">The starting value of the interpolation, when <paramref name="t"/> is zero.</param>
+		/// <param name="b">The ending value of the interpolation, when <paramref name="t"/> is one.</param>
+		/// <param name="t">The position at which the interpolation is done, determining the weighting applied to <paramref name="a"/> and <paramref name="b"/>.  Typically in the range [0, 1], but all values are valid.</param>
+		/// <returns>The result of linearly interpolating from <paramref name="a"/> to <paramref name="b"/> at position <paramref name="t"/>.</returns>
+		/// <remarks><para>This functionality was added to the <see cref="UnityEngine.Mathf"/> class in Unity 5.2, and is only included
+		/// in this class for use in earlier versions of Unity which do not have it built in to the Unity library.</para></remarks>
 		public static float LerpUnclamped(float a, float b, float t)
 		{
 			return (b - a) * t + a;
