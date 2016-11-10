@@ -3,23 +3,27 @@
 \******************************************************************************/
 
 using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
 
 using System.Threading;
 
 namespace Experilous.Core
 {
+	/// <summary>
+	/// A class of static helper functions for working with threads.
+	/// </summary>
 	public static class ThreadUtility
 	{
 		private static bool _mainThreadIdentified = false;
 		private static int _mainThreadId;
 
 #if UNITY_EDITOR
-		[InitializeOnLoadMethod]
+		[UnityEditor.InitializeOnLoadMethod]
 #endif
+#if UNITY_5_2 || UNITY_5_3_OR_NEWER
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+#else
 		[RuntimeInitializeOnLoadMethod]
+#endif
 		private static void OnLoad()
 		{
 			_mainThreadId = Thread.CurrentThread.ManagedThreadId;
@@ -32,9 +36,8 @@ namespace Experilous.Core
 		/// <remarks>
 		/// <para>The value of this property is determined by comparing the current thread
 		/// id to the thread id acquired during Unity's call of methods marked with either
-		/// the [<see cref="InitializeOnLoadMethodAttribute"/>] or
+		/// the [<see cref="UnityEditor.InitializeOnLoadMethodAttribute"/>] or
 		/// the [<see cref="RuntimeInitializeOnLoadMethodAttribute"/>].</para>
-		/// 
 		/// <para>If this property returns false, you should not attempt to access the vast
 		/// majority of the Unity API.</para>
 		/// </remarks>

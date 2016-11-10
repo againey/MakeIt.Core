@@ -12,104 +12,65 @@ namespace Experilous.Numerics.Tests
 	{
 		#region Private Helpers
 
-		private delegate void AdjustMidAnchorDelegate(ref Vector2 min, ref Vector2 size, float targetAspectRatio);
-		private delegate void AdjustSharedAnchorDelegate(ref Vector2 min, ref Vector2 size, float targetAspectRatio, Vector2 anchor);
-		private delegate void AdjustDistinctAnchorsDelegate(ref Vector2 min, ref Vector2 size, float targetAspectRatio, Vector2 sourceAnchor, Vector2 targetAnchor);
+		private delegate Rect AdjustMidAnchorDelegate(Rect rect, float targetAspectRatio);
+		private delegate Rect AdjustSharedAnchorDelegate(Rect rect, float targetAspectRatio, Vector2 anchor);
+		private delegate Rect AdjustDistinctAnchorsDelegate(Rect rect, float targetAspectRatio, Vector2 sourceAnchor, Vector2 targetAnchor);
 
 		private void AssertNoChange(Vector2 min, Vector2 size, float targetAspectRatio, AdjustMidAnchorDelegate adjust)
 		{
-			Vector2 expectedMin = min;
-			Vector2 expectedSize = size;
-			Vector2 actualMin = min;
-			Vector2 actualSize = size;
-			adjust(ref actualMin, ref actualSize, targetAspectRatio);
-			Assert.AreEqual(expectedMin, actualMin);
-			Assert.AreEqual(expectedSize, actualSize);
+			var adjusted = adjust(new Rect(min, size), targetAspectRatio);
+			Assert.AreEqual(new Rect(min, size), adjusted);
 		}
 
 		private void AssertNoChange(Vector2 min, Vector2 size, float targetAspectRatio, Vector2 anchor, AdjustSharedAnchorDelegate adjust)
 		{
-			Vector2 expectedMin = min;
-			Vector2 expectedSize = size;
-			Vector2 actualMin = min;
-			Vector2 actualSize = size;
-			adjust(ref actualMin, ref actualSize, targetAspectRatio, anchor);
-			Assert.AreEqual(expectedMin, actualMin);
-			Assert.AreEqual(expectedSize, actualSize);
+			var adjusted = adjust(new Rect(min, size), targetAspectRatio, anchor);
+			Assert.AreEqual(new Rect(min, size), adjusted);
 		}
 
 		private void AssertNoChange(Vector2 min, Vector2 size, float targetAspectRatio, Vector2 sourceAnchor, Vector2 targetAnchor, AdjustDistinctAnchorsDelegate adjust)
 		{
-			Vector2 expectedMin = min;
-			Vector2 expectedSize = size;
-			Vector2 actualMin = min;
-			Vector2 actualSize = size;
-			adjust(ref actualMin, ref actualSize, targetAspectRatio, sourceAnchor, targetAnchor);
-			Assert.AreEqual(expectedMin, actualMin);
-			Assert.AreEqual(expectedSize, actualSize);
+			var adjusted = adjust(new Rect(min, size), targetAspectRatio, sourceAnchor, targetAnchor);
+			Assert.AreEqual(new Rect(min, size), adjusted);
 		}
 
 		private void AssertAreSame(Vector2 expectedMin, Vector2 expectedSize, Vector2 min, Vector2 size, float targetAspectRatio, AdjustMidAnchorDelegate adjust)
 		{
-			Vector2 actualMin = min;
-			Vector2 actualSize = size;
-			adjust(ref actualMin, ref actualSize, targetAspectRatio);
-			Assert.AreEqual(expectedMin, actualMin);
-			Assert.AreEqual(expectedSize, actualSize);
+			var adjusted = adjust(new Rect(min, size), targetAspectRatio);
+			Assert.AreEqual(new Rect(expectedMin, expectedSize), adjusted);
 		}
 
 		private void AssertAreSame(Vector2 expectedMin, Vector2 expectedSize, Vector2 min, Vector2 size, float targetAspectRatio, Vector2 anchor, AdjustSharedAnchorDelegate adjust)
 		{
-			Vector2 actualMin = min;
-			Vector2 actualSize = size;
-			adjust(ref actualMin, ref actualSize, targetAspectRatio, anchor);
-			Assert.AreEqual(expectedMin, actualMin);
-			Assert.AreEqual(expectedSize, actualSize);
+			var adjusted = adjust(new Rect(min, size), targetAspectRatio, anchor);
+			Assert.AreEqual(new Rect(expectedMin, expectedSize), adjusted);
 		}
 
 		private void AssertAreSame(Vector2 expectedMin, Vector2 expectedSize, Vector2 min, Vector2 size, float targetAspectRatio, Vector2 sourceAnchor, Vector2 targetAnchor, AdjustDistinctAnchorsDelegate adjust)
 		{
-			Vector2 actualMin = min;
-			Vector2 actualSize = size;
-			adjust(ref actualMin, ref actualSize, targetAspectRatio, sourceAnchor, targetAnchor);
-			Assert.AreEqual(expectedMin, actualMin);
-			Assert.AreEqual(expectedSize, actualSize);
+			var adjusted = adjust(new Rect(min, size), targetAspectRatio, sourceAnchor, targetAnchor);
+			Assert.AreEqual(new Rect(expectedMin, expectedSize), adjusted);
 		}
 
 		private void AssertAreSame(Vector2 min, Vector2 size, float targetAspectRatio, AdjustMidAnchorDelegate adjustExpected, AdjustMidAnchorDelegate adjustActual)
 		{
-			Vector2 expectedMin = min;
-			Vector2 expectedSize = size;
-			Vector2 actualMin = min;
-			Vector2 actualSize = size;
-			adjustExpected(ref expectedMin, ref expectedSize, targetAspectRatio);
-			adjustActual(ref actualMin, ref actualSize, targetAspectRatio);
-			Assert.AreEqual(expectedMin, actualMin);
-			Assert.AreEqual(expectedSize, actualSize);
+			var expected = adjustExpected(new Rect(min, size), targetAspectRatio);
+			var adjusted = adjustActual(new Rect(min, size), targetAspectRatio);
+			Assert.AreEqual(expected, adjusted);
 		}
 
 		private void AssertAreSame(Vector2 min, Vector2 size, float targetAspectRatio, Vector2 anchor, AdjustSharedAnchorDelegate adjustExpected, AdjustSharedAnchorDelegate adjustActual)
 		{
-			Vector2 expectedMin = min;
-			Vector2 expectedSize = size;
-			Vector2 actualMin = min;
-			Vector2 actualSize = size;
-			adjustExpected(ref expectedMin, ref expectedSize, targetAspectRatio, anchor);
-			adjustActual(ref actualMin, ref actualSize, targetAspectRatio, anchor);
-			Assert.AreEqual(expectedMin, actualMin);
-			Assert.AreEqual(expectedSize, actualSize);
+			var expected = adjustExpected(new Rect(min, size), targetAspectRatio, anchor);
+			var adjusted = adjustActual(new Rect(min, size), targetAspectRatio, anchor);
+			Assert.AreEqual(expected, adjusted);
 		}
 
 		private void AssertAreSame(Vector2 min, Vector2 size, float targetAspectRatio, Vector2 sourceAnchor, Vector2 targetAnchor, AdjustDistinctAnchorsDelegate adjustExpected, AdjustDistinctAnchorsDelegate adjustActual)
 		{
-			Vector2 expectedMin = min;
-			Vector2 expectedSize = size;
-			Vector2 actualMin = min;
-			Vector2 actualSize = size;
-			adjustExpected(ref expectedMin, ref expectedSize, targetAspectRatio, sourceAnchor, targetAnchor);
-			adjustActual(ref actualMin, ref actualSize, targetAspectRatio, sourceAnchor, targetAnchor);
-			Assert.AreEqual(expectedMin, actualMin);
-			Assert.AreEqual(expectedSize, actualSize);
+			var expected = adjustExpected(new Rect(min, size), targetAspectRatio, sourceAnchor, targetAnchor);
+			var adjusted = adjustActual(new Rect(min, size), targetAspectRatio, sourceAnchor, targetAnchor);
+			Assert.AreEqual(expected, adjusted);
 		}
 
 		#endregion
