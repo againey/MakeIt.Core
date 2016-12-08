@@ -434,6 +434,26 @@ namespace Experilous.Numerics
 		}
 
 		/// <summary>
+		/// Returns a vector that is the same length as but perpendicular to this vector, rotated clockwise by 90 degrees.
+		/// </summary>
+		/// <param name="v">The original vector for which a perpendicular vector is to be returned.</param>
+		/// <returns>A vector that is the same length as the original vector, but rotated 90 degrees clockwise.</returns>
+		public static Vector2 PerpendicularCW(this Vector2 v)
+		{
+			return new Vector2(v.y, -v.x);
+		}
+
+		/// <summary>
+		/// Returns a vector that is the same length as but perpendicular to this vector, rotated counter-clockwise by 90 degrees.
+		/// </summary>
+		/// <param name="v">The original vector for which a perpendicular vector is to be returned.</param>
+		/// <returns>A vector that is the same length as the original vector, but rotated 90 degrees counter-clockwise.</returns>
+		public static Vector2 PerpendicularCCW(this Vector2 v)
+		{
+			return new Vector2(-v.y, v.x);
+		}
+
+		/// <summary>
 		/// Checks if the two vectors are approximately equal, accounting for floating point imprecision.
 		/// </summary>
 		/// <param name="lhs">The first vector to compare.</param>
@@ -536,6 +556,25 @@ namespace Experilous.Numerics
 		public static bool Approximately(this Quaternion lhs, float x, float y, float z, float w)
 		{
 			return Mathf.Approximately(lhs.x, x) && Mathf.Approximately(lhs.y, y) && Mathf.Approximately(lhs.z, z) && Mathf.Approximately(lhs.w, w);
+		}
+
+		#endregion
+
+		#region Line Operations
+
+		public static Vector2 ProjectOnto(this Vector2 point, Vector2 rayOrigin, Vector2 rayVector)
+		{
+			return (point - rayOrigin).ProjectOnto(rayVector) + rayOrigin;
+		}
+
+		public static Vector2 ProjectOntoUnit(this Vector2 point, Vector2 rayOrigin, Vector2 rayUnitVector)
+		{
+			return (point - rayOrigin).ProjectOntoUnit(rayUnitVector) + rayOrigin;
+		}
+
+		public static Vector2 ProjectOnto(this Vector2 point, Ray2D ray)
+		{
+			return (point - ray.origin).ProjectOntoUnit(ray.direction) + ray.origin;
 		}
 
 		#endregion

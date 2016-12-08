@@ -2,6 +2,8 @@
 * Copyright Andy Gainey                                                        *
 \******************************************************************************/
 
+using UnityEngine;
+
 namespace Experilous.Numerics
 {
 	/// <summary>
@@ -166,6 +168,81 @@ namespace Experilous.Numerics
 			else
 			{
 				return Plus1Log2Ceil((uint)n);
+			}
+		}
+
+		#endregion
+
+		#region Quadratic Equation
+
+		public static int SolveQuadratic(float a, float b, float c, out float t0, out float t1, float epsilon = 0.0001f)
+		{
+			// Conditionally uses the quadratic formula or the Citardauq formula to minimize precision loss.
+			if (a != 0f)
+			{
+				var sqr = b * b - 4f * a * c;
+				// If the square is positive, we can take the square root and use the standard formulas.
+				if (sqr > 0f)
+				{
+					var sqrt = Mathf.Sqrt(sqr);
+					// Make sure the smaller t value is stored in t0, the larger in t1.
+					if (b >= 0f)
+					{
+						t0 = -0.5f * (b + sqrt) / a; // Quadratic
+						t1 = -2f * c / (b + sqrt); // Citardauq
+						return 2;
+					}
+					else
+					{
+						t0 = -2f * c / (b - sqrt); // Citardauq
+						t1 = -0.5f * (b - sqrt) / a; // Quadratic
+						return 2;
+					}
+				}
+				// If it is at least within epsilon of being zero, we will treat the square root portion as exactly zero.
+				else if (sqr > -epsilon)
+				{
+					// Make sure the larger value is in the denominator.
+					if (Mathf.Abs(a) > Mathf.Abs(b))
+					{
+						t0 = t1 = -0.5f * b / a; // Quadratic
+						return 1;
+					}
+					else
+					{
+						t0 = t1 = -2f * c / b; // Citardauq
+						return 1;
+					}
+				}
+				// If the square is definitely negative, there is no solution.
+				else
+				{
+					t0 = t1 = float.NaN;
+					return 0;
+				}
+			}
+			// This is actually at most a linear equation, no need to mess with square roots.
+			else
+			{
+				// If the linear component is not zero, then it must have exactly one root.
+				if (b != 0f)
+				{
+					t0 = t1 = -c / b;
+					return 1;
+				}
+				// Else, it is a constant function; if it is a non-zero constant, it has no root.
+				else if (c != 0f)
+				{
+					t0 = t1 = float.NaN;
+					return 0;
+				}
+				// Else, it has infinite roots.
+				else
+				{
+					t0 = float.NegativeInfinity;
+					t1 = float.PositiveInfinity;
+					return 0; // Return 0 as the number of roots anyway.  If the caller cares about this case, t0 and t1 can be checked.
+				}
 			}
 		}
 
