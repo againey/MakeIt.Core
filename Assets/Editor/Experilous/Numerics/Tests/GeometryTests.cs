@@ -14,7 +14,7 @@ namespace Experilous.Numerics.Tests
 
 		#region GetIntersectionParameter_NegativeOffset
 
-		[Test] public static void GetIntersectionParameter_NegativeOffset_PerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_NegativeOffset_PerpendicularNegative()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -23,7 +23,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(-0.5f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_NegativeOffset_InversePerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_NegativeOffset_InversePerpendicularNegative()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -32,7 +32,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(-0.5f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_NegativeOffset_PerpendicularZero()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_NegativeOffset_PerpendicularZero()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -41,7 +41,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_NegativeOffset_InversePerpendicularZero()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_NegativeOffset_InversePerpendicularZero()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -50,7 +50,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_NegativeOffset_PerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_NegativeOffset_PerpendicularPositive()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -59,7 +59,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0.5f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_NegativeOffset_InversePerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_NegativeOffset_InversePerpendicularPositive()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -68,7 +68,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0.5f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_NegativeOffset_NonPerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_NegativeOffset_NonPerpendicularNegative()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -77,7 +77,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(-0.25f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_NegativeOffset_InverseNonPerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_NegativeOffset_InverseNonPerpendicularNegative()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -86,7 +86,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(-0.25f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_NegativeOffset_NonPerpendicularZero()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_NegativeOffset_NonPerpendicularZero()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -95,7 +95,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_NegativeOffset_InverseNonPerpendicularZero()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_NegativeOffset_InverseNonPerpendicularZero()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -104,7 +104,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_NegativeOffset_NonPerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_NegativeOffset_NonPerpendicularPositive()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -113,7 +113,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0.25f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_NegativeOffset_InverseNonPerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_NegativeOffset_InverseNonPerpendicularPositive()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -122,7 +122,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0.25f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_NegativeOffset_ParallelNegative()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_NegativeOffset_ParallelNegative()
 		{
 			Assert.That(float.IsInfinity(
 				Geometry.GetIntersectionParameter(
@@ -130,7 +130,7 @@ namespace Experilous.Numerics.Tests
 					new ScaledRay(new Vector3(1f, 0f, 0f), new Vector3(0f, 4f, 3f)))));
 		}
 
-		[Test] public static void GetIntersectionParameter_NegativeOffset_ParallelZero()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_NegativeOffset_ParallelZero()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -139,7 +139,7 @@ namespace Experilous.Numerics.Tests
 				Is.NaN);
 		}
 
-		[Test] public static void GetIntersectionParameter_NegativeOffset_ParallelZeroOffset()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_NegativeOffset_ParallelZeroOffset()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -148,7 +148,7 @@ namespace Experilous.Numerics.Tests
 				Is.NaN);
 		}
 
-		[Test] public static void GetIntersectionParameter_NegativeOffset_ParallelPositive()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_NegativeOffset_ParallelPositive()
 		{
 			Assert.That(float.IsInfinity(
 				Geometry.GetIntersectionParameter(
@@ -160,7 +160,7 @@ namespace Experilous.Numerics.Tests
 
 		#region GetIntersectionParameter_ZeroOffset
 
-		[Test] public static void GetIntersectionParameter_ZeroOffset_PerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_ZeroOffset_PerpendicularNegative()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -169,7 +169,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(-0.5f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_ZeroOffset_InversePerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_ZeroOffset_InversePerpendicularNegative()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -178,7 +178,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(-0.5f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_ZeroOffset_PerpendicularZero()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_ZeroOffset_PerpendicularZero()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -187,7 +187,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_ZeroOffset_InversePerpendicularZero()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_ZeroOffset_InversePerpendicularZero()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -196,7 +196,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_ZeroOffset_PerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_ZeroOffset_PerpendicularPositive()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -205,7 +205,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0.5f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_ZeroOffset_InversePerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_ZeroOffset_InversePerpendicularPositive()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -214,7 +214,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0.5f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_ZeroOffset_NonPerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_ZeroOffset_NonPerpendicularNegative()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -223,7 +223,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(-0.25f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_ZeroOffset_InverseNonPerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_ZeroOffset_InverseNonPerpendicularNegative()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -232,7 +232,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(-0.25f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_ZeroOffset_NonPerpendicularZero()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_ZeroOffset_NonPerpendicularZero()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -241,7 +241,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_ZeroOffset_InverseNonPerpendicularZero()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_ZeroOffset_InverseNonPerpendicularZero()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -250,7 +250,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_ZeroOffset_NonPerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_ZeroOffset_NonPerpendicularPositive()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -259,7 +259,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0.25f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_ZeroOffset_InverseNonPerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_ZeroOffset_InverseNonPerpendicularPositive()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -268,7 +268,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0.25f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_ZeroOffset_ParallelNegative()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_ZeroOffset_ParallelNegative()
 		{
 			Assert.That(float.IsInfinity(
 				Geometry.GetIntersectionParameter(
@@ -276,7 +276,7 @@ namespace Experilous.Numerics.Tests
 					new ScaledRay(new Vector3(-1f, 0f, 0f), new Vector3(0f, 4f, 3f)))));
 		}
 
-		[Test] public static void GetIntersectionParameter_ZeroOffset_ParallelZero()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_ZeroOffset_ParallelZero()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -285,7 +285,7 @@ namespace Experilous.Numerics.Tests
 				Is.NaN);
 		}
 
-		[Test] public static void GetIntersectionParameter_ZeroOffset_ParallelZeroOffset()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_ZeroOffset_ParallelZeroOffset()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -294,7 +294,7 @@ namespace Experilous.Numerics.Tests
 				Is.NaN);
 		}
 
-		[Test] public static void GetIntersectionParameter_ZeroOffset_ParallelPositive()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_ZeroOffset_ParallelPositive()
 		{
 			Assert.That(float.IsInfinity(
 				Geometry.GetIntersectionParameter(
@@ -306,7 +306,7 @@ namespace Experilous.Numerics.Tests
 
 		#region GetIntersectionParameter_PositiveOffset
 
-		[Test] public static void GetIntersectionParameter_PositiveOffset_PerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_PositiveOffset_PerpendicularNegative()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -315,7 +315,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(-0.5f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_PositiveOffset_InversePerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_PositiveOffset_InversePerpendicularNegative()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -324,7 +324,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(-0.5f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_PositiveOffset_PerpendicularZero()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_PositiveOffset_PerpendicularZero()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -333,7 +333,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_PositiveOffset_InversePerpendicularZero()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_PositiveOffset_InversePerpendicularZero()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -342,7 +342,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_PositiveOffset_PerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_PositiveOffset_PerpendicularPositive()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -351,7 +351,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0.5f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_PositiveOffset_InversePerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_PositiveOffset_InversePerpendicularPositive()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -360,7 +360,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0.5f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_PositiveOffset_NonPerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_PositiveOffset_NonPerpendicularNegative()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -369,7 +369,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(-0.25f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_PositiveOffset_InverseNonPerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_PositiveOffset_InverseNonPerpendicularNegative()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -378,7 +378,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(-0.25f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_PositiveOffset_NonPerpendicularZero()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_PositiveOffset_NonPerpendicularZero()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -387,7 +387,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_PositiveOffset_InverseNonPerpendicularZero()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_PositiveOffset_InverseNonPerpendicularZero()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -396,7 +396,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_PositiveOffset_NonPerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_PositiveOffset_NonPerpendicularPositive()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -405,7 +405,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0.25f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_PositiveOffset_InverseNonPerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_PositiveOffset_InverseNonPerpendicularPositive()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -414,7 +414,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0.25f).Within(0.0001f));
 		}
 
-		[Test] public static void GetIntersectionParameter_PositiveOffset_ParallelNegative()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_PositiveOffset_ParallelNegative()
 		{
 			Assert.That(float.IsInfinity(
 				Geometry.GetIntersectionParameter(
@@ -422,7 +422,7 @@ namespace Experilous.Numerics.Tests
 					new ScaledRay(new Vector3(-3f, 0f, 0f), new Vector3(0f, 4f, 3f)))));
 		}
 
-		[Test] public static void GetIntersectionParameter_PositiveOffset_ParallelZero()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_PositiveOffset_ParallelZero()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -431,7 +431,7 @@ namespace Experilous.Numerics.Tests
 				Is.NaN);
 		}
 
-		[Test] public static void GetIntersectionParameter_PositiveOffset_ParallelZeroOffset()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_PositiveOffset_ParallelZeroOffset()
 		{
 			Assert.That(
 				Geometry.GetIntersectionParameter(
@@ -440,7 +440,7 @@ namespace Experilous.Numerics.Tests
 				Is.NaN);
 		}
 
-		[Test] public static void GetIntersectionParameter_PositiveOffset_ParallelPositive()
+		[TestCase(Category = "Normal")] public static void GetIntersectionParameter_PositiveOffset_ParallelPositive()
 		{
 			Assert.That(float.IsInfinity(
 				Geometry.GetIntersectionParameter(
@@ -456,7 +456,7 @@ namespace Experilous.Numerics.Tests
 
 		#region Intersect_PlaneLine_NegativeOffset
 
-		[Test] public static void Intersect_PlaneLine_NegativeOffset_PerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_NegativeOffset_PerpendicularNegative()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -467,7 +467,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlaneLine_NegativeOffset_InversePerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_NegativeOffset_InversePerpendicularNegative()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -478,7 +478,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlaneLine_NegativeOffset_PerpendicularZero()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_NegativeOffset_PerpendicularZero()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -489,7 +489,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlaneLine_NegativeOffset_InversePerpendicularZero()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_NegativeOffset_InversePerpendicularZero()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -500,7 +500,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlaneLine_NegativeOffset_PerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_NegativeOffset_PerpendicularPositive()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -511,7 +511,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlaneLine_NegativeOffset_InversePerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_NegativeOffset_InversePerpendicularPositive()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -526,7 +526,7 @@ namespace Experilous.Numerics.Tests
 
 		#region Intersect_PlaneLine_ZeroOffset
 
-		[Test] public static void Intersect_PlaneLine_ZeroOffset_PerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_ZeroOffset_PerpendicularNegative()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -537,7 +537,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlaneLine_ZeroOffset_InversePerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_ZeroOffset_InversePerpendicularNegative()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -548,7 +548,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlaneLine_ZeroOffset_PerpendicularZero()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_ZeroOffset_PerpendicularZero()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -559,7 +559,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlaneLine_ZeroOffset_InversePerpendicularZero()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_ZeroOffset_InversePerpendicularZero()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -570,7 +570,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlaneLine_ZeroOffset_PerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_ZeroOffset_PerpendicularPositive()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -581,7 +581,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlaneLine_ZeroOffset_InversePerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_ZeroOffset_InversePerpendicularPositive()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -596,7 +596,7 @@ namespace Experilous.Numerics.Tests
 
 		#region Intersect_PlaneLine_PositiveOffset
 
-		[Test] public static void Intersect_PlaneLine_PositiveOffset_PerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_PositiveOffset_PerpendicularNegative()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -607,7 +607,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlaneLine_PositiveOffset_InversePerpendicularNegative()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_PositiveOffset_InversePerpendicularNegative()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -618,7 +618,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlaneLine_PositiveOffset_PerpendicularZero()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_PositiveOffset_PerpendicularZero()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -629,7 +629,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlaneLine_PositiveOffset_InversePerpendicularZero()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_PositiveOffset_InversePerpendicularZero()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -640,7 +640,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlaneLine_PositiveOffset_PerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_PositiveOffset_PerpendicularPositive()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -651,7 +651,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlaneLine_PositiveOffset_InversePerpendicularPositive()
+		[TestCase(Category = "Normal")] public static void Intersect_PlaneLine_PositiveOffset_InversePerpendicularPositive()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -668,7 +668,7 @@ namespace Experilous.Numerics.Tests
 
 		#region Intersect_PlanePlanePlane
 
-		[Test] public static void Intersect_PlanePlanePlane_PosPosPos_PosPosPos()
+		[TestCase(Category = "Normal")] public static void Intersect_PlanePlanePlane_PosPosPos_PosPosPos()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -680,7 +680,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlanePlanePlane_PosPosPos_PosPosNeg()
+		[TestCase(Category = "Normal")] public static void Intersect_PlanePlanePlane_PosPosPos_PosPosNeg()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -692,7 +692,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlanePlanePlane_PosPosPos_PosNegNeg()
+		[TestCase(Category = "Normal")] public static void Intersect_PlanePlanePlane_PosPosPos_PosNegNeg()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -704,7 +704,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlanePlanePlane_PosPosPos_NegNegNeg()
+		[TestCase(Category = "Normal")] public static void Intersect_PlanePlanePlane_PosPosPos_NegNegNeg()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -716,7 +716,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlanePlanePlane_PosPosNeg_PosPosPos()
+		[TestCase(Category = "Normal")] public static void Intersect_PlanePlanePlane_PosPosNeg_PosPosPos()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -728,7 +728,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlanePlanePlane_PosPosNeg_PosPosNeg()
+		[TestCase(Category = "Normal")] public static void Intersect_PlanePlanePlane_PosPosNeg_PosPosNeg()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -740,7 +740,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlanePlanePlane_PosPosNeg_PosNegNeg()
+		[TestCase(Category = "Normal")] public static void Intersect_PlanePlanePlane_PosPosNeg_PosNegNeg()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -752,7 +752,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlanePlanePlane_PosPosNeg_NegNegNeg()
+		[TestCase(Category = "Normal")] public static void Intersect_PlanePlanePlane_PosPosNeg_NegNegNeg()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -764,7 +764,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlanePlanePlane_PosNegNeg_PosPosPos()
+		[TestCase(Category = "Normal")] public static void Intersect_PlanePlanePlane_PosNegNeg_PosPosPos()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -776,7 +776,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlanePlanePlane_PosNegNeg_PosPosNeg()
+		[TestCase(Category = "Normal")] public static void Intersect_PlanePlanePlane_PosNegNeg_PosPosNeg()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -788,7 +788,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlanePlanePlane_PosNegNeg_PosNegNeg()
+		[TestCase(Category = "Normal")] public static void Intersect_PlanePlanePlane_PosNegNeg_PosNegNeg()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -800,7 +800,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlanePlanePlane_PosNegNeg_NegNegNeg()
+		[TestCase(Category = "Normal")] public static void Intersect_PlanePlanePlane_PosNegNeg_NegNegNeg()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -812,7 +812,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlanePlanePlane_NegNegNeg_PosPosPos()
+		[TestCase(Category = "Normal")] public static void Intersect_PlanePlanePlane_NegNegNeg_PosPosPos()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -824,7 +824,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlanePlanePlane_NegNegNeg_PosPosNeg()
+		[TestCase(Category = "Normal")] public static void Intersect_PlanePlanePlane_NegNegNeg_PosPosNeg()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -836,7 +836,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlanePlanePlane_NegNegNeg_PosNegNeg()
+		[TestCase(Category = "Normal")] public static void Intersect_PlanePlanePlane_NegNegNeg_PosNegNeg()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -848,7 +848,7 @@ namespace Experilous.Numerics.Tests
 				Is.EqualTo(0f).Within(0.0001f));
 		}
 
-		[Test] public static void Intersect_PlanePlanePlane_NegNegNeg_NegNegNeg()
+		[TestCase(Category = "Normal")] public static void Intersect_PlanePlanePlane_NegNegNeg_NegNegNeg()
 		{
 			Assert.That(
 				Vector3.Distance(
@@ -862,357 +862,357 @@ namespace Experilous.Numerics.Tests
 
 		#endregion
 
-		[Test] public static void Intersect_SphereRay_NoIntersection()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereRay_NoIntersection()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(Vector3.zero, Vector3.forward), out intersection));
 		}
 
-		[Test] public static void Intersect_SphereRay_PosTangent()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereRay_PosTangent()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(new Vector3(-1f, 1f, 0f), Vector3.right), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void Intersect_SphereRay_ZeroTangent()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereRay_ZeroTangent()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0f), Vector3.right), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void Intersect_SphereRay_NegTangent()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereRay_NegTangent()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(new Vector3(2f, 1f, 0f), Vector3.right), out intersection));
 		}
 
-		[Test] public static void Intersect_SphereRay_External()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereRay_External()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, -2f), Vector3.forward), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void Intersect_SphereRay_SurfacePointingIn()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereRay_SurfacePointingIn()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0f), Vector3.forward), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void Intersect_SphereRay_Internal()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereRay_Internal()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0.5f), Vector3.forward), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void Intersect_SphereRay_SurfacePointingOut()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereRay_SurfacePointingOut()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 2f), Vector3.forward), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void Intersect_SphereRay_NegExternal()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereRay_NegExternal()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.Intersect(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 3f), Vector3.forward), out intersection));
 		}
 
-		[Test] public static void Intersect_SphereScaledRay_NoIntersection()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereScaledRay_NoIntersection()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(Vector3.zero, Vector3.forward * 1.5f), out intersection));
 		}
 
-		[Test] public static void Intersect_SphereScaledRay_PosTangent()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereScaledRay_PosTangent()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(-1f, 1f, 0f), Vector3.right * 1.5f), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void Intersect_SphereScaledRay_ZeroTangent()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereScaledRay_ZeroTangent()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0f), Vector3.right * 1.5f), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void Intersect_SphereScaledRay_NegTangent()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereScaledRay_NegTangent()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(2f, 1f, 0f), Vector3.right * 1.5f), out intersection));
 		}
 
-		[Test] public static void Intersect_SphereScaledRay_External()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereScaledRay_External()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, -2f), Vector3.forward * 1.5f), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void Intersect_SphereScaledRay_SurfacePointingIn()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereScaledRay_SurfacePointingIn()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0f), Vector3.forward * 1.5f), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void Intersect_SphereScaledRay_Internal()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereScaledRay_Internal()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0.5f), Vector3.forward * 1.5f), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void Intersect_SphereScaledRay_SurfacePointingOut()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereScaledRay_SurfacePointingOut()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 2f), Vector3.forward * 1.5f), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void Intersect_SphereScaledRay_NegExternal()
+		[TestCase(Category = "Normal")] public static void Intersect_SphereScaledRay_NegExternal()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.Intersect(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 3f), Vector3.forward * 1.5f), out intersection));
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereRay_NoIntersection()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereRay_NoIntersection()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(Vector3.zero, Vector3.forward), out intersection));
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereRay_PosTangent()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereRay_PosTangent()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(-1f, 1f, 0f), Vector3.right), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereRay_ZeroTangent()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereRay_ZeroTangent()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0f), Vector3.right), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereRay_NegTangent()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereRay_NegTangent()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(2f, 1f, 0f), Vector3.right), out intersection));
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereRay_External()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereRay_External()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, -2f), Vector3.forward), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereRay_SurfacePointingIn()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereRay_SurfacePointingIn()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0f), Vector3.forward), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereRay_Internal()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereRay_Internal()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0.5f), Vector3.forward), out intersection));
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereRay_SurfacePointingOut()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereRay_SurfacePointingOut()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 2f), Vector3.forward), out intersection));
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereRay_NegExternal()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereRay_NegExternal()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 3f), Vector3.forward), out intersection));
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereScaledRay_NoIntersection()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereScaledRay_NoIntersection()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(Vector3.zero, Vector3.forward * 1.5f), out intersection));
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereScaledRay_PosTangent()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereScaledRay_PosTangent()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(-1f, 1f, 0f), Vector3.right * 1.5f), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereScaledRay_ZeroTangent()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereScaledRay_ZeroTangent()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0f), Vector3.right * 1.5f), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereScaledRay_NegTangent()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereScaledRay_NegTangent()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(2f, 1f, 0f), Vector3.right * 1.5f), out intersection));
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereScaledRay_External()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereScaledRay_External()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, -2f), Vector3.forward * 1.5f), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereScaledRay_SurfacePointingIn()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereScaledRay_SurfacePointingIn()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0f), Vector3.forward * 1.5f), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereScaledRay_Internal()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereScaledRay_Internal()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0.5f), Vector3.forward * 1.5f), out intersection));
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereScaledRay_SurfacePointingOut()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereScaledRay_SurfacePointingOut()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 2f), Vector3.forward * 1.5f), out intersection));
 		}
 
-		[Test] public static void IntersectForwardExternal_SphereScaledRay_NegExternal()
+		[TestCase(Category = "Normal")] public static void IntersectForwardExternal_SphereScaledRay_NegExternal()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.IntersectForwardExternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 3f), Vector3.forward * 1.5f), out intersection));
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereRay_NoIntersection()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereRay_NoIntersection()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(Vector3.zero, Vector3.forward), out intersection));
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereRay_PosTangent()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereRay_PosTangent()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(-1f, 1f, 0f), Vector3.right), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereRay_ZeroTangent()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereRay_ZeroTangent()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0f), Vector3.right), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereRay_NegTangent()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereRay_NegTangent()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(2f, 1f, 0f), Vector3.right), out intersection));
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereRay_External()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereRay_External()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, -2f), Vector3.forward), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereRay_SurfacePointingIn()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereRay_SurfacePointingIn()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0f), Vector3.forward), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereRay_Internal()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereRay_Internal()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 0.5f), Vector3.forward), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereRay_SurfacePointingOut()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereRay_SurfacePointingOut()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 2f), Vector3.forward), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereRay_NegExternal()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereRay_NegExternal()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new Ray(new Vector3(1f, 1f, 3f), Vector3.forward), out intersection));
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereScaledRay_NoIntersection()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereScaledRay_NoIntersection()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(Vector3.zero, Vector3.forward * 1.5f), out intersection));
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereScaledRay_PosTangent()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereScaledRay_PosTangent()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(-1f, 1f, 0f), Vector3.right * 1.5f), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereScaledRay_ZeroTangent()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereScaledRay_ZeroTangent()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0f), Vector3.right * 1.5f), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 0f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereScaledRay_NegTangent()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereScaledRay_NegTangent()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(2f, 1f, 0f), Vector3.right * 1.5f), out intersection));
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereScaledRay_External()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereScaledRay_External()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, -2f), Vector3.forward * 1.5f), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereScaledRay_SurfacePointingIn()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereScaledRay_SurfacePointingIn()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0f), Vector3.forward * 1.5f), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereScaledRay_Internal()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereScaledRay_Internal()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 0.5f), Vector3.forward * 1.5f), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereScaledRay_SurfacePointingOut()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereScaledRay_SurfacePointingOut()
 		{
 			Vector3 intersection;
 			Assert.IsTrue(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 2f), Vector3.forward * 1.5f), out intersection));
 			Assert.Less((intersection - new Vector3(1f, 1f, 2f)).magnitude, 0.0001f);
 		}
 
-		[Test] public static void IntersectForwardInternal_SphereScaledRay_NegExternal()
+		[TestCase(Category = "Normal")] public static void IntersectForwardInternal_SphereScaledRay_NegExternal()
 		{
 			Vector3 intersection;
 			Assert.IsFalse(Geometry.IntersectForwardInternal(new Sphere(Vector3.one, 1f), new ScaledRay(new Vector3(1f, 1f, 3f), Vector3.forward * 1.5f), out intersection));

@@ -11,7 +11,7 @@ namespace Experilous.Numerics.Tests
 	{
 		#region Arithmetic Tests
 
-		[Test]
+		[TestCase(Category = "Normal")]
 		public void ModuloTest()
 		{
 			Assert.AreEqual(0, Math.Modulo(0, 1));
@@ -67,7 +67,7 @@ namespace Experilous.Numerics.Tests
 			Assert.AreEqual(22, Math.Modulo(int.MinValue / 23 * 23 + 22, 23));
 		}
 
-		[Test]
+		[TestCase(Category = "Normal")]
 		public void IsEvenTest()
 		{
 			Assert.IsTrue(Math.IsEven(0), "MathTools.IsEven(0)");
@@ -111,7 +111,7 @@ namespace Experilous.Numerics.Tests
 			Assert.IsFalse(Math.IsEven(int.MinValue + 1), string.Format("MathTools.IsEven({0})", int.MinValue + 1));
 		}
 
-		[Test]
+		[TestCase(Category = "Normal")]
 		public void IsOddTest()
 		{
 			Assert.IsTrue(Math.IsOdd(1), "MathTools.IsOdd(1)");
@@ -155,7 +155,7 @@ namespace Experilous.Numerics.Tests
 			Assert.IsFalse(Math.IsOdd(int.MinValue), string.Format("MathTools.IsOdd({0})", int.MinValue));
 		}
 
-		[Test]
+		[TestCase(Category = "Normal")]
 		public void HaveSameSignTest()
 		{
 			var nonNegative = new int[] { 0, 1, 2, 34578345, int.MaxValue - 1, int.MaxValue };
@@ -192,7 +192,7 @@ namespace Experilous.Numerics.Tests
 
 		#region Base 2 Integer Logarithm Tests
 
-		[Test]
+		[TestCase(Category = "Normal")]
 		public void Log2Ceil32BitPowerOfTwo()
 		{
 			for (int i = 0; i < 32; ++i)
@@ -201,7 +201,7 @@ namespace Experilous.Numerics.Tests
 			}
 		}
 
-		[Test]
+		[TestCase(Category = "Normal")]
 		public void Log2Ceil64BitPowerOfTwo()
 		{
 			for (int i = 0; i < 64; ++i)
@@ -210,7 +210,7 @@ namespace Experilous.Numerics.Tests
 			}
 		}
 
-		[Test]
+		[TestCase(Category = "Normal")]
 		public void Plus1Log2Ceil32BitPowerOfTwo()
 		{
 			for (int i = 0; i < 32; ++i)
@@ -219,7 +219,7 @@ namespace Experilous.Numerics.Tests
 			}
 		}
 
-		[Test]
+		[TestCase(Category = "Normal")]
 		public void Plus1Log2Ceil64BitPowerOfTwo()
 		{
 			for (int i = 0; i < 64; ++i)
@@ -228,7 +228,7 @@ namespace Experilous.Numerics.Tests
 			}
 		}
 
-		[Test]
+		[TestCase(Category = "Normal")]
 		public void Log2Ceil32BitPowerOfTwoMinusOne()
 		{
 			for (int i = 2; i < 32; ++i)
@@ -237,7 +237,7 @@ namespace Experilous.Numerics.Tests
 			}
 		}
 
-		[Test]
+		[TestCase(Category = "Normal")]
 		public void Log2Ceil64BitPowerOfTwoMinusOne()
 		{
 			for (int i = 2; i < 64; ++i)
@@ -246,7 +246,7 @@ namespace Experilous.Numerics.Tests
 			}
 		}
 
-		[Test]
+		[TestCase(Category = "Normal")]
 		public void Plus1Log2Ceil32BitPowerOfTwoMinusOne()
 		{
 			for (int i = 2; i < 32; ++i)
@@ -255,7 +255,7 @@ namespace Experilous.Numerics.Tests
 			}
 		}
 
-		[Test]
+		[TestCase(Category = "Normal")]
 		public void Plus1Log2Ceil64BitPowerOfTwoMinusOne()
 		{
 			for (int i = 2; i < 64; ++i)
@@ -264,7 +264,7 @@ namespace Experilous.Numerics.Tests
 			}
 		}
 
-		[Test]
+		[TestCase(Category = "Normal")]
 		public void Log2Ceil32BitPowerOfTwoPlusOne()
 		{
 			for (int i = 1; i < 32; ++i)
@@ -273,7 +273,7 @@ namespace Experilous.Numerics.Tests
 			}
 		}
 
-		[Test]
+		[TestCase(Category = "Normal")]
 		public void Log2Ceil64BitPowerOfTwoPlusOne()
 		{
 			for (int i = 1; i < 64; ++i)
@@ -282,7 +282,7 @@ namespace Experilous.Numerics.Tests
 			}
 		}
 
-		[Test]
+		[TestCase(Category = "Normal")]
 		public void Plus1Log2Ceil32BitPowerOfTwoPlusOne()
 		{
 			for (int i = 1; i < 32; ++i)
@@ -291,7 +291,7 @@ namespace Experilous.Numerics.Tests
 			}
 		}
 
-		[Test]
+		[TestCase(Category = "Normal")]
 		public void Plus1Log2Ceil64BitPowerOfTwoPlusOne()
 		{
 			for (int i = 1; i < 64; ++i)
