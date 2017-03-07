@@ -368,6 +368,28 @@ namespace Experilous.Numerics
 		}
 
 		/// <summary>
+		/// Calculates the dot product of the first vector with the clockwise perpendicular transformation of the second vector.
+		/// </summary>
+		/// <param name="lhs">The first vector.</param>
+		/// <param name="rhs">The second vector.</param>
+		/// <returns>The dot product of the first vector with the clockwise perpendicular transformation of the second vector.</returns>
+		public static float DotPerpendicularCW(Vector2 lhs, Vector2 rhs)
+		{
+			return rhs.x * lhs.y - rhs.y * lhs.x;
+		}
+
+		/// <summary>
+		/// Calculates the dot product of the first vector with the counter-clockwise perpendicular transformation of the second vector.
+		/// </summary>
+		/// <param name="lhs">The first vector.</param>
+		/// <param name="rhs">The second vector.</param>
+		/// <returns>The dot product of the first vector with the counter-clockwise perpendicular transformation of the second vector.</returns>
+		public static float DotPerpendicularCCW(Vector2 lhs, Vector2 rhs)
+		{
+			return lhs.x * rhs.y - lhs.y * rhs.x;
+		}
+
+		/// <summary>
 		/// Projects the first vector onto the second target vector.
 		/// </summary>
 		/// <param name="v">The vector to be projected.</param>
