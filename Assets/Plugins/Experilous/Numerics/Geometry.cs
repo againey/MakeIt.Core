@@ -375,7 +375,7 @@ namespace Experilous.Numerics
 		/// <returns>The dot product of the first vector with the clockwise perpendicular transformation of the second vector.</returns>
 		public static float DotPerpendicularCW(Vector2 lhs, Vector2 rhs)
 		{
-			return rhs.x * lhs.y - rhs.y * lhs.x;
+			return lhs.x * rhs.y - lhs.y * rhs.x;
 		}
 
 		/// <summary>
@@ -386,7 +386,7 @@ namespace Experilous.Numerics
 		/// <returns>The dot product of the first vector with the counter-clockwise perpendicular transformation of the second vector.</returns>
 		public static float DotPerpendicularCCW(Vector2 lhs, Vector2 rhs)
 		{
-			return lhs.x * rhs.y - lhs.y * rhs.x;
+			return rhs.x * lhs.y - rhs.y * lhs.x;
 		}
 
 		/// <summary>
