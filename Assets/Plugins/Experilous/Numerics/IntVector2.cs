@@ -36,7 +36,7 @@ namespace Experilous.Numerics
 				{
 					case 0: return x;
 					case 1: return y;
-					default: throw new ArgumentOutOfRangeException("index", "The index must be in the range [0, 1].");
+					default: throw new ArgumentOutOfRangeException("index", index, "The index must be in the range [0, 1].");
 				}
 			}
 			set
@@ -45,7 +45,7 @@ namespace Experilous.Numerics
 				{
 					case 0: x = value; break;
 					case 1: y = value; break;
-					default: throw new ArgumentOutOfRangeException("index", "The index must be in the range [0, 1].");
+					default: throw new ArgumentOutOfRangeException("index", index, "The index must be in the range [0, 1].");
 				}
 			}
 		}
