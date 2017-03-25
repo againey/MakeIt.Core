@@ -177,7 +177,7 @@ namespace Experilous.Numerics
 
 		public static int SolveQuadratic(float a, float b, float c, out float t0, out float t1, float epsilon = 0.0001f)
 		{
-			// Conditionally uses the quadratic formula or the Citardauq formula to minimize precision loss.
+			// Conditionally uses the quadratic formula or the citardauq formula to minimize precision loss.
 			if (a != 0f)
 			{
 				var sqr = b * b - 4f * a * c;
@@ -188,14 +188,14 @@ namespace Experilous.Numerics
 					// Make sure the smaller t value is stored in t0, the larger in t1.
 					if (b >= 0f)
 					{
-						t0 = -0.5f * (b + sqrt) / a; // Quadratic
-						t1 = -2f * c / (b + sqrt); // Citardauq
+						t0 = -0.5f * (b + sqrt) / a; // Quadratic:  (-b - sqrt(b^2 + 4ac)) / 2a
+						t1 = -2f * c / (b + sqrt); // Citardauq:  2c / (-b - sqrt(b^2 + 4ac))
 						return 2;
 					}
 					else
 					{
-						t0 = -2f * c / (b - sqrt); // Citardauq
-						t1 = -0.5f * (b - sqrt) / a; // Quadratic
+						t0 = -2f * c / (b - sqrt); // Citardauq:  2c / (-b + sqrt(b^2 + 4ac))
+						t1 = -0.5f * (b - sqrt) / a; // Quadratic:  (-b + sqrt(b^2 + 4ac)) / 2a
 						return 2;
 					}
 				}
@@ -205,12 +205,12 @@ namespace Experilous.Numerics
 					// Make sure the larger value is in the denominator.
 					if (Mathf.Abs(a) > Mathf.Abs(b))
 					{
-						t0 = t1 = -0.5f * b / a; // Quadratic
+						t0 = t1 = -0.5f * b / a; // Quadratic:  (-b - 0) / 2a
 						return 1;
 					}
 					else
 					{
-						t0 = t1 = -2f * c / b; // Citardauq
+						t0 = t1 = -2f * c / b; // Citardauq:  2c / (-b - 0)
 						return 1;
 					}
 				}
@@ -242,6 +242,126 @@ namespace Experilous.Numerics
 					t0 = float.NegativeInfinity;
 					t1 = float.PositiveInfinity;
 					return 0; // Return 0 as the number of roots anyway.  If the caller cares about this case, t0 and t1 can be checked.
+				}
+			}
+		}
+
+		public static float SolveQuadraticNegRoot(float a, float b, float c, float epsilon = 0.0001f)
+		{
+			// Conditionally uses the quadratic formula or the citardauq formula to minimize precision loss.
+			if (a != 0f)
+			{
+				var sqr = b * b - 4f * a * c;
+				// If the square is positive, we can take the square root and use the standard formulas.
+				if (sqr > 0f)
+				{
+					var sqrt = Mathf.Sqrt(sqr);
+					// Make sure the smaller t value is stored in t0, the larger in t1.
+					if (b >= 0f)
+					{
+						return -0.5f * (b + sqrt) / a; // Quadratic:  (-b - sqrt(b^2 + 4ac)) / 2a
+					}
+					else
+					{
+						return -2f * c / (b - sqrt); // Citardauq:  2c / (-b + sqrt(b^2 + 4ac))
+					}
+				}
+				// If it is at least within epsilon of being zero, we will treat the square root portion as exactly zero.
+				else if (sqr > -epsilon)
+				{
+					// Make sure the larger value is in the denominator.
+					if (Mathf.Abs(a) > Mathf.Abs(b))
+					{
+						return -0.5f * b / a; // Quadratic:  (-b - 0) / 2a
+					}
+					else
+					{
+						return -2f * c / b; // Citardauq:  2c / (-b - 0)
+					}
+				}
+				// If the square is definitely negative, there is no solution.
+				else
+				{
+					return float.NaN;
+				}
+			}
+			// This is actually at most a linear equation, no need to mess with square roots.
+			else
+			{
+				// If the linear component is not zero, then it must have exactly one root.
+				if (b != 0f)
+				{
+					return -c / b;
+				}
+				// Else, it is a constant function; if it is a non-zero constant, it has no root.
+				else if (c != 0f)
+				{
+					return float.NaN;
+				}
+				// Else, it has infinite roots.
+				else
+				{
+					return float.NaN;
+				}
+			}
+		}
+
+		public static float SolveQuadraticPosRoot(float a, float b, float c, float epsilon = 0.0001f)
+		{
+			// Conditionally uses the quadratic formula or the citardauq formula to minimize precision loss.
+			if (a != 0f)
+			{
+				var sqr = b * b - 4f * a * c;
+				// If the square is positive, we can take the square root and use the standard formulas.
+				if (sqr > 0f)
+				{
+					var sqrt = Mathf.Sqrt(sqr);
+					// Make sure the smaller t value is stored in t0, the larger in t1.
+					if (b >= 0f)
+					{
+						return -2f * c / (b + sqrt); // Citardauq:  2c / (-b - sqrt(b^2 + 4ac))
+					}
+					else
+					{
+						return -0.5f * (b - sqrt) / a; // Quadratic:  (-b + sqrt(b^2 + 4ac)) / 2a
+					}
+				}
+				// If it is at least within epsilon of being zero, we will treat the square root portion as exactly zero.
+				else if (sqr > -epsilon)
+				{
+					// Make sure the larger value is in the denominator.
+					if (Mathf.Abs(a) > Mathf.Abs(b))
+					{
+						return -0.5f * b / a; // Quadratic:  (-b - 0) / 2a
+					}
+					else
+					{
+						return -2f * c / b; // Citardauq:  2c / (-b - 0)
+					}
+				}
+				// If the square is definitely negative, there is no solution.
+				else
+				{
+					return float.NaN;
+				}
+			}
+			// This is actually at most a linear equation, no need to mess with square roots.
+			else
+			{
+				// If the linear component is not zero, then it must have exactly one root.
+				if (b != 0f)
+				{
+					return -c / b;
+				}
+				// Else, it is a constant function; if it is a non-zero constant, it has no root.
+				else if (c != 0f)
+				{
+					return float.NaN;
+				}
+				// Else, it has infinite roots.
+				else
+				{
+					return float.NaN;
 				}
 			}
 		}
