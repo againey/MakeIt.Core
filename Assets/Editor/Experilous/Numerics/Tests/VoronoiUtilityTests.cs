@@ -223,13 +223,59 @@ namespace Experilous.Topologies.Tests
 		#region ComputeDirectionalOrder
 
 		[Test]
+		public static void ComputeDirectionalOrder_CardinalDirections()
+		{
+			AssertApproximatelyEqual(-4f, VoronoiUtility.ComputeDirectionalOrder(new Vector2(-1f,  0f)), 0.0001f);
+			AssertApproximatelyEqual(-2f, VoronoiUtility.ComputeDirectionalOrder(new Vector2( 0f, -1f)), 0.0001f);
+			AssertApproximatelyEqual( 0f, VoronoiUtility.ComputeDirectionalOrder(new Vector2(+1f,  0f)), 0.0001f);
+			AssertApproximatelyEqual(+2f, VoronoiUtility.ComputeDirectionalOrder(new Vector2( 0f, +1f)), 0.0001f);
+		}
+
+		[Test]
+		public static void ComputeDirectionalOrder_IntercardinalDirections()
+		{
+			AssertApproximatelyEqual(-3f, VoronoiUtility.ComputeDirectionalOrder(new Vector2(-1f, -1f)), 0.0001f);
+			AssertApproximatelyEqual(-1f, VoronoiUtility.ComputeDirectionalOrder(new Vector2(+1f, -1f)), 0.0001f);
+			AssertApproximatelyEqual(+1f, VoronoiUtility.ComputeDirectionalOrder(new Vector2(+1f, +1f)), 0.0001f);
+			AssertApproximatelyEqual(+3f, VoronoiUtility.ComputeDirectionalOrder(new Vector2(-1f, +1f)), 0.0001f);
+		}
+
+		[Test]
+		public static void ComputeDirectionalOrder_SecondaryIntercardinalDirections()
+		{
+			Assert.Greater(VoronoiUtility.ComputeDirectionalOrder(new Vector2(-2f, -1f).normalized), -4f);
+			Assert.Less(VoronoiUtility.ComputeDirectionalOrder(new Vector2(-2f, -1f).normalized), -3f);
+
+			Assert.Greater(VoronoiUtility.ComputeDirectionalOrder(new Vector2(-1f, -2f).normalized), -3f);
+			Assert.Less(VoronoiUtility.ComputeDirectionalOrder(new Vector2(-1f, -2f).normalized), -2f);
+
+			Assert.Greater(VoronoiUtility.ComputeDirectionalOrder(new Vector2(+1f, -2f).normalized), -2f);
+			Assert.Less(VoronoiUtility.ComputeDirectionalOrder(new Vector2(+1f, -2f).normalized), -1f);
+
+			Assert.Greater(VoronoiUtility.ComputeDirectionalOrder(new Vector2(+2f, -1f).normalized), -1f);
+			Assert.Less(VoronoiUtility.ComputeDirectionalOrder(new Vector2(+2f, -1f).normalized),  0f);
+
+			Assert.Greater(VoronoiUtility.ComputeDirectionalOrder(new Vector2(+2f, +1f).normalized),  0f);
+			Assert.Less(VoronoiUtility.ComputeDirectionalOrder(new Vector2(+2f, +1f).normalized), +1f);
+
+			Assert.Greater(VoronoiUtility.ComputeDirectionalOrder(new Vector2(+1f, +2f).normalized), +1f);
+			Assert.Less(VoronoiUtility.ComputeDirectionalOrder(new Vector2(+1f, +2f).normalized), +2f);
+
+			Assert.Greater(VoronoiUtility.ComputeDirectionalOrder(new Vector2(-1f, +2f).normalized), +2f);
+			Assert.Less(VoronoiUtility.ComputeDirectionalOrder(new Vector2(-1f, +2f).normalized), +3f);
+
+			Assert.Greater(VoronoiUtility.ComputeDirectionalOrder(new Vector2(-2f, +1f).normalized), +3f);
+			Assert.Less(VoronoiUtility.ComputeDirectionalOrder(new Vector2(-2f, +1f).normalized), +4f);
+		}
+
+		[Test]
 		public static void ComputeDirectionalOrder_SortedList()
 		{
 			var directions = new Vector2[24];
 			for (int i = 0; i < 24; ++i)
 			{
 				float radians = i * 15 * Mathf.Deg2Rad;
-				directions[i] = new Vector2(Mathf.Cos(radians), -Mathf.Sin(radians));
+				directions[i] = new Vector2(-Mathf.Cos(radians), -Mathf.Sin(radians));
 			}
 
 			for (int i = 0; i < 23; ++i)
