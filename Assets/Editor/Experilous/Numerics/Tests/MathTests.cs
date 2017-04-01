@@ -4,11 +4,22 @@
 
 #if UNITY_5_3_OR_NEWER
 using NUnit.Framework;
+using UnityEngine;
 
 namespace Experilous.Numerics.Tests
 {
 	class MathTests
 	{
+		#region Assert
+
+		private static void AssertApproximatelyEqual(float expected, float actual, float margin, string message = null)
+		{
+			Assert.IsFalse(float.IsNaN(actual), message != null ? message : string.Format("Expected {0:G8} but actual was {1:G8}.", expected, actual));
+			Assert.LessOrEqual(Mathf.Abs(expected - actual), margin, message != null ? message : string.Format("Expected {0:G8} but actual was {1:G8}.", expected, actual));
+		}
+
+		#endregion
+
 		#region Arithmetic Tests
 
 		[Test]
@@ -298,6 +309,146 @@ namespace Experilous.Numerics.Tests
 			{
 				Assert.AreEqual(i + 1, Math.Plus1Log2Ceil((1UL << i) + 1), string.Format("MathTools.Plus1Log2Ceil((1UL << {0}) + 1), MathTools.Plus1Log2Ceil({1})", i, (1UL << i) + 1));
 			}
+		}
+
+		#endregion
+
+		#region Solve Quartic Tests
+
+		[Test]
+		public void SolveQuartic_FourSolutionSymmetric()
+		{
+			float t0, t1, t2, t3;
+			Assert.AreEqual(4, Math.SolveQuartic(+1f, 0f, -2f, 0f, +0.5f, out t0, out t1, out t2, out t3));
+			AssertApproximatelyEqual(-Mathf.Sqrt(1f + 1f / Mathf.Sqrt(2f)), t0, 0.0001f);
+			AssertApproximatelyEqual(-Mathf.Sqrt(1f - 1f / Mathf.Sqrt(2f)), t1, 0.0001f);
+			AssertApproximatelyEqual(+Mathf.Sqrt(1f - 1f / Mathf.Sqrt(2f)), t2, 0.0001f);
+			AssertApproximatelyEqual(+Mathf.Sqrt(1f + 1f / Mathf.Sqrt(2f)), t3, 0.0001f);
+
+			Assert.AreEqual(4, Math.SolveQuartic(-1f, 0f, +2f, 0f, -0.5f, out t0, out t1, out t2, out t3));
+			AssertApproximatelyEqual(-Mathf.Sqrt(1f + 1f / Mathf.Sqrt(2f)), t0, 0.0001f);
+			AssertApproximatelyEqual(-Mathf.Sqrt(1f - 1f / Mathf.Sqrt(2f)), t1, 0.0001f);
+			AssertApproximatelyEqual(+Mathf.Sqrt(1f - 1f / Mathf.Sqrt(2f)), t2, 0.0001f);
+			AssertApproximatelyEqual(+Mathf.Sqrt(1f + 1f / Mathf.Sqrt(2f)), t3, 0.0001f);
+		}
+
+		[Test]
+		public void SolveQuartic_FourSolutionAsymmetric()
+		{
+			float t0, t1, t2, t3;
+			Assert.AreEqual(4, Math.SolveQuartic(+1f, +4f, -4f, -1f, +0.5f, out t0, out t1, out t2, out t3));
+			AssertApproximatelyEqual(-4.7873463638169f, t0, 0.0001f);
+			AssertApproximatelyEqual(-0.40754469481348f, t1, 0.0001f);
+			AssertApproximatelyEqual(+0.28016033143891f, t2, 0.0001f);
+			AssertApproximatelyEqual(+0.9147307271913f, t3, 0.0001f);
+
+			Assert.AreEqual(4, Math.SolveQuartic(-1f, -4f, +4f, +1f, -0.5f, out t0, out t1, out t2, out t3));
+			AssertApproximatelyEqual(-4.7873463638169f, t0, 0.0001f);
+			AssertApproximatelyEqual(-0.40754469481348f, t1, 0.0001f);
+			AssertApproximatelyEqual(+0.28016033143891f, t2, 0.0001f);
+			AssertApproximatelyEqual(+0.9147307271913f, t3, 0.0001f);
+		}
+
+		[Test]
+		public void SolveQuartic_ThreeSolutionSymmetric()
+		{
+			float t0, t1, t2, t3;
+			Assert.AreEqual(3, Math.SolveQuartic(+1f, 0f, -2f, 0f, 0f, out t0, out t1, out t2, out t3));
+			AssertApproximatelyEqual(-Mathf.Sqrt(2f), t0, 0.0001f);
+			AssertApproximatelyEqual(-0f, t1, 0.0001f);
+			AssertApproximatelyEqual(+0f, t2, 0.0001f);
+			AssertApproximatelyEqual(+Mathf.Sqrt(2f), t3, 0.0001f);
+
+			Assert.AreEqual(3, Math.SolveQuartic(-1f, 0f, +2f, 0f, 0f, out t0, out t1, out t2, out t3));
+			AssertApproximatelyEqual(-Mathf.Sqrt(2f), t0, 0.0001f);
+			AssertApproximatelyEqual(-0f, t1, 0.0001f);
+			AssertApproximatelyEqual(+0f, t2, 0.0001f);
+			AssertApproximatelyEqual(+Mathf.Sqrt(2f), t3, 0.0001f);
+		}
+
+		[Test]
+		public void SolveQuartic_ThreeSolutionAsymmetric_TangentAtFirst()
+		{
+			float t0, t1, t2, t3;
+			Assert.AreEqual(3, Math.SolveQuartic(+1f, +1f, -1f, -1f, 0f, out t0, out t1, out t2, out t3));
+			AssertApproximatelyEqual(-1f, t0, 0.0001f);
+			AssertApproximatelyEqual(-1f, t1, 0.0001f);
+			AssertApproximatelyEqual( 0f, t2, 0.0001f);
+			AssertApproximatelyEqual(+1f, t3, 0.0001f);
+
+			Assert.AreEqual(3, Math.SolveQuartic(-1f, -1f, +1f, +1f, 0f, out t0, out t1, out t2, out t3));
+			AssertApproximatelyEqual(-1f, t0, 0.0001f);
+			AssertApproximatelyEqual(-1f, t1, 0.0001f);
+			AssertApproximatelyEqual( 0f, t2, 0.0001f);
+			AssertApproximatelyEqual(+1f, t3, 0.0001f);
+		}
+
+		[Test]
+		public void SolveQuartic_TwoSolutionSymmetric()
+		{
+			float t0, t1, t2, t3;
+			Assert.AreEqual(2, Math.SolveQuartic(+1f, 0f, -2f, 0f, -1f, out t0, out t1, out t2, out t3));
+			AssertApproximatelyEqual(-Mathf.Sqrt(Mathf.Sqrt(2f) + 1f), t0, 0.0001f);
+			Assert.IsNaN(t1);
+			Assert.IsNaN(t2);
+			AssertApproximatelyEqual(+Mathf.Sqrt(Mathf.Sqrt(2f) + 1f), t3, 0.0001f);
+
+			Assert.AreEqual(2, Math.SolveQuartic(-1f, 0f, +2f, 0f, +1f, out t0, out t1, out t2, out t3));
+			AssertApproximatelyEqual(-Mathf.Sqrt(Mathf.Sqrt(2f) + 1f), t0, 0.0001f);
+			Assert.IsNaN(t1);
+			Assert.IsNaN(t2);
+			AssertApproximatelyEqual(+Mathf.Sqrt(Mathf.Sqrt(2f) + 1f), t3, 0.0001f);
+		}
+
+		[Test]
+		public void SolveQuartic_TwoSolutionAsymmetric_t0t1()
+		{
+			float t0, t1, t2, t3;
+			Assert.AreEqual(2, Math.SolveQuartic(+1f, -1f, -1f, +1f, +0.5f, out t0, out t1, out t2, out t3));
+			AssertApproximatelyEqual(-0.8128147866566f, t0, 0.0001f);
+			Assert.IsNaN(t1);
+			Assert.IsNaN(t2);
+			AssertApproximatelyEqual(-0.42878157445627f, t3, 0.0001f);
+
+			Assert.AreEqual(2, Math.SolveQuartic(-1f, +1f, +1f, -1f, -0.5f, out t0, out t1, out t2, out t3));
+			AssertApproximatelyEqual(-0.8128147866566f, t0, 0.0001f);
+			Assert.IsNaN(t1);
+			Assert.IsNaN(t2);
+			AssertApproximatelyEqual(-0.42878157445627f, t3, 0.0001f);
+		}
+
+		[Test]
+		public void SolveQuartic_TwoSolutionAsymmetric_t0t3()
+		{
+			float t0, t1, t2, t3;
+			Assert.AreEqual(2, Math.SolveQuartic(+1f, +1f, -1f, -1f, -0.5f, out t0, out t1, out t2, out t3));
+			AssertApproximatelyEqual(-1.3883230719268f, t0, 0.0001f);
+			Assert.IsNaN(t1);
+			Assert.IsNaN(t2);
+			AssertApproximatelyEqual(+1.102578440926f, t3, 0.0001f);
+
+			Assert.AreEqual(2, Math.SolveQuartic(-1f, -1f, +1f, +1f, +0.5f, out t0, out t1, out t2, out t3));
+			AssertApproximatelyEqual(-1.3883230719268f, t0, 0.0001f);
+			Assert.IsNaN(t1);
+			Assert.IsNaN(t2);
+			AssertApproximatelyEqual(+1.102578440926f, t3, 0.0001f);
+		}
+
+		[Test]
+		public void SolveQuartic_TwoSolutionAsymmetric_t2t3()
+		{
+			float t0, t1, t2, t3;
+			Assert.AreEqual(2, Math.SolveQuartic(+1f, +1f, -1f, -1f, +0.5f, out t0, out t1, out t2, out t3));
+			AssertApproximatelyEqual(+0.42878157445627f, t0, 0.0001f);
+			Assert.IsNaN(t1);
+			Assert.IsNaN(t2);
+			AssertApproximatelyEqual(+0.8128147866566f, t3, 0.0001f);
+
+			Assert.AreEqual(2, Math.SolveQuartic(-1f, -1f, +1f, +1f, -0.5f, out t0, out t1, out t2, out t3));
+			AssertApproximatelyEqual(+0.42878157445627f, t0, 0.0001f);
+			Assert.IsNaN(t1);
+			Assert.IsNaN(t2);
+			AssertApproximatelyEqual(+0.8128147866566f, t3, 0.0001f);
 		}
 
 		#endregion

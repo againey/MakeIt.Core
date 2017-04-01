@@ -599,6 +599,26 @@ namespace Experilous.Numerics
 			return (point - ray.origin).ProjectOntoUnit(ray.direction) + ray.origin;
 		}
 
+		public static Vector3 ProjectOnto(this Vector3 point, Vector3 rayOrigin, Vector3 rayVector)
+		{
+			return (point - rayOrigin).ProjectOnto(rayVector) + rayOrigin;
+		}
+
+		public static Vector3 ProjectOntoUnit(this Vector3 point, Vector3 rayOrigin, Vector3 rayUnitVector)
+		{
+			return (point - rayOrigin).ProjectOntoUnit(rayUnitVector) + rayOrigin;
+		}
+
+		public static Vector3 ProjectOnto(this Vector3 point, Ray ray)
+		{
+			return (point - ray.origin).ProjectOntoUnit(ray.direction) + ray.origin;
+		}
+
+		public static Vector3 ProjectOnto(this Vector3 point, ScaledRay ray)
+		{
+			return (point - ray.origin).ProjectOnto(ray.direction) + ray.origin;
+		}
+
 		#endregion
 
 		#region Plane/Line Intersection
@@ -1205,6 +1225,91 @@ namespace Experilous.Numerics
 
 		#endregion
 
+		#region Parabola/Sphere Intersection
+
+		public static int GetIntersectionParameters(Parabola parabola, Sphere sphere, out float descendingEntrance, out float descendingExit, out float ascendingEntrance, out float ascendingExit, float epsilon = 0.0001f, int maxIterations = 1000)
+		{
+			var delta = parabola.vertex - sphere.center;
+			float k4 = parabola.axis.sqrMagnitude;
+			float k3 = 2f * Vector3.Dot(parabola.axis, parabola.tangent);
+			float k2 = 2f * Vector3.Dot(parabola.axis, delta) + parabola.tangent.sqrMagnitude;
+			float k1 = 2f * Vector3.Dot(parabola.tangent, delta);
+			float k0 = delta.sqrMagnitude - sphere.radius * sphere.radius;
+
+			int solutionCount = Math.SolveQuartic(k4, k3, k2, k1, k0, out descendingEntrance, out descendingExit, out ascendingEntrance, out ascendingExit, epsilon, maxIterations);
+
+			if ((solutionCount == 1 || solutionCount == 2) && float.IsNaN(descendingExit) && float.IsNaN(ascendingEntrance))
+			{
+				if (descendingEntrance >= 0f)
+				{
+					ascendingEntrance = descendingEntrance;
+					descendingEntrance = float.NaN;
+				}
+				else if (ascendingExit <= 0f)
+				{
+					descendingExit = ascendingExit;
+					ascendingExit = float.NaN;
+				}
+			}
+
+			return solutionCount;
+		}
+
+		public static int Intersect(Parabola parabola, Sphere sphere, out Vector3 descendingEntrance, out Vector3 descendingExit, out Vector3 ascendingEntrance, out Vector3 ascendingExit, float epsilon = 0.0001f, int maxIterations = 1000)
+		{
+			float t0, t1, t2, t3;
+			int solutionCount = GetIntersectionParameters(parabola, sphere, out t0, out t1, out t2, out t3, epsilon, maxIterations);
+			
+			descendingEntrance = parabola.Evaluate(t0);
+			descendingExit = parabola.Evaluate(t1);
+			ascendingEntrance = parabola.Evaluate(t2);
+			ascendingExit = parabola.Evaluate(t3);
+
+			return solutionCount;
+		}
+
+		public static bool IntersectDescendingEntrance(Parabola parabola, Sphere sphere, out Vector3 intersection, float epsilon = 0.0001f, int maxIterations = 1000)
+		{
+			float t0, t1, t2, t3;
+			int solutionCount = GetIntersectionParameters(parabola, sphere, out t0, out t1, out t2, out t3, epsilon, maxIterations);
+
+			intersection = parabola.Evaluate(t0);
+
+			return !float.IsNaN(t3);
+		}
+
+		public static bool IntersectDescendingExit(Parabola parabola, Sphere sphere, out Vector3 intersection, float epsilon = 0.0001f, int maxIterations = 1000)
+		{
+			float t0, t1, t2, t3;
+			int solutionCount = GetIntersectionParameters(parabola, sphere, out t0, out t1, out t2, out t3, epsilon, maxIterations);
+
+			intersection = parabola.Evaluate(t1);
+
+			return !float.IsNaN(t3);
+		}
+
+		public static bool IntersectAscendingEntrance(Parabola parabola, Sphere sphere, out Vector3 intersection, float epsilon = 0.0001f, int maxIterations = 1000)
+		{
+			float t0, t1, t2, t3;
+			int solutionCount = GetIntersectionParameters(parabola, sphere, out t0, out t1, out t2, out t3, epsilon, maxIterations);
+
+			intersection = parabola.Evaluate(t2);
+
+			return !float.IsNaN(t3);
+		}
+
+		public static bool IntersectAscendingExit(Parabola parabola, Sphere sphere, out Vector3 intersection, float epsilon = 0.0001f, int maxIterations = 1000)
+		{
+			float t0, t1, t2, t3;
+			int solutionCount = GetIntersectionParameters(parabola, sphere, out t0, out t1, out t2, out t3, epsilon, maxIterations);
+
+			intersection = parabola.Evaluate(t3);
+
+			return !float.IsNaN(t3);
+		}
+
+		#endregion
+
 		#region Plane Operations
 
 		/// <summary>
@@ -1364,6 +1469,76 @@ namespace Experilous.Numerics
 			return new ScaledRay(
 				transform.InverseTransformPoint(ray.origin),
 				transform.InverseTransformVector(ray.direction));
+		}
+
+		public static void GetNearestParameters(Ray ray0, Ray ray1, out float t0, out float t1)
+		{
+			var normal = Vector3.Cross(ray0.direction, ray1.direction);
+
+			if (normal != Vector3.zero)
+			{
+				var n0 = Vector3.Cross(normal, ray0.direction);
+				var n1 = Vector3.Cross(normal, ray1.direction);
+
+				t0 = Vector3.Dot(ray1.origin - ray0.origin, n1) / Vector3.Dot(ray0.direction, n1);
+				t1 = Vector3.Dot(ray0.origin - ray1.origin, n0) / Vector3.Dot(ray1.direction, n0);
+			}
+			else
+			{
+				// Parallel lines, just take the midpoint of the two origins as the nearest point.
+				t0 = Vector3.Dot(ray1.origin - ray0.origin, ray0.direction) / 2f;
+				t1 = Vector3.Dot(ray0.origin - ray1.origin, ray1.direction) / 2f;
+			}
+		}
+
+		public static void GetNearestParameters(ScaledRay ray0, ScaledRay ray1, out float t0, out float t1)
+		{
+			var normal = Vector3.Cross(ray0.direction, ray1.direction);
+
+			if (normal != Vector3.zero)
+			{
+				var n0 = Vector3.Cross(normal, ray0.direction);
+				var n1 = Vector3.Cross(normal, ray1.direction);
+
+				t0 = Vector3.Dot(ray1.origin - ray0.origin, n1) / Vector3.Dot(ray0.direction, n1);
+				t1 = Vector3.Dot(ray0.origin - ray1.origin, n0) / Vector3.Dot(ray1.direction, n0);
+			}
+			else
+			{
+				// Parallel lines, just take the midpoint of the two origins as the nearest point.
+				t0 = Vector3.Dot(ray1.origin - ray0.origin, ray0.direction) / (2f * Vector3.Dot(ray0.direction, ray0.direction));
+				t1 = Vector3.Dot(ray0.origin - ray1.origin, ray1.direction) / (2f * Vector3.Dot(ray1.direction, ray1.direction));
+			}
+		}
+
+		public static void GetNearestPoints(Ray ray0, Ray ray1, out Vector3 point0, out Vector3 point1)
+		{
+			float t0, t1;
+			GetNearestParameters(ray0, ray1, out t0, out t1);
+			point0 = ray0.direction * t0 + ray0.origin;
+			point1 = ray1.direction * t1 + ray1.origin;
+		}
+
+		public static void GetNearestPoints(ScaledRay ray0, ScaledRay ray1, out Vector3 point0, out Vector3 point1)
+		{
+			float t0, t1;
+			GetNearestParameters(ray0, ray1, out t0, out t1);
+			point0 = ray0.direction * t0 + ray0.origin;
+			point1 = ray1.direction * t1 + ray1.origin;
+		}
+
+		public static Vector3 GetNearestPoint(Ray ray0, Ray ray1)
+		{
+			float t0, t1;
+			GetNearestParameters(ray0, ray1, out t0, out t1);
+			return (ray0.direction * t0 + ray0.origin + ray1.direction * t1 + ray1.origin) / 2f;
+		}
+
+		public static Vector3 GetNearestPoint(ScaledRay ray0, ScaledRay ray1)
+		{
+			float t0, t1;
+			GetNearestParameters(ray0, ray1, out t0, out t1);
+			return (ray0.direction * t0 + ray0.origin + ray1.direction * t1 + ray1.origin) / 2f;
 		}
 
 		#endregion

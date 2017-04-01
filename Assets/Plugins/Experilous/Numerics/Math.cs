@@ -367,5 +367,73 @@ namespace Experilous.Numerics
 		}
 
 		#endregion
+
+		#region Quartic Equation
+
+		public static int SolveQuartic(float k4, float k3, float k2, float k1, float k0, out float t0, out float t1, out float t2, out float t3, float epsilon = 0.0001f, int maxIterations = 1000)
+		{
+			// Solve the quartic k4*t^4 + k3*t^3 + k2*t^2 + k1*t + k0 = 0
+			float u = k3 / k4;
+			float v = k2 / k4;
+
+			float delta = float.PositiveInfinity;
+			int iterations = 0;
+			while (delta > epsilon && iterations < maxIterations)
+			{
+				float n0 = k3 - u * k4;
+				float n1 = k2 - u * n0 - v * k4;
+				float n2 = k1 - u * n1 - v * n0;
+				float n3 = k0 - v * n1;
+				float n4 = n0 - u * k4;
+				float n5 = n1 - v * k4;
+
+				float s = v * n4 * n4 + n5 * (n5 - u * n4);
+				float du = (n4 * n3 - n5 * n2) / s;
+				float dv = ((u * n4 - n5) * n3 - v * n4 * n2) / s;
+				u -= du;
+				v -= dv;
+				delta = Mathf.Sqrt((du * du) / (u * u + 1f) + (dv * dv) / (v * v + 1f));
+				
+				++iterations;
+			}
+
+			if (delta <= epsilon)
+			{
+				float n0 = k3 - u * k4;
+				float n1 = k2 - u * n0 - v * k4;
+
+				int solutionCount = SolveQuadratic(1f, u, v, out t0, out t3, epsilon);
+
+				if (k4 >= 0f)
+				{
+					solutionCount += SolveQuadratic(k4, n0, n1, out t1, out t2, epsilon);
+				}
+				else
+				{
+					solutionCount += SolveQuadratic(k4, n0, n1, out t2, out t1, epsilon);
+				}
+
+				if (Mathf.Abs(t0 - t1) <= epsilon * 2f)
+				{
+					t0 = t1 = (t0 + t1) / 2f;
+					solutionCount -= 1;
+				}
+
+				if (Mathf.Abs(t2 - t3) <= epsilon * 2f)
+				{
+					t2 = t3 = (t2 + t3) / 2f;
+					solutionCount -= 1;
+				}
+
+				return solutionCount;
+			}
+			else
+			{
+				t0 = t1 = t2 = t3 = float.NaN;
+				return 0;
+			}
+		}
+
+		#endregion
 	}
 }
