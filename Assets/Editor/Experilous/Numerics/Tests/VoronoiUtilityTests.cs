@@ -225,47 +225,47 @@ namespace Experilous.Topologies.Tests
 		[Test]
 		public static void ComputeDirectionalOrder_CardinalDirections()
 		{
-			AssertApproximatelyEqual(-4f, VoronoiUtility.ComputeDirectionalOrder(new Vector2(-1f,  0f)), 0.0001f);
-			AssertApproximatelyEqual(-2f, VoronoiUtility.ComputeDirectionalOrder(new Vector2( 0f, -1f)), 0.0001f);
-			AssertApproximatelyEqual( 0f, VoronoiUtility.ComputeDirectionalOrder(new Vector2(+1f,  0f)), 0.0001f);
-			AssertApproximatelyEqual(+2f, VoronoiUtility.ComputeDirectionalOrder(new Vector2( 0f, +1f)), 0.0001f);
+			AssertApproximatelyEqual(-4f, VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(-1f,  0f)), 0.0001f);
+			AssertApproximatelyEqual(-2f, VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2( 0f, -1f)), 0.0001f);
+			AssertApproximatelyEqual( 0f, VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(+1f,  0f)), 0.0001f);
+			AssertApproximatelyEqual(+2f, VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2( 0f, +1f)), 0.0001f);
 		}
 
 		[Test]
 		public static void ComputeDirectionalOrder_IntercardinalDirections()
 		{
-			AssertApproximatelyEqual(-3f, VoronoiUtility.ComputeDirectionalOrder(new Vector2(-1f, -1f)), 0.0001f);
-			AssertApproximatelyEqual(-1f, VoronoiUtility.ComputeDirectionalOrder(new Vector2(+1f, -1f)), 0.0001f);
-			AssertApproximatelyEqual(+1f, VoronoiUtility.ComputeDirectionalOrder(new Vector2(+1f, +1f)), 0.0001f);
-			AssertApproximatelyEqual(+3f, VoronoiUtility.ComputeDirectionalOrder(new Vector2(-1f, +1f)), 0.0001f);
+			AssertApproximatelyEqual(-3f, VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(-1f, -1f)), 0.0001f);
+			AssertApproximatelyEqual(-1f, VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(+1f, -1f)), 0.0001f);
+			AssertApproximatelyEqual(+1f, VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(+1f, +1f)), 0.0001f);
+			AssertApproximatelyEqual(+3f, VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(-1f, +1f)), 0.0001f);
 		}
 
 		[Test]
 		public static void ComputeDirectionalOrder_SecondaryIntercardinalDirections()
 		{
-			Assert.Greater(VoronoiUtility.ComputeDirectionalOrder(new Vector2(-2f, -1f).normalized), -4f);
-			Assert.Less(VoronoiUtility.ComputeDirectionalOrder(new Vector2(-2f, -1f).normalized), -3f);
+			Assert.Greater(VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(-2f, -1f).normalized), -4f);
+			Assert.Less(VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(-2f, -1f).normalized), -3f);
 
-			Assert.Greater(VoronoiUtility.ComputeDirectionalOrder(new Vector2(-1f, -2f).normalized), -3f);
-			Assert.Less(VoronoiUtility.ComputeDirectionalOrder(new Vector2(-1f, -2f).normalized), -2f);
+			Assert.Greater(VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(-1f, -2f).normalized), -3f);
+			Assert.Less(VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(-1f, -2f).normalized), -2f);
 
-			Assert.Greater(VoronoiUtility.ComputeDirectionalOrder(new Vector2(+1f, -2f).normalized), -2f);
-			Assert.Less(VoronoiUtility.ComputeDirectionalOrder(new Vector2(+1f, -2f).normalized), -1f);
+			Assert.Greater(VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(+1f, -2f).normalized), -2f);
+			Assert.Less(VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(+1f, -2f).normalized), -1f);
 
-			Assert.Greater(VoronoiUtility.ComputeDirectionalOrder(new Vector2(+2f, -1f).normalized), -1f);
-			Assert.Less(VoronoiUtility.ComputeDirectionalOrder(new Vector2(+2f, -1f).normalized),  0f);
+			Assert.Greater(VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(+2f, -1f).normalized), -1f);
+			Assert.Less(VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(+2f, -1f).normalized),  0f);
 
-			Assert.Greater(VoronoiUtility.ComputeDirectionalOrder(new Vector2(+2f, +1f).normalized),  0f);
-			Assert.Less(VoronoiUtility.ComputeDirectionalOrder(new Vector2(+2f, +1f).normalized), +1f);
+			Assert.Greater(VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(+2f, +1f).normalized),  0f);
+			Assert.Less(VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(+2f, +1f).normalized), +1f);
 
-			Assert.Greater(VoronoiUtility.ComputeDirectionalOrder(new Vector2(+1f, +2f).normalized), +1f);
-			Assert.Less(VoronoiUtility.ComputeDirectionalOrder(new Vector2(+1f, +2f).normalized), +2f);
+			Assert.Greater(VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(+1f, +2f).normalized), +1f);
+			Assert.Less(VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(+1f, +2f).normalized), +2f);
 
-			Assert.Greater(VoronoiUtility.ComputeDirectionalOrder(new Vector2(-1f, +2f).normalized), +2f);
-			Assert.Less(VoronoiUtility.ComputeDirectionalOrder(new Vector2(-1f, +2f).normalized), +3f);
+			Assert.Greater(VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(-1f, +2f).normalized), +2f);
+			Assert.Less(VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(-1f, +2f).normalized), +3f);
 
-			Assert.Greater(VoronoiUtility.ComputeDirectionalOrder(new Vector2(-2f, +1f).normalized), +3f);
-			Assert.Less(VoronoiUtility.ComputeDirectionalOrder(new Vector2(-2f, +1f).normalized), +4f);
+			Assert.Greater(VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(-2f, +1f).normalized), +3f);
+			Assert.Less(VoronoiUtility.DirectedEdge.ComputeOrder(new Vector2(-2f, +1f).normalized), +4f);
 		}
 
 		[Test]
@@ -281,12 +281,12 @@ namespace Experilous.Topologies.Tests
 			for (int i = 0; i < 23; ++i)
 			{
 				var lhs = directions[i];
-				float lhsOrder = VoronoiUtility.ComputeDirectionalOrder(lhs.normalized);
+				float lhsOrder = VoronoiUtility.DirectedEdge.ComputeOrder(lhs.normalized);
 
 				for (int j = i + 1; j < 24; ++j)
 				{
 					var rhs = directions[j];
-					float rhsOrder = VoronoiUtility.ComputeDirectionalOrder(rhs.normalized);
+					float rhsOrder = VoronoiUtility.DirectedEdge.ComputeOrder(rhs.normalized);
 					Assert.LessOrEqual(lhsOrder - rhsOrder, 0.0001f, string.Format("Expected {0:G8} to be less than or equal to {1:G8} but was actually greater, for direction[{2}] {3} and direction[{4}] {5}.", lhsOrder, rhsOrder, i, lhs.ToString("F4"), j, rhs.ToString("F4")));
 				}
 			}
@@ -541,15 +541,17 @@ namespace Experilous.Topologies.Tests
 
 		#endregion
 
+#if false
 		#region CheckForMergeEvent
 
 		#region PointPointPoint
 
 		private static void AssertFalse_CheckForMergeEvent_PointPointPoint(Vector2 p0, Vector2 p1, Vector2 p2)
 		{
-			Vector2 actualMergePosition;
-			float actualDistance;
-			Assert.IsFalse(VoronoiUtility.CheckForMergeEvent_PointPointPoint(p0, p1, p2, out actualMergePosition, out actualDistance), string.Format("Expected no merge of points {0}, {1}, and {2}, but got a merge at {3} with distance {4:G8}.", p0.ToString("F4"), p1.ToString("F4"), p2.ToString("F4"), actualMergePosition.ToString("F4"), actualDistance));
+			GraphNodeDataArray<Vector2> positions = new GraphNodeDataArray<Vector2>(new Vector2[] { p0, p1, p2 });
+			VoronoiUtility.MergeEventQueue queue = new VoronoiUtility.MergeEventQueue(0.0001f);
+			VoronoiUtility.CheckForMergeEvent_PointPointPoint(0, 1, 2, positions, 0.0001f, new VoronoiUtility.BeachSegment(), queue);
+			Assert.IsTrue(queue.isEmpty, string.Format("Expected no merge of points {0}, {1}, and {2}, but got a merge at {3} with distance {4:G8}.", p0.ToString("F4"), p1.ToString("F4"), p2.ToString("F4"), queue.Peek().position.ToString("F4"), queue.Peek().distance));
 		}
 
 		private static void AssertTrue_CheckForMergeEvent_PointPointPoint(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 expectedMergePosition, float expectedDistance, float margin)
@@ -988,6 +990,7 @@ namespace Experilous.Topologies.Tests
 		#endregion
 
 		#endregion
+#endif
 	}
 }
 #endif
