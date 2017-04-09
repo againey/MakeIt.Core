@@ -159,6 +159,42 @@ namespace Experilous.Numerics
 		}
 
 		/// <summary>
+		/// Adjusts the squared magnitude of the given vector without changing its direction.
+		/// </summary>
+		/// <param name="v">The vector to adjust.</param>
+		/// <param name="newSqrMagnitude">The new squared magnitude for the vector to acquire.</param>
+		/// <returns>A vector with the same direction as the given vector, but with the specified squared magnitude.</returns>
+		public static Vector2 WithSqrMagnitude(this Vector2 v, float newSqrMagnitude)
+		{
+			var originalSqrMagnitude = v.sqrMagnitude;
+			return v * Mathf.Sqrt(newSqrMagnitude / originalSqrMagnitude);
+		}
+
+		/// <summary>
+		/// Adjusts the squared magnitude of the given vector without changing its direction.
+		/// </summary>
+		/// <param name="v">The vector to adjust.</param>
+		/// <param name="newSqrMagnitude">The new squared magnitude for the vector to acquire.</param>
+		/// <returns>A vector with the same direction as the given vector, but with the specified squared magnitude.</returns>
+		public static Vector3 WithSqrMagnitude(this Vector3 v, float newSqrMagnitude)
+		{
+			var originalSqrMagnitude = v.sqrMagnitude;
+			return v * Mathf.Sqrt(newSqrMagnitude / originalSqrMagnitude);
+		}
+
+		/// <summary>
+		/// Adjusts the squared magnitude of the given vector without changing its direction.
+		/// </summary>
+		/// <param name="v">The vector to adjust.</param>
+		/// <param name="newSqrMagnitude">The new squared magnitude for the vector to acquire.</param>
+		/// <returns>A vector with the same direction as the given vector, but with the specified squared magnitude.</returns>
+		public static Vector4 WithSqrMagnitude(this Vector4 v, float newSqrMagnitude)
+		{
+			var originalSqrMagnitude = v.sqrMagnitude;
+			return v * Mathf.Sqrt(newSqrMagnitude / originalSqrMagnitude);
+		}
+
+		/// <summary>
 		/// Creates a new vector by multiplying the components of the given vector by the specified scale.
 		/// </summary>
 		/// <param name="v">The vector whose components are to be multiplied.</param>
@@ -1539,6 +1575,73 @@ namespace Experilous.Numerics
 			float t0, t1;
 			GetNearestParameters(ray0, ray1, out t0, out t1);
 			return (ray0.direction * t0 + ray0.origin + ray1.direction * t1 + ray1.origin) / 2f;
+		}
+
+		public static float GetIntersectionParameter(Ray2D ray0, Ray2D ray1)
+		{
+			float determinant = DotPerpendicularCCW(ray0.direction, ray1.direction);
+			if (determinant != 0f)
+			{
+				Vector2 delta = ray1.origin - ray0.origin;
+				return DotPerpendicularCCW(delta, ray1.direction) / determinant;
+			}
+			else
+			{
+				return float.NaN;
+			}
+		}
+
+		public static bool GetIntersectionParameter(Ray2D ray0, Ray2D ray1, out float t)
+		{
+			float determinant = DotPerpendicularCCW(ray0.direction, ray1.direction);
+			if (determinant != 0f)
+			{
+				Vector2 delta = ray1.origin - ray0.origin;
+				t = DotPerpendicularCCW(delta, ray1.direction) / determinant;
+				return true;
+			}
+			else
+			{
+				t = float.NaN;
+				return false;
+			}
+		}
+
+		public static bool GetIntersectionParameters(Ray2D ray0, Ray2D ray1, out float t0, out float t1)
+		{
+			float determinant = DotPerpendicularCCW(ray0.direction, ray1.direction);
+			if (determinant != 0f)
+			{
+				Vector2 delta = ray1.origin - ray0.origin;
+				t0 = DotPerpendicularCCW(delta, ray1.direction) / determinant;
+				t1 = DotPerpendicularCCW(delta, ray0.direction) / determinant;
+				return true;
+			}
+			else
+			{
+				t0 = t1 = float.NaN;
+				return false;
+			}
+		}
+
+		public static Vector2 Intersect(Ray2D ray0, Ray2D ray1)
+		{
+			return ray0.GetPoint(GetIntersectionParameter(ray0, ray1));
+		}
+
+		public static bool Intersect(Ray2D ray0, Ray2D ray1, out Vector2 intersectionPoint)
+		{
+			float t0, t1;
+			if (GetIntersectionParameters(ray0, ray1, out t0, out t1))
+			{
+				intersectionPoint = (ray0.GetPoint(t0) + ray1.GetPoint(t1)) / 2f;
+				return true;
+			}
+			else
+			{
+				intersectionPoint = new Vector2(float.NaN, float.NaN);
+				return false;
+			}
 		}
 
 		#endregion

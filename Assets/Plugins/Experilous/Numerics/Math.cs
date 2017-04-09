@@ -59,6 +59,26 @@ namespace Experilous.Numerics
 			return (a ^ b) >= 0;
 		}
 
+		public static float ZeroExclusiveSign(float n)
+		{
+			if (float.IsNaN(n)) return float.NaN;
+			return System.BitConverter.DoubleToInt64Bits(n) < 0f ? -1f : +1f;
+		}
+
+		public static float ZeroInclusiveSign(float n)
+		{
+			if (float.IsNaN(n)) return float.NaN;
+			if (n == 0f) return 0f;
+			return n < 0f ? -1f : +1f;
+		}
+
+		public static float ApproximateSign(float n, float epsilon = 0.0001f)
+		{
+			if (float.IsNaN(n)) return float.NaN;
+			if (n > -epsilon && n < epsilon) return 0f;
+			return n < 0f ? -1f : +1f;
+		}
+
 		/// <summary>
 		/// Performs a linear interpolation from <paramref name="a"/> to <paramref name="b"/> using the interpolation parameter <paramref name="t"/>, which does not get clamped to the range [0, 1] first.
 		/// </summary>
