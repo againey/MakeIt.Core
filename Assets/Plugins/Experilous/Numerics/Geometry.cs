@@ -1591,7 +1591,37 @@ namespace Experilous.Numerics
 			}
 		}
 
+		public static float GetIntersectionParameter(ScaledRay2D ray0, ScaledRay2D ray1)
+		{
+			float determinant = DotPerpendicularCCW(ray0.direction, ray1.direction);
+			if (determinant != 0f)
+			{
+				Vector2 delta = ray1.origin - ray0.origin;
+				return DotPerpendicularCCW(delta, ray1.direction) / determinant;
+			}
+			else
+			{
+				return float.NaN;
+			}
+		}
+
 		public static bool GetIntersectionParameter(Ray2D ray0, Ray2D ray1, out float t)
+		{
+			float determinant = DotPerpendicularCCW(ray0.direction, ray1.direction);
+			if (determinant != 0f)
+			{
+				Vector2 delta = ray1.origin - ray0.origin;
+				t = DotPerpendicularCCW(delta, ray1.direction) / determinant;
+				return true;
+			}
+			else
+			{
+				t = float.NaN;
+				return false;
+			}
+		}
+
+		public static bool GetIntersectionParameter(ScaledRay2D ray0, ScaledRay2D ray1, out float t)
 		{
 			float determinant = DotPerpendicularCCW(ray0.direction, ray1.direction);
 			if (determinant != 0f)
@@ -1624,12 +1654,49 @@ namespace Experilous.Numerics
 			}
 		}
 
+		public static bool GetIntersectionParameters(ScaledRay2D ray0, ScaledRay2D ray1, out float t0, out float t1)
+		{
+			float determinant = DotPerpendicularCCW(ray0.direction, ray1.direction);
+			if (determinant != 0f)
+			{
+				Vector2 delta = ray1.origin - ray0.origin;
+				t0 = DotPerpendicularCCW(delta, ray1.direction) / determinant;
+				t1 = DotPerpendicularCCW(delta, ray0.direction) / determinant;
+				return true;
+			}
+			else
+			{
+				t0 = t1 = float.NaN;
+				return false;
+			}
+		}
+
 		public static Vector2 Intersect(Ray2D ray0, Ray2D ray1)
 		{
 			return ray0.GetPoint(GetIntersectionParameter(ray0, ray1));
 		}
 
+		public static Vector2 Intersect(ScaledRay2D ray0, ScaledRay2D ray1)
+		{
+			return ray0.GetPoint(GetIntersectionParameter(ray0, ray1));
+		}
+
 		public static bool Intersect(Ray2D ray0, Ray2D ray1, out Vector2 intersectionPoint)
+		{
+			float t0, t1;
+			if (GetIntersectionParameters(ray0, ray1, out t0, out t1))
+			{
+				intersectionPoint = (ray0.GetPoint(t0) + ray1.GetPoint(t1)) / 2f;
+				return true;
+			}
+			else
+			{
+				intersectionPoint = new Vector2(float.NaN, float.NaN);
+				return false;
+			}
+		}
+
+		public static bool Intersect(ScaledRay2D ray0, ScaledRay2D ray1, out Vector2 intersectionPoint)
 		{
 			float t0, t1;
 			if (GetIntersectionParameters(ray0, ray1, out t0, out t1))
