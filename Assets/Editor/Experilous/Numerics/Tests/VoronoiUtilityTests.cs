@@ -35,61 +35,85 @@ namespace Experilous.Topologies.Tests
 			Assert.IsTrue(float.IsNaN(actual), message != null ? message : string.Format("Expected NaN but actual was {0:G8}.", actual));
 		}
 
-		private static void AssertFalse_CheckForMergeEvent(float margin, Transform2 transform, string methodName, string message, params Vector2[] positions)
+		private void AssertFalse_CheckForMergeEvent(float errorMargin, Transform2 transform, string methodName, string message, int[] indices, params Vector2[] rawPositions)
 		{
 			var method = typeof(VoronoiUtility).GetMethod("CheckForMergeEvent_" + methodName);
 
-			int mergePositionIndex = -1;
-			int distanceIndex = -1;
+			GraphNodeDataArray<Vector2> nodePositions = new GraphNodeDataArray<Vector2>((Vector2[])rawPositions.Clone());
+			VoronoiUtility.MergeEventQueue queue = new VoronoiUtility.MergeEventQueue(0.0001f);
+
 			var parameterInfo = method.GetParameters();
 			var parameters = new object[parameterInfo.Length];
-			for (int i = 0; i < positions.Length; ++i)
+			for (int i = 0; i < rawPositions.Length; ++i)
 			{
-				parameters[i] = transform.TransformPosition(positions[i]);
+				nodePositions[i] = transform.TransformPosition(rawPositions[i]);
 			}
-			for (int i = positions.Length; i < parameterInfo.Length; ++i)
+			for (int i = 0; i < indices.Length; ++i)
 			{
-				if (parameterInfo[i].Name == "errorMargin") parameters[i] = margin;
-				else if (parameterInfo[i].Name == "mergePosition") mergePositionIndex = i;
-				else if (parameterInfo[i].Name == "distance") distanceIndex = i;
+				parameters[i] = indices[i];
 			}
-			var result = (bool)method.Invoke(null, parameters);
+			for (int i = indices.Length; i < parameterInfo.Length; ++i)
+			{
+				if (parameterInfo[i].ParameterType == typeof(IGraphNodeData<Vector2>) && parameterInfo[i].Name == "nodePositions") parameters[i] = nodePositions;
+				else if (parameterInfo[i].ParameterType == typeof(float) && parameterInfo[i].Name == "errorMargin") parameters[i] = errorMargin;
+				else if (parameterInfo[i].ParameterType == typeof(VoronoiUtility.BeachSegment)) parameters[i] = segment;
+				else if (parameterInfo[i].ParameterType == typeof(VoronoiUtility.MergeEventQueue)) parameters[i] = queue;
+			}
+			method.Invoke(null, parameters);
 
-			Vector2 actualMergePosition = (Vector2)parameters[mergePositionIndex];
-			float actualDistance = (float)parameters[distanceIndex];
+			bool found = ExtractActualValuesFromQueue(queue);
 
-			Assert.IsFalse(result, string.Format("Expected no merge of {0}, but got a merge at {1} with distance {2:G8}.", string.Format(message, parameters), actualMergePosition.ToString("F4"), actualDistance));
+			object[] formattedPositions = new object[nodePositions.Count];
+			for (int i = 0; i < nodePositions.Count; ++i)
+			{
+				formattedPositions[i] = nodePositions[i].ToString("F3");
+			}
+			var mergeMessage = string.Format(message, formattedPositions);
+
+			Assert.IsFalse(found, string.Format("Expected no merge of {0}, but got a merge at {1} with distance {2:G8}.", mergeMessage, actualMergePosition.ToString("F4"), actualDistance));
 		}
 
-		private static void AssertTrue_CheckForMergeEvent(Vector2 expectedMergePosition, float expectedDistance, float margin, Transform2 transform, string methodName, string message, params Vector2[] positions)
+		private void AssertTrue_CheckForMergeEvent(Vector2 expectedMergePosition, float expectedDistance, float errorMargin, Transform2 transform, string methodName, string message, int[] indices, params Vector2[] rawPositions)
 		{
 			var method = typeof(VoronoiUtility).GetMethod("CheckForMergeEvent_" + methodName);
 
 			expectedMergePosition = transform.TransformPosition(expectedMergePosition);
 			expectedDistance = transform.TransformDistance(expectedDistance);
 
-			int mergePositionIndex = -1;
-			int distanceIndex = -1;
+			GraphNodeDataArray<Vector2> nodePositions = new GraphNodeDataArray<Vector2>((Vector2[])rawPositions.Clone());
+			VoronoiUtility.MergeEventQueue queue = new VoronoiUtility.MergeEventQueue(0.0001f);
+
 			var parameterInfo = method.GetParameters();
 			var parameters = new object[parameterInfo.Length];
-			for (int i = 0; i < positions.Length; ++i)
+			for (int i = 0; i < rawPositions.Length; ++i)
 			{
-				parameters[i] = transform.TransformPosition(positions[i]);
+				nodePositions[i] = transform.TransformPosition(rawPositions[i]);
 			}
-			for (int i = positions.Length; i < parameterInfo.Length; ++i)
+			for (int i = 0; i < indices.Length; ++i)
 			{
-				if (parameterInfo[i].Name == "errorMargin") parameters[i] = margin;
-				else if (parameterInfo[i].Name == "mergePosition") mergePositionIndex = i;
-				else if (parameterInfo[i].Name == "distance") distanceIndex = i;
+				parameters[i] = indices[i];
 			}
-			var result = (bool)method.Invoke(null, parameters);
+			for (int i = indices.Length; i < parameterInfo.Length; ++i)
+			{
+				if (parameterInfo[i].ParameterType == typeof(IGraphNodeData<Vector2>) && parameterInfo[i].Name == "nodePositions") parameters[i] = nodePositions;
+				else if (parameterInfo[i].ParameterType == typeof(float) && parameterInfo[i].Name == "errorMargin") parameters[i] = errorMargin;
+				else if (parameterInfo[i].ParameterType == typeof(VoronoiUtility.BeachSegment)) parameters[i] = segment;
+				else if (parameterInfo[i].ParameterType == typeof(VoronoiUtility.MergeEventQueue)) parameters[i] = queue;
+			}
+			method.Invoke(null, parameters);
 
-			Vector2 actualMergePosition = (Vector2)parameters[mergePositionIndex];
-			float actualDistance = (float)parameters[distanceIndex];
+			bool found = ExtractActualValuesFromQueue(queue);
 
-			Assert.IsTrue(result, string.Format("Expected a merge of {0} at {1} with distance {2:G8}, but got no merge.", string.Format(message, parameters), expectedMergePosition.ToString("F4"), expectedDistance));
-			AssertApproximatelyEqual(expectedMergePosition, actualMergePosition, margin, string.Format("Expected a merge of {0} at {1} with distance {2:G8}, but got a merge at {3} with distance {4:G8}.", string.Format(message, parameters), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
-			AssertApproximatelyEqual(expectedDistance, actualDistance, margin, string.Format("Expected a merge of {0} at {1} with distance {2:G8}, but got a merge at {3} with distance {4:G8}.", string.Format(message, parameters), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
+			object[] formattedPositions = new object[nodePositions.Count];
+			for (int i = 0; i < nodePositions.Count; ++i)
+			{
+				formattedPositions[i] = nodePositions[i].ToString("F3");
+			}
+			var mergeMessage = string.Format(message, formattedPositions);
+
+			Assert.IsTrue(found, string.Format("Expected a merge of {0} at {1} with distance {2:G8}, but got no merge.", mergeMessage, expectedMergePosition.ToString("F4"), expectedDistance));
+			AssertApproximatelyEqual(expectedMergePosition, actualMergePosition, errorMargin, string.Format("Expected a merge of {0} at {1} with distance {2:G8}, but got a merge at {3} with distance {4:G8}.", mergeMessage, expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
+			AssertApproximatelyEqual(expectedDistance, actualDistance, errorMargin, string.Format("Expected a merge of {0} at {1} with distance {2:G8}, but got a merge at {3} with distance {4:G8}.", mergeMessage, expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 		}
 
 		#endregion
@@ -541,30 +565,53 @@ namespace Experilous.Topologies.Tests
 
 		#endregion
 
-#if false
 		#region CheckForMergeEvent
+
+		private VoronoiUtility.BeachSegment segment = new VoronoiUtility.BeachSegment();
+		private Vector2 actualMergePosition;
+		private float actualDistance;
+
+		private bool ExtractActualValuesFromQueue(VoronoiUtility.MergeEventQueue queue)
+		{
+			if (queue.isEmpty)
+			{
+				actualMergePosition = Vector2.zero;
+				actualDistance = 0f;
+				return false;
+			}
+			else
+			{
+				var ev = queue.Pop();
+				actualMergePosition = ev.mergePosition;
+				actualDistance = ev.distance;
+				return true;
+			}
+		}
 
 		#region PointPointPoint
 
-		private static void AssertFalse_CheckForMergeEvent_PointPointPoint(Vector2 p0, Vector2 p1, Vector2 p2)
+		private void AssertFalse_CheckForMergeEvent_PointPointPoint(Vector2 p0, Vector2 p1, Vector2 p2)
 		{
 			GraphNodeDataArray<Vector2> positions = new GraphNodeDataArray<Vector2>(new Vector2[] { p0, p1, p2 });
 			VoronoiUtility.MergeEventQueue queue = new VoronoiUtility.MergeEventQueue(0.0001f);
-			VoronoiUtility.CheckForMergeEvent_PointPointPoint(0, 1, 2, positions, 0.0001f, new VoronoiUtility.BeachSegment(), queue);
-			Assert.IsTrue(queue.isEmpty, string.Format("Expected no merge of points {0}, {1}, and {2}, but got a merge at {3} with distance {4:G8}.", p0.ToString("F4"), p1.ToString("F4"), p2.ToString("F4"), queue.Peek().position.ToString("F4"), queue.Peek().distance));
+			VoronoiUtility.CheckForMergeEvent_PointPointPoint(0, 1, 2, positions, 0.0001f, segment, queue);
+			bool found = ExtractActualValuesFromQueue(queue);
+			Assert.IsFalse(found, string.Format("Expected no merge of points {0}, {1}, and {2}, but got a merge at {3} with distance {4:G8}.", p0.ToString("F4"), p1.ToString("F4"), p2.ToString("F4"), actualMergePosition.ToString("F4"), actualDistance));
 		}
 
-		private static void AssertTrue_CheckForMergeEvent_PointPointPoint(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 expectedMergePosition, float expectedDistance, float margin)
+		private void AssertTrue_CheckForMergeEvent_PointPointPoint(Vector2 p0, Vector2 p1, Vector2 p2, Vector2 expectedMergePosition, float expectedDistance, float margin)
 		{
-			Vector2 actualMergePosition;
-			float actualDistance;
-			Assert.IsTrue(VoronoiUtility.CheckForMergeEvent_PointPointPoint(p0, p1, p2, out actualMergePosition, out actualDistance), string.Format("Expected a merge of points {0}, {1}, and {2} at {3} with distance {4:G8}, but got no merge.", p0.ToString("F4"), p1.ToString("F4"), p2.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
+			GraphNodeDataArray<Vector2> positions = new GraphNodeDataArray<Vector2>(new Vector2[] { p0, p1, p2 });
+			VoronoiUtility.MergeEventQueue queue = new VoronoiUtility.MergeEventQueue(0.0001f);
+			VoronoiUtility.CheckForMergeEvent_PointPointPoint(0, 1, 2, positions, 0.0001f, segment, queue);
+			bool found = ExtractActualValuesFromQueue(queue);
+			Assert.IsTrue(found, string.Format("Expected a merge of points {0}, {1}, and {2} at {3} with distance {4:G8}, but got no merge.", p0.ToString("F4"), p1.ToString("F4"), p2.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
 			AssertApproximatelyEqual(expectedMergePosition, actualMergePosition, margin, string.Format("Expected a merge of points {0}, {1}, and {2} at {3} with distance {4:G8}, but got a merge at {5} with distance {6:G8}.", p0.ToString("F4"), p1.ToString("F4"), p2.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 			AssertApproximatelyEqual(expectedDistance, actualDistance, margin, string.Format("Expected a merge of points {0}, {1}, and {2} at {3} with distance {4:G8}, but got a merge at {5} with distance {6:G8}.", p0.ToString("F4"), p1.ToString("F4"), p2.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 		}
 
 		[Test]
-		public static void CheckForMergeEvent_3P0L_PointPointPoint_ConcaveSymmetric()
+		public void CheckForMergeEvent_3P0L_PointPointPoint_ConcaveSymmetric()
 		{
 			var p0 = new Vector2(1f, 19f);
 			var p1 = new Vector2(25f, 1f);
@@ -575,7 +622,7 @@ namespace Experilous.Topologies.Tests
 		}
 
 		[Test]
-		public static void CheckForMergeEvent_3P0L_PointPointPoint_ConcaveAsymmetric()
+		public void CheckForMergeEvent_3P0L_PointPointPoint_ConcaveAsymmetric()
 		{
 			var p0 = new Vector2(1f, 13f);
 			var p1 = new Vector2(17f, 1f);
@@ -586,7 +633,7 @@ namespace Experilous.Topologies.Tests
 		}
 
 		[Test]
-		public static void CheckForMergeEvent_3P0L_PointPointPoint_ConvexAsymmetric()
+		public void CheckForMergeEvent_3P0L_PointPointPoint_ConvexAsymmetric()
 		{
 			var p0 = new Vector2(-12f + 47f/6f, 16f + 47f/8f);
 			var p1 = new Vector2(-12f - 47f/6f, 16f - 47f/8f);
@@ -600,17 +647,19 @@ namespace Experilous.Topologies.Tests
 
 		#region PointPointLine
 
-		private static void AssertTrue_CheckForMergeEvent_PointTargetPointLine(Vector2 p0, Vector2 p2a, Vector2 p2b, Vector2 expectedMergePosition, float expectedDistance, float margin)
+		private void AssertTrue_CheckForMergeEvent_PointTargetPointLine(Vector2 p0, Vector2 p2a, Vector2 p2b, Vector2 expectedMergePosition, float expectedDistance, float margin)
 		{
-			Vector2 actualMergePosition;
-			float actualDistance;
-			Assert.IsTrue(VoronoiUtility.CheckForMergeEvent_PointTargetPointLine(p0, p2a, p2b, out actualMergePosition, out actualDistance), string.Format("Expected a merge of point {0}, point {1}, and line {2} -> {3} at {4} with distance {5:G8}, but got no merge.", p0.ToString("F4"), p2b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
+			GraphNodeDataArray<Vector2> positions = new GraphNodeDataArray<Vector2>(new Vector2[] { p0, p2a, p2b });
+			VoronoiUtility.MergeEventQueue queue = new VoronoiUtility.MergeEventQueue(0.0001f);
+			VoronoiUtility.CheckForMergeEvent_PointPointLine(0, 2, 1, 2, positions, 0.0001f, segment, queue);
+			bool found = ExtractActualValuesFromQueue(queue);
+			Assert.IsTrue(found, string.Format("Expected a merge of point {0}, point {1}, and line {2} -> {3} at {4} with distance {5:G8}, but got no merge.", p0.ToString("F4"), p2b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
 			AssertApproximatelyEqual(expectedMergePosition, actualMergePosition, margin, string.Format("Expected a merge of point {0}, point {1}, and line {2} -> {3} at {4} with distance {5:G8}, but got a merge at {6} with distance {7:G8}.", p0.ToString("F4"), p2b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 			AssertApproximatelyEqual(expectedDistance, actualDistance, margin, string.Format("Expected a merge of points point {0}, point {1}, and line {2} -> {3} at {4} with distance {5:G8}, but got a merge at {6} with distance {7:G8}.", p0.ToString("F4"), p2b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 		}
 
 		[Test]
-		public static void CheckForMergeEvent_2P1L_PointTargetPointLine_LargeNegativeSlope()
+		public void CheckForMergeEvent_2P1L_PointTargetPointLine_LargeNegativeSlope()
 		{
 			var p0 = new Vector2(-120f/17f, 225f/17f);
 			var p2a = new Vector2(15f, 5f);
@@ -618,20 +667,22 @@ namespace Experilous.Topologies.Tests
 			AssertTrue_CheckForMergeEvent_PointTargetPointLine(p0, p2a, p2b, new Vector2(0f, 0f), 15f, 0.0001f);
 		}
 
-		private static void AssertTrue_CheckForMergeEvent_PointPointLine(Vector2 p0, Vector2 p1, Vector2 p2a, Vector2 p2b, Vector2 expectedMergePosition, float expectedDistance, float margin)
+		private void AssertTrue_CheckForMergeEvent_PointPointLine(Vector2 p0, Vector2 p1, Vector2 p2a, Vector2 p2b, Vector2 expectedMergePosition, float expectedDistance, float margin)
 		{
-			Vector2 actualMergePosition;
-			float actualDistance;
-			Assert.IsTrue(VoronoiUtility.CheckForMergeEvent_PointPointLine(p0, p1, p2a, p2b, margin, out actualMergePosition, out actualDistance), string.Format("Expected a merge of point {0}, point {1}, and line {2} -> {3} at {4} with distance {5:G8}, but got no merge.", p0.ToString("F4"), p1.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
+			GraphNodeDataArray<Vector2> positions = new GraphNodeDataArray<Vector2>(new Vector2[] { p0, p1, p2a, p2b });
+			VoronoiUtility.MergeEventQueue queue = new VoronoiUtility.MergeEventQueue(0.0001f);
+			VoronoiUtility.CheckForMergeEvent_PointPointLine(0, 1, 2, 3, positions, 0.0001f, segment, queue);
+			bool found = ExtractActualValuesFromQueue(queue);
+			Assert.IsTrue(found, string.Format("Expected a merge of point {0}, point {1}, and line {2} -> {3} at {4} with distance {5:G8}, but got no merge.", p0.ToString("F4"), p1.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
 			AssertApproximatelyEqual(expectedMergePosition, actualMergePosition, margin, string.Format("Expected a merge of point {0}, point {1}, and line {2} -> {3} at {4} with distance {5:G8}, but got a merge at {6} with distance {7:G8}.", p0.ToString("F4"), p1.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 			AssertApproximatelyEqual(expectedDistance, actualDistance, margin, string.Format("Expected a merge of points point {0}, point {1}, and line {2} -> {3} at {4} with distance {5:G8}, but got a merge at {6} with distance {7:G8}.", p0.ToString("F4"), p1.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 		}
 
 		[Test]
-		public static void CheckForMergeEvent_2P1L_PointPointLine_SmallPositiveSlope()
+		public void CheckForMergeEvent_2P1L_PointPointLine_SmallPositiveSlope()
 		{
-			var p0 = new Vector2(-10f, 0f);
-			var p1 = new Vector2(-8f, 6f);
+			var p0 = new Vector2(-8f, 6f);
+			var p1 = new Vector2(-10f, 0f);
 			var p2a = new Vector2(5f, -14f);
 			var p2b = new Vector2(10f, -2f);
 			AssertTrue_CheckForMergeEvent_PointPointLine(p0, p1, p2a, p2b, new Vector2(0f, 0f), 10f, 0.0001f);
@@ -646,13 +697,13 @@ namespace Experilous.Topologies.Tests
 		[TestCase(1f, 55f, 0f, 0f)]
 		[TestCase(1f, 0f, 12f, -19f)]
 		[TestCase(2.5f, 55f, 12f, -19f)]
-		public static void CheckForMergeEvent_2P1L_PointLinePoint_SmallPositiveSlope_NoMerge(float s, float r, float dx, float dy)
+		public void CheckForMergeEvent_2P1L_PointLinePoint_SmallPositiveSlope_NoMerge(float s, float r, float dx, float dy)
 		{
 			var p0 = new Vector2(-5f, 0f);
 			var p1a = new Vector2(1f, -5f);
 			var p1b = new Vector2(13f, 0f);
 			var p2 = new Vector2(4f, -6f);
-			AssertFalse_CheckForMergeEvent(0.0001f, new Transform2(s, r, dx, dy), "PointLinePoint", "point {0}, line {1} -> {2}, and point {3}", p0, p1a, p1b, p2);
+			AssertFalse_CheckForMergeEvent(0.0001f, new Transform2(s, r, dx, dy), "PointLinePoint", "point {0}, line {1} -> {2}, and point {3}", new int[] { 0, 1, 2, 3 }, p0, p1a, p1b, p2);
 		}
 
 		[TestCase(1f, 0f, 0f, 0f)]
@@ -660,13 +711,13 @@ namespace Experilous.Topologies.Tests
 		[TestCase(1f, 55f, 0f, 0f)]
 		[TestCase(1f, 0f, 12f, -19f)]
 		[TestCase(2.5f, 55f, 12f, -19f)]
-		public static void CheckForMergeEvent_2P1L_PointLinePoint_SmallPositiveSlope(float s, float r, float dx, float dy)
+		public void CheckForMergeEvent_2P1L_PointLinePoint_SmallPositiveSlope(float s, float r, float dx, float dy)
 		{
 			var p0 = new Vector2(-5f, 0f);
 			var p1a = new Vector2(1f, -5f);
 			var p1b = new Vector2(13f, 0f);
 			var p2 = new Vector2(4f, 3f);
-			AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "PointLinePoint", "point {0}, line {1} -> {2}, and point {3}", p0, p1a, p1b, p2);
+			AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "PointLinePoint", "point {0}, line {1} -> {2}, and point {3}", new int[] { 0, 1, 2, 3 }, p0, p1a, p1b, p2);
 		}
 
 		[TestCase(1f, 0f, 0f, 0f)]
@@ -674,13 +725,13 @@ namespace Experilous.Topologies.Tests
 		[TestCase(1f, 55f, 0f, 0f)]
 		[TestCase(1f, 0f, 12f, -19f)]
 		[TestCase(2.5f, 55f, 12f, -19f)]
-		public static void CheckForMergeEvent_2P1L_PointLinePoint_SmallPositiveSlope_Symmetric(float s, float r, float dx, float dy)
+		public void CheckForMergeEvent_2P1L_PointLinePoint_SmallPositiveSlope_Symmetric(float s, float r, float dx, float dy)
 		{
 			var p0 = new Vector2(-25f, 0f);
 			var p1a = new Vector2(3f, -29f);
 			var p1b = new Vector2(39f, -2f);
 			var p2 = new Vector2(7f, 24f);
-			AssertTrue_CheckForMergeEvent(Vector2.zero, 25f, 0.0001f, new Transform2(s, r, dx, dy), "PointLinePoint", "point {0}, line {1} -> {2}, and point {3}", p0, p1a, p1b, p2);
+			AssertTrue_CheckForMergeEvent(Vector2.zero, 25f, 0.0001f, new Transform2(s, r, dx, dy), "PointLinePoint", "point {0}, line {1} -> {2}, and point {3}", new int[] { 0, 1, 2, 3 }, p0, p1a, p1b, p2);
 		}
 
 		[TestCase(1f, 0f, 0f, 0f)]
@@ -688,13 +739,13 @@ namespace Experilous.Topologies.Tests
 		[TestCase(1f, 55f, 0f, 0f)]
 		[TestCase(1f, 0f, 12f, -19f)]
 		[TestCase(2.5f, 55f, 12f, -19f)]
-		public static void CheckForMergeEvent_2P1L_PointLinePoint_SmallPositiveSlope_SymmetricHorizontal(float s, float r, float dx, float dy)
+		public void CheckForMergeEvent_2P1L_PointLinePoint_SmallPositiveSlope_SymmetricHorizontal(float s, float r, float dx, float dy)
 		{
 			var p0 = new Vector2(-4f, -3f);
 			var p1a = new Vector2(-5f, -5f);
 			var p1b = new Vector2(5f, -5f);
 			var p2 = new Vector2(4f, -3f);
-			AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "PointLinePoint", "point {0}, line {1} -> {2}, and point {3}", p0, p1a, p1b, p2);
+			AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "PointLinePoint", "point {0}, line {1} -> {2}, and point {3}", new int[] { 0, 1, 2, 3 }, p0, p1a, p1b, p2);
 		}
 
 		[TestCase(1f, 0f, 0f, 0f)]
@@ -702,12 +753,12 @@ namespace Experilous.Topologies.Tests
 		[TestCase(1f, 55f, 0f, 0f)]
 		[TestCase(1f, 0f, 12f, -19f)]
 		[TestCase(2.5f, 55f, 12f, -19f)]
-		public static void CheckForMergeEvent_2P1L_SourcePointLinePoint_Horizontal(float s, float r, float dx, float dy)
+		public void CheckForMergeEvent_2P1L_SourcePointLinePoint_Horizontal(float s, float r, float dx, float dy)
 		{
 			var p1a = new Vector2(0f, -5f);
 			var p1b = new Vector2(8f, -5f);
 			var p2 = new Vector2(4f, -3f);
-			AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "SourcePointLinePoint", "point {0}, line {0} -> {1}, and point {2}", p1a, p1b, p2);
+			AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "PointLinePoint", "point {0}, line {0} -> {1}, and point {2}", new int[] { 0, 0, 1, 2 }, p1a, p1b, p2);
 		}
 
 		[TestCase(1f, 0f, 0f, 0f)]
@@ -715,29 +766,31 @@ namespace Experilous.Topologies.Tests
 		[TestCase(1f, 55f, 0f, 0f)]
 		[TestCase(1f, 0f, 12f, -19f)]
 		[TestCase(2.5f, 55f, 12f, -19f)]
-		public static void CheckForMergeEvent_2P1L_PointLineTargetPoint_Horizontal(float s, float r, float dx, float dy)
+		public void CheckForMergeEvent_2P1L_PointLineTargetPoint_Horizontal(float s, float r, float dx, float dy)
 		{
 			var p0 = new Vector2(-4f, -3f);
 			var p1a = new Vector2(-8f, -5f);
 			var p1b = new Vector2(0f, -5f);
-			AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "PointLineTargetPoint", "point {0}, line {1} -> {2}, and point {2}", p0, p1a, p1b);
+			AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "PointLinePoint", "point {0}, line {1} -> {2}, and point {2}", new int[] { 0, 1, 2, 2 }, p0, p1a, p1b);
 		}
 
 		#endregion
 
 		#region PointLineLine
 
-		private static void AssertTrue_CheckForMergeEvent_PointLineLine(Vector2 p0, Vector2 p1a, Vector2 p1b, Vector2 p2a, Vector2 p2b, Vector2 expectedMergePosition, float expectedDistance, float margin)
+		private void AssertTrue_CheckForMergeEvent_PointLineLine(Vector2 p0, Vector2 p1a, Vector2 p1b, Vector2 p2a, Vector2 p2b, Vector2 expectedMergePosition, float expectedDistance, float margin)
 		{
-			Vector2 actualMergePosition;
-			float actualDistance;
-			Assert.IsTrue(VoronoiUtility.CheckForMergeEvent_PointLineLine(p0, p1a, p1b, p2a, p2b, margin, out actualMergePosition, out actualDistance), string.Format("Expected a merge of point {0}, line {1} -> {2}, and line {3} -> {4} at {5} with distance {6:G8}, but got no merge.", p0.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
+			GraphNodeDataArray<Vector2> positions = new GraphNodeDataArray<Vector2>(new Vector2[] { p0, p1a, p1b, p2a, p2b });
+			VoronoiUtility.MergeEventQueue queue = new VoronoiUtility.MergeEventQueue(0.0001f);
+			VoronoiUtility.CheckForMergeEvent_PointLineLine(0, 1, 2, 3, 4, positions, 0.0001f, segment, queue);
+			bool found = ExtractActualValuesFromQueue(queue);
+			Assert.IsTrue(found, string.Format("Expected a merge of point {0}, line {1} -> {2}, and line {3} -> {4} at {5} with distance {6:G8}, but got no merge.", p0.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
 			AssertApproximatelyEqual(expectedMergePosition, actualMergePosition, margin, string.Format("Expected a merge of point {0}, line {1} -> {2}, and line {3} -> {4} at {5} with distance {6:G8}, but got a merge at {7} with distance {8:G8}.", p0.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 			AssertApproximatelyEqual(expectedDistance, actualDistance, margin, string.Format("Expected a merge of point {0}, line {1} -> {2}, and line {3} -> {4} at {5} with distance {6:G8}, but got a merge at {7} with distance {8:G8}.", p0.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 		}
 
 		[Test]
-		public static void CheckForMergeEvent_1P2L_PointLineLine_()
+		public void CheckForMergeEvent_1P2L_PointLineLine_()
 		{
 			var p0 = new Vector2(-4f, 3f);
 			var p1a = new Vector2(-15f, 5f);
@@ -747,17 +800,19 @@ namespace Experilous.Topologies.Tests
 			AssertTrue_CheckForMergeEvent_PointLineLine(p0, p1a, p1b, p2a, p2b, new Vector2(0f, 0f), 5f, 0.0001f);
 		}
 
-		private static void AssertTrue_CheckForMergeEvent_SourcePointLineLine(Vector2 p1a, Vector2 p1b, Vector2 p2a, Vector2 p2b, Vector2 expectedMergePosition, float expectedDistance, float margin)
+		private void AssertTrue_CheckForMergeEvent_SourcePointLineLine(Vector2 p1a, Vector2 p1b, Vector2 p2a, Vector2 p2b, Vector2 expectedMergePosition, float expectedDistance, float margin)
 		{
-			Vector2 actualMergePosition;
-			float actualDistance;
-			Assert.IsTrue(VoronoiUtility.CheckForMergeEvent_SourcePointLineLine(p1a, p1b, p2a, p2b, out actualMergePosition, out actualDistance), string.Format("Expected a merge of point {0}, line {1} -> {2}, and line {3} -> {4} at {5} with distance {6:G8}, but got no merge.", p1a.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
+			GraphNodeDataArray<Vector2> positions = new GraphNodeDataArray<Vector2>(new Vector2[] { p1a, p1b, p2a, p2b });
+			VoronoiUtility.MergeEventQueue queue = new VoronoiUtility.MergeEventQueue(0.0001f);
+			VoronoiUtility.CheckForMergeEvent_PointLineLine(0, 0, 1, 2, 3, positions, 0.0001f, segment, queue);
+			bool found = ExtractActualValuesFromQueue(queue);
+			Assert.IsTrue(found, string.Format("Expected a merge of point {0}, line {1} -> {2}, and line {3} -> {4} at {5} with distance {6:G8}, but got no merge.", p1a.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
 			AssertApproximatelyEqual(expectedMergePosition, actualMergePosition, margin, string.Format("Expected a merge of point {0}, line {1} -> {2}, and line {3} -> {4} at {5} with distance {6:G8}, but got a merge at {7} with distance {8:G8}.", p1a.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 			AssertApproximatelyEqual(expectedDistance, actualDistance, margin, string.Format("Expected a merge of point {0}, line {1} -> {2}, and line {3} -> {4} at {5} with distance {6:G8}, but got a merge at {7} with distance {8:G8}.", p1a.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 		}
 
 		[Test]
-		public static void CheckForMergeEvent_1P2L_SourcePointLineLine_()
+		public void CheckForMergeEvent_1P2L_SourcePointLineLine_()
 		{
 			var p1a = new Vector2(-12f, -5f);
 			var p1b = new Vector2(-7f, -17f);
@@ -766,21 +821,33 @@ namespace Experilous.Topologies.Tests
 			AssertTrue_CheckForMergeEvent_SourcePointLineLine(p1a, p1b, p2a, p2b, new Vector2(0f, 0f), 13f, 0.0001f);
 		}
 
+		[Test]
+		public void CheckForMergeEvent_1P2L_SourcePointLineLine_2()
+		{
+			var p1a = new Vector2(0f, -5f);
+			var p1b = new Vector2(10f, -5f);
+			var p2a = new Vector2(10f, -5f);
+			var p2b = new Vector2(1f, 7f);
+			AssertTrue_CheckForMergeEvent_SourcePointLineLine(p1a, p1b, p2a, p2b, new Vector2(0f, 0f), 5f, 0.0001f);
+		}
+
 		#endregion
 
 		#region LinePointPoint
 
-		private static void AssertTrue_CheckForMergeEvent_LineSourcePointPoint(Vector2 p0, Vector2 p2a, Vector2 p2b, Vector2 expectedMergePosition, float expectedDistance, float margin)
+		private void AssertTrue_CheckForMergeEvent_LineSourcePointPoint(Vector2 p0a, Vector2 p0b, Vector2 p2, Vector2 expectedMergePosition, float expectedDistance, float margin)
 		{
-			Vector2 actualMergePosition;
-			float actualDistance;
-			Assert.IsTrue(VoronoiUtility.CheckForMergeEvent_LineSourcePointPoint(p0, p2a, p2b, out actualMergePosition, out actualDistance), string.Format("Expected a merge of point {0}, point {1}, and line {2} -> {3} at {4} with distance {5:G8}, but got no merge.", p0.ToString("F4"), p2b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
-			AssertApproximatelyEqual(expectedMergePosition, actualMergePosition, margin, string.Format("Expected a merge of point {0}, point {1}, and line {2} -> {3} at {4} with distance {5:G8}, but got a merge at {6} with distance {7:G8}.", p0.ToString("F4"), p2b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
-			AssertApproximatelyEqual(expectedDistance, actualDistance, margin, string.Format("Expected a merge of points point {0}, point {1}, and line {2} -> {3} at {4} with distance {5:G8}, but got a merge at {6} with distance {7:G8}.", p0.ToString("F4"), p2b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
+			GraphNodeDataArray<Vector2> positions = new GraphNodeDataArray<Vector2>(new Vector2[] { p0a, p0b, p2 });
+			VoronoiUtility.MergeEventQueue queue = new VoronoiUtility.MergeEventQueue(0.0001f);
+			VoronoiUtility.CheckForMergeEvent_LinePointPoint(0, 1, 0, 2, positions, 0.0001f, segment, queue);
+			bool found = ExtractActualValuesFromQueue(queue);
+			Assert.IsTrue(found, string.Format("Expected a merge of line {0} -> {1}, point {2}, and point {3} at {4} with distance {5:G8}, but got no merge.", p0a.ToString("F4"), p0b.ToString("F4"), p0a.ToString("F4"), p2.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
+			AssertApproximatelyEqual(expectedMergePosition, actualMergePosition, margin, string.Format("Expected a merge of line {0} -> {1}, point {2}, and point {3} at {4} with distance {5:G8}, but got no merge.", p0a.ToString("F4"), p0b.ToString("F4"), p0a.ToString("F4"), p2.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
+			AssertApproximatelyEqual(expectedDistance, actualDistance, margin, string.Format("Expected a merge of line {0} -> {1}, point {2}, and point {3} at {4} with distance {5:G8}, but got no merge.", p0a.ToString("F4"), p0b.ToString("F4"), p0a.ToString("F4"), p2.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 		}
 
 		[Test]
-		public static void CheckForMergeEvent_2P1L_LineSourcePointPoint_LargeNegativeSlope()
+		public void CheckForMergeEvent_2P1L_LineSourcePointPoint_LargeNegativeSlope()
 		{
 			var p0a = new Vector2(-12f, 9f);
 			var p0b = new Vector2(-15f, 5f);
@@ -788,17 +855,19 @@ namespace Experilous.Topologies.Tests
 			AssertTrue_CheckForMergeEvent_LineSourcePointPoint(p0a, p0b, p2, new Vector2(0f, 0f), 15f, 0.0001f);
 		}
 
-		private static void AssertTrue_CheckForMergeEvent_LinePointPoint(Vector2 p0, Vector2 p1, Vector2 p2a, Vector2 p2b, Vector2 expectedMergePosition, float expectedDistance, float margin)
+		private void AssertTrue_CheckForMergeEvent_LinePointPoint(Vector2 p0a, Vector2 p0b, Vector2 p1, Vector2 p2, Vector2 expectedMergePosition, float expectedDistance, float margin)
 		{
-			Vector2 actualMergePosition;
-			float actualDistance;
-			Assert.IsTrue(VoronoiUtility.CheckForMergeEvent_LinePointPoint(p0, p1, p2a, p2b, margin, out actualMergePosition, out actualDistance), string.Format("Expected a merge of point {0}, point {1}, and line {2} -> {3} at {4} with distance {5:G8}, but got no merge.", p0.ToString("F4"), p1.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
-			AssertApproximatelyEqual(expectedMergePosition, actualMergePosition, margin, string.Format("Expected a merge of point {0}, point {1}, and line {2} -> {3} at {4} with distance {5:G8}, but got a merge at {6} with distance {7:G8}.", p0.ToString("F4"), p1.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
-			AssertApproximatelyEqual(expectedDistance, actualDistance, margin, string.Format("Expected a merge of points point {0}, point {1}, and line {2} -> {3} at {4} with distance {5:G8}, but got a merge at {6} with distance {7:G8}.", p0.ToString("F4"), p1.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
+			GraphNodeDataArray<Vector2> positions = new GraphNodeDataArray<Vector2>(new Vector2[] { p0a, p0b, p1, p2 });
+			VoronoiUtility.MergeEventQueue queue = new VoronoiUtility.MergeEventQueue(0.0001f);
+			VoronoiUtility.CheckForMergeEvent_LinePointPoint(0, 1, 2, 3, positions, 0.0001f, segment, queue);
+			bool found = ExtractActualValuesFromQueue(queue);
+			Assert.IsTrue(found, string.Format("Expected a merge of line {0} -> {1}, point {2}, and point {3} at {4} with distance {5:G8}, but got no merge.", p0a.ToString("F4"), p0b.ToString("F4"), p1.ToString("F4"), p2.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
+			AssertApproximatelyEqual(expectedMergePosition, actualMergePosition, margin, string.Format("Expected a merge of line {0} -> {1}, point {2}, and point {3} at {4} with distance {5:G8}, but got no merge.", p0a.ToString("F4"), p0b.ToString("F4"), p1.ToString("F4"), p2.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
+			AssertApproximatelyEqual(expectedDistance, actualDistance, margin, string.Format("Expected a merge of line {0} -> {1}, point {2}, and point {3} at {4} with distance {5:G8}, but got no merge.", p0a.ToString("F4"), p0b.ToString("F4"), p1.ToString("F4"), p2.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 		}
 
 		[Test]
-		public static void CheckForMergeEvent_2P1L_LinePointPoint_SmallPositiveSlope()
+		public void CheckForMergeEvent_2P1L_LinePointPoint_SmallPositiveSlope()
 		{
 			var p0a = new Vector2(-10f, -2f);
 			var p0b = new Vector2(-5f, -14f);
@@ -811,17 +880,19 @@ namespace Experilous.Topologies.Tests
 
 		#region LinePointLine
 
-		private static void AssertTrue_CheckForMergeEvent_LinePointLine(Vector2 p0a, Vector2 p0b, Vector2 p1, Vector2 p2a, Vector2 p2b, Vector2 expectedMergePosition, float expectedDistance, float margin)
+		private void AssertTrue_CheckForMergeEvent_LinePointLine(Vector2 p0a, Vector2 p0b, Vector2 p1, Vector2 p2a, Vector2 p2b, Vector2 expectedMergePosition, float expectedDistance, float margin)
 		{
-			Vector2 actualMergePosition;
-			float actualDistance;
-			Assert.IsTrue(VoronoiUtility.CheckForMergeEvent_LinePointLine(p0a, p0b, p1, p2a, p2b, margin, out actualMergePosition, out actualDistance), string.Format("Expected a merge of line {0} -> {1}, point {2}, and line {3} -> {4} at {5} with distance {6:G8}, but got no merge.", p0a.ToString("F4"), p0b.ToString("F4"), p1.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
+			GraphNodeDataArray<Vector2> positions = new GraphNodeDataArray<Vector2>(new Vector2[] { p0a, p0b, p1, p2a, p2b });
+			VoronoiUtility.MergeEventQueue queue = new VoronoiUtility.MergeEventQueue(0.0001f);
+			VoronoiUtility.CheckForMergeEvent_LinePointLine(0, 1, 2, 3, 4, positions, 0.0001f, segment, queue);
+			bool found = ExtractActualValuesFromQueue(queue);
+			Assert.IsTrue(found, string.Format("Expected a merge of line {0} -> {1}, point {2}, and line {3} -> {4} at {5} with distance {6:G8}, but got no merge.", p0a.ToString("F4"), p0b.ToString("F4"), p1.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
 			AssertApproximatelyEqual(expectedMergePosition, actualMergePosition, margin, string.Format("Expected a merge of line {0} -> {1}, point {2}, and line {3} -> {4} at {5} with distance {6:G8}, but got a merge at {7} with distance {8:G8}.", p0a.ToString("F4"), p0b.ToString("F4"), p1.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 			AssertApproximatelyEqual(expectedDistance, actualDistance, margin, string.Format("Expected a merge of line {0} -> {1}, point {2}, and line {3} -> {4} at {5} with distance {6:G8}, but got a merge at {7} with distance {8:G8}.", p0a.ToString("F4"), p0b.ToString("F4"), p1.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 		}
 
 		[Test]
-		public static void CheckForMergeEvent_1P2L_LinePointLine_SymmetricFunnelUp()
+		public void CheckForMergeEvent_1P2L_LinePointLine_SymmetricFunnelUp()
 		{
 			var p0a = new Vector2(-7f, -11.5f);
 			var p0b = new Vector2(-1f, -19.5f);
@@ -832,7 +903,7 @@ namespace Experilous.Topologies.Tests
 		}
 
 		[Test]
-		public static void CheckForMergeEvent_1P2L_LinePointLine_SymmetricFunnelUp45()
+		public void CheckForMergeEvent_1P2L_LinePointLine_SymmetricFunnelUp45()
 		{
 			var d = 10f * Mathf.Sqrt(2f) + 10f;
 			var p0a = new Vector2(-10f, -d);
@@ -844,7 +915,7 @@ namespace Experilous.Topologies.Tests
 		}
 
 		[Test]
-		public static void CheckForMergeEvent_1P2L_LinePointLine_()
+		public void CheckForMergeEvent_1P2L_LinePointLine_()
 		{
 			var p0a = new Vector2(-13f + 50f/13f, 120f/13f);
 			var p0b = new Vector2(-13f, 0f);
@@ -860,14 +931,14 @@ namespace Experilous.Topologies.Tests
 		[TestCase(1f, -55f, 0f, 0f)]
 		[TestCase(1f, 0f, 12f, -19f)]
 		[TestCase(2.5f, 55f, 12f, -19f)]
-		public static void CheckForMergeEvent_1P2L_LinePointLine_OpenUp(float s, float r, float dx, float dy)
+		public void CheckForMergeEvent_1P2L_LinePointLine_OpenUp(float s, float r, float dx, float dy)
 		{
 			var p0a = new Vector2(-32f, 1f);
 			var p0b = new Vector2(-2f, -39f);
 			var p1 = new Vector2(0f, -25f);
 			var p2a = new Vector2(2f, -39f);
 			var p2b = new Vector2(32f, 1f);
-			AssertTrue_CheckForMergeEvent(Vector2.zero, 25f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {2}, and line {3} -> {4}", p0a, p0b, p1, p2a, p2b);
+			AssertTrue_CheckForMergeEvent(Vector2.zero, 25f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {2}, and line {3} -> {4}", new int[] { 0, 1, 2, 3, 4 }, p0a, p0b, p1, p2a, p2b);
 		}
 
 		[TestCase(1f, 0f, 0f, 0f)]
@@ -876,14 +947,14 @@ namespace Experilous.Topologies.Tests
 		[TestCase(1f, -55f, 0f, 0f)]
 		[TestCase(1f, 0f, 12f, -19f)]
 		[TestCase(2.5f, 55f, 12f, -19f)]
-		public static void CheckForMergeEvent_1P2L_LinePointLine_OpenDown(float s, float r, float dx, float dy)
+		public void CheckForMergeEvent_1P2L_LinePointLine_OpenDown(float s, float r, float dx, float dy)
 		{
 			var p0a = new Vector2(-8f, 19f);
 			var p0b = new Vector2(-36f, -2f);
 			var p1 = new Vector2(0f, -20f);
 			var p2a = new Vector2(36f, -2f);
 			var p2b = new Vector2(8f, 19f);
-			AssertTrue_CheckForMergeEvent(Vector2.zero, 20f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {2}, and line {3} -> {4}", p0a, p0b, p1, p2a, p2b);
+			AssertTrue_CheckForMergeEvent(Vector2.zero, 20f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {2}, and line {3} -> {4}", new int[] { 0, 1, 2, 3, 4 }, p0a, p0b, p1, p2a, p2b);
 		}
 
 		[TestCase(1f, 0f, 0f, 0f)]
@@ -892,14 +963,14 @@ namespace Experilous.Topologies.Tests
 		[TestCase(1f, -55f, 0f, 0f)]
 		[TestCase(1f, 0f, 12f, -19f)]
 		[TestCase(2.5f, 55f, 12f, -19f)]
-		public static void CheckForMergeEvent_1P2L_LinePointLine_ParallelSymmetric(float s, float r, float dx, float dy)
+		public void CheckForMergeEvent_1P2L_LinePointLine_ParallelSymmetric(float s, float r, float dx, float dy)
 		{
 			var p0a = new Vector2(-1f, 1f);
 			var p0b = new Vector2(-1f, -2f);
 			var p1 = new Vector2(0f, -1f);
 			var p2a = new Vector2(1f, -2f);
 			var p2b = new Vector2(1f, 1f);
-			AssertTrue_CheckForMergeEvent(Vector2.zero, 1f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {2}, and line {3} -> {4}", p0a, p0b, p1, p2a, p2b);
+			AssertTrue_CheckForMergeEvent(Vector2.zero, 1f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {2}, and line {3} -> {4}", new int[] { 0, 1, 2, 3, 4 }, p0a, p0b, p1, p2a, p2b);
 		}
 
 		[TestCase(1f, 0f, 0f, 0f)]
@@ -908,31 +979,63 @@ namespace Experilous.Topologies.Tests
 		[TestCase(1f, -55f, 0f, 0f)]
 		[TestCase(1f, 0f, 12f, -19f)]
 		[TestCase(2.5f, 55f, 12f, -19f)]
-		public static void CheckForMergeEvent_1P2L_LinePointLine_ParallelAsymmetric(float s, float r, float dx, float dy)
+		public void CheckForMergeEvent_1P2L_LinePointLine_ParallelAsymmetric(float s, float r, float dx, float dy)
 		{
 			var p0a = new Vector2(-5f, 1f);
 			var p0b = new Vector2(-5f, -5f);
 			var p1 = new Vector2(0f, -4f);
 			var p2a = new Vector2(5f, -5f);
 			var p2b = new Vector2(5f, 1f);
-			AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {2}, and line {3} -> {4}", p0a, p0b, p1, p2a, p2b);
+			AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {2}, and line {3} -> {4}", new int[] { 0, 1, 2, 3, 4 }, p0a, p0b, p1, p2a, p2b);
+		}
+
+		[TestCase(1f, 0f, 0f, 0f)]
+		[TestCase(2.5f, 0f, 0f, 0f)]
+		[TestCase(1f, 55f, 0f, 0f)]
+		[TestCase(1f, -55f, 0f, 0f)]
+		[TestCase(1f, 0f, 12f, -19f)]
+		[TestCase(2.5f, 55f, 12f, -19f)]
+		public void CheckForMergeEvent_1P2L_LineSourcePointLine(float s, float r, float dx, float dy)
+		{
+			var p0a = new Vector2(-10f, -5f);
+			var p0b = new Vector2(10f, -5f);
+			var p2a = new Vector2(4f, 3f);
+			var p2b = new Vector2(-2f, 11f);
+			AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {2}, and line {2} -> {3}", new int[] { 0, 1, 2, 2, 3 }, p0a, p0b, p2a, p2b);
+		}
+
+		[TestCase(1f, 0f, 0f, 0f)]
+		[TestCase(2.5f, 0f, 0f, 0f)]
+		[TestCase(1f, 55f, 0f, 0f)]
+		[TestCase(1f, -55f, 0f, 0f)]
+		[TestCase(1f, 0f, 12f, -19f)]
+		[TestCase(2.5f, 55f, 12f, -19f)]
+		public void CheckForMergeEvent_1P2L_LineTargetPointLine(float s, float r, float dx, float dy)
+		{
+			var p0a = new Vector2(-10f, -5f);
+			var p0b = new Vector2(0f, -5f);
+			var p2a = new Vector2(10f, -5f);
+			var p2b = new Vector2(1f, 7f);
+			AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {1}, and line {2} -> {3}", new int[] { 0, 1, 1, 2, 3 }, p0a, p0b, p2a, p2b);
 		}
 
 		#endregion
 
 		#region LineLinePoint
 
-		private static void AssertTrue_CheckForMergeEvent_LineLinePoint(Vector2 p0a, Vector2 p0b, Vector2 p1a, Vector2 p1b, Vector2 p2, Vector2 expectedMergePosition, float expectedDistance, float margin)
+		private void AssertTrue_CheckForMergeEvent_LineLinePoint(Vector2 p0a, Vector2 p0b, Vector2 p1a, Vector2 p1b, Vector2 p2, Vector2 expectedMergePosition, float expectedDistance, float margin)
 		{
-			Vector2 actualMergePosition;
-			float actualDistance;
-			Assert.IsTrue(VoronoiUtility.CheckForMergeEvent_LineLinePoint(p0a, p0b, p1a, p1b, p2, margin, out actualMergePosition, out actualDistance), string.Format("Expected a merge of line {0} -> {1}, line {2} -> {3}, and point {4} at {5} with distance {6:G8}, but got no merge.", p0a.ToString("F4"), p0b.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p2.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
+			GraphNodeDataArray<Vector2> positions = new GraphNodeDataArray<Vector2>(new Vector2[] { p0a, p0b, p1a, p1b, p2 });
+			VoronoiUtility.MergeEventQueue queue = new VoronoiUtility.MergeEventQueue(0.0001f);
+			VoronoiUtility.CheckForMergeEvent_LineLinePoint(0, 1, 2, 3, 4, positions, 0.0001f, segment, queue);
+			bool found = ExtractActualValuesFromQueue(queue);
+			Assert.IsTrue(found, string.Format("Expected a merge of line {0} -> {1}, line {2} -> {3}, and point {4} at {5} with distance {6:G8}, but got no merge.", p0a.ToString("F4"), p0b.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p2.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
 			AssertApproximatelyEqual(expectedMergePosition, actualMergePosition, margin, string.Format("Expected a merge of line {0} -> {1}, line {2} -> {3}, and point {4} at {5} with distance {6:G8}, but got a merge at {7} with distance {8:G8}.", p0a.ToString("F4"), p0b.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p2.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 			AssertApproximatelyEqual(expectedDistance, actualDistance, margin, string.Format("Expected a merge of line {0} -> {1}, line {2} -> {3}, and point {4} at {5} with distance {6:G8}, but got a merge at {7} with distance {8:G8}.", p0a.ToString("F4"), p0b.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p2.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 		}
 
 		[Test]
-		public static void CheckForMergeEvent_1P2L_LineLinePoint_()
+		public void CheckForMergeEvent_1P2L_LineLinePoint_()
 		{
 			var p0a = new Vector2(-7f, -1f);
 			var p0b = new Vector2(-2.6f, -4.3f);
@@ -942,18 +1045,19 @@ namespace Experilous.Topologies.Tests
 			AssertTrue_CheckForMergeEvent_LineLinePoint(p0a, p0b, p1a, p1b, p2, new Vector2(0f, 0f), 5f, 0.0001f);
 		}
 
-		private static void AssertTrue_CheckForMergeEvent_LineLineTargetPoint(Vector2 p0a, Vector2 p0b, Vector2 p1a, Vector2 p1b, Vector2 expectedMergePosition, float expectedDistance, float margin)
+		private void AssertTrue_CheckForMergeEvent_LineLineTargetPoint(Vector2 p0a, Vector2 p0b, Vector2 p1a, Vector2 p1b, Vector2 expectedMergePosition, float expectedDistance, float margin)
 		{
-			Vector2 actualMergePosition;
-			float actualDistance;
-			Assert.IsTrue(VoronoiUtility.CheckForMergeEvent_LineLineTargetPoint(p0a, p0b, p1a, p1b, out actualMergePosition, out actualDistance), string.Format("Expected a merge of line {0} -> {1}, line {2} -> {3}, and point {4} at {5} with distance {6:G8}, but got no merge.", p0a.ToString("F4"), p0b.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p1b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
+			GraphNodeDataArray<Vector2> positions = new GraphNodeDataArray<Vector2>(new Vector2[] { p0a, p0b, p1a, p1b });
+			VoronoiUtility.MergeEventQueue queue = new VoronoiUtility.MergeEventQueue(0.0001f);
+			VoronoiUtility.CheckForMergeEvent_LineLinePoint(0, 1, 2, 3, 3, positions, 0.0001f, segment, queue);
+			bool found = ExtractActualValuesFromQueue(queue);
+			Assert.IsTrue(found, string.Format("Expected a merge of line {0} -> {1}, line {2} -> {3}, and point {4} at {5} with distance {6:G8}, but got no merge.", p0a.ToString("F4"), p0b.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p1b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
 			AssertApproximatelyEqual(expectedMergePosition, actualMergePosition, margin, string.Format("Expected a merge of line {0} -> {1}, line {2} -> {3}, and point {4} at {5} with distance {6:G8}, but got a merge at {7} with distance {8:G8}.", p0a.ToString("F4"), p0b.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p1b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 			AssertApproximatelyEqual(expectedDistance, actualDistance, margin, string.Format("Expected a merge of line {0} -> {1}, line {2} -> {3}, and point {4} at {5} with distance {6:G8}, but got a merge at {7} with distance {8:G8}.", p0a.ToString("F4"), p0b.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p1b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
-			Debug.LogFormat("{0:F8}, {1:F8}", expectedDistance, actualDistance);
 		}
 
 		[Test]
-		public static void CheckForMergeEvent_1P2L_LineLineTargetPoint_()
+		public void CheckForMergeEvent_1P2L_LineLineTargetPoint_()
 		{
 			var p0a = new Vector2(-1f, -14.5f);
 			var p0b = new Vector2(6.2f, -11.5f);
@@ -962,21 +1066,33 @@ namespace Experilous.Topologies.Tests
 			AssertTrue_CheckForMergeEvent_LineLineTargetPoint(p0a, p0b, p1a, p1b, new Vector2(0f, 0f), 13f, 0.0001f);
 		}
 
+		[Test]
+		public void CheckForMergeEvent_1P2L_LineLineTargetPoint_2()
+		{
+			var p0a = new Vector2(-10f, -5f);
+			var p0b = new Vector2(10f, -5f);
+			var p1a = new Vector2(10f, -5f);
+			var p1b = new Vector2(4f, 3f);
+			AssertTrue_CheckForMergeEvent_LineLineTargetPoint(p0a, p0b, p1a, p1b, new Vector2(0f, 0f), 5f, 0.0001f);
+		}
+
 		#endregion
 
 		#region LineLineLine
 
-		private static void AssertTrue_CheckForMergeEvent_LineLineLine(Vector2 p0a, Vector2 p0b, Vector2 p1a, Vector2 p1b, Vector2 p2a, Vector2 p2b, Vector2 expectedMergePosition, float expectedDistance, float margin)
+		private void AssertTrue_CheckForMergeEvent_LineLineLine(Vector2 p0a, Vector2 p0b, Vector2 p1a, Vector2 p1b, Vector2 p2a, Vector2 p2b, Vector2 expectedMergePosition, float expectedDistance, float margin)
 		{
-			Vector2 actualMergePosition;
-			float actualDistance;
-			Assert.IsTrue(VoronoiUtility.CheckForMergeEvent_LineLineLine(p0a, p0b, p1a, p1b, p2a, p2b, margin, out actualMergePosition, out actualDistance), string.Format("Expected a merge of line {0} -> {1}, line {2} -> {3}, and line {4} -> {5} at {6} with distance {7:G8}, but got no merge.", p0a.ToString("F4"), p0b.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
+			GraphNodeDataArray<Vector2> positions = new GraphNodeDataArray<Vector2>(new Vector2[] { p0a, p0b, p1a, p1b, p2a, p2b });
+			VoronoiUtility.MergeEventQueue queue = new VoronoiUtility.MergeEventQueue(0.0001f);
+			VoronoiUtility.CheckForMergeEvent_LineLineLine(0, 1, 2, 3, 4, 5, positions, 0.0001f, segment, queue);
+			bool found = ExtractActualValuesFromQueue(queue);
+			Assert.IsTrue(found, string.Format("Expected a merge of line {0} -> {1}, line {2} -> {3}, and line {4} -> {5} at {6} with distance {7:G8}, but got no merge.", p0a.ToString("F4"), p0b.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance));
 			AssertApproximatelyEqual(expectedMergePosition, actualMergePosition, margin, string.Format("Expected a merge of line {0} -> {1}, line {2} -> {3}, and line {4} -> {5} at {6} with distance {7:G8}, but got a merge at {8} with distance {9:G8}.", p0a.ToString("F4"), p0b.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 			AssertApproximatelyEqual(expectedDistance, actualDistance, margin, string.Format("Expected a merge of line {0} -> {1}, line {2} -> {3}, and line {4} -> {5} at {6} with distance {7:G8}, but got a merge at {8} with distance {9:G8}.", p0a.ToString("F4"), p0b.ToString("F4"), p1a.ToString("F4"), p1b.ToString("F4"), p2a.ToString("F4"), p2b.ToString("F4"), expectedMergePosition.ToString("F4"), expectedDistance, actualMergePosition.ToString("F4"), actualDistance));
 		}
 
 		[Test]
-		public static void CheckForMergeEvent_0P3L_LineLineLine_()
+		public void CheckForMergeEvent_0P3L_LineLineLine_()
 		{
 			var p0a = new Vector2(-15f, 0f);
 			var p0b = new Vector2(-6f, -12f);
@@ -990,7 +1106,6 @@ namespace Experilous.Topologies.Tests
 		#endregion
 
 		#endregion
-#endif
 	}
 }
 #endif
