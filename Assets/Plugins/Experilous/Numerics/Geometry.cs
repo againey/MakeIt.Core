@@ -635,6 +635,11 @@ namespace Experilous.Numerics
 			return (point - ray.origin).ProjectOntoUnit(ray.direction) + ray.origin;
 		}
 
+		public static Vector2 ProjectOnto(this Vector2 point, ScaledRay2D ray)
+		{
+			return (point - ray.origin).ProjectOnto(ray.direction) + ray.origin;
+		}
+
 		public static Vector3 ProjectOnto(this Vector3 point, Vector3 rayOrigin, Vector3 rayVector)
 		{
 			return (point - rayOrigin).ProjectOnto(rayVector) + rayOrigin;
