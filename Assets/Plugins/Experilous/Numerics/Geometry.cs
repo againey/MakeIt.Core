@@ -110,6 +110,52 @@ namespace Experilous.Numerics
 			return Mathf.Atan2(Vector3.Cross(lhs, rhs).magnitude, Vector3.Dot(lhs, rhs));
 		}
 
+		public static bool IsBetween(this Vector2 v, Vector2 a, Vector2 b, float errorMargin = 0.0001f)
+		{
+			float crossAB = DotPerpendicularCCW(a, b);
+			float crossVA = DotPerpendicularCCW(v, a);
+			float crossVB = DotPerpendicularCCW(v, b);
+			if (crossAB > errorMargin)
+			{
+				return crossVA < -errorMargin && crossVB > errorMargin;
+			}
+			else if (crossAB < -errorMargin)
+			{
+				return crossVA < -errorMargin || crossVB > errorMargin;
+			}
+			else if (Vector2.Dot(a, b) < 0f)
+			{
+				return crossVA < -errorMargin;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		public static bool IsBetween(this Vector3 v, Vector3 a, Vector3 b, Vector3 normal, float errorMargin = 0.0001f)
+		{
+			float crossAB = Vector3.Dot(Vector3.Cross(a, b), normal);
+			float crossVA = Vector3.Dot(Vector3.Cross(v, a), normal);
+			float crossVB = Vector3.Dot(Vector3.Cross(v, b), normal);
+			if (crossAB > errorMargin)
+			{
+				return crossVA < -errorMargin && crossVB > errorMargin;
+			}
+			else if (crossAB < -errorMargin)
+			{
+				return crossVA < -errorMargin || crossVB > errorMargin;
+			}
+			else if (Vector2.Dot(a, b) < 0f)
+			{
+				return crossVA < -errorMargin;
+			}
+			else
+			{
+				return false;
+			}
+		}
+
 		/// <summary>
 		/// The spherical length of the shortest great circle arc between the given vectors.
 		/// </summary>

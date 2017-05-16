@@ -59,7 +59,14 @@ namespace Experilous.Topologies.Tests
 				else if (parameterInfo[i].ParameterType == typeof(VoronoiUtility.BeachSegment)) parameters[i] = segment;
 				else if (parameterInfo[i].ParameterType == typeof(VoronoiUtility.MergeEventQueue)) parameters[i] = queue;
 			}
-			method.Invoke(null, parameters);
+			try
+			{
+				method.Invoke(null, parameters);
+			}
+			catch (System.Reflection.TargetInvocationException ex)
+			{
+				throw ex.InnerException;
+			}
 
 			bool found = ExtractActualValuesFromQueue(queue);
 
@@ -100,7 +107,14 @@ namespace Experilous.Topologies.Tests
 				else if (parameterInfo[i].ParameterType == typeof(VoronoiUtility.BeachSegment)) parameters[i] = segment;
 				else if (parameterInfo[i].ParameterType == typeof(VoronoiUtility.MergeEventQueue)) parameters[i] = queue;
 			}
-			method.Invoke(null, parameters);
+			try
+			{
+				method.Invoke(null, parameters);
+			}
+			catch (System.Reflection.TargetInvocationException ex)
+			{
+				throw ex.InnerException;
+			}
 
 			bool found = ExtractActualValuesFromQueue(queue);
 
@@ -970,7 +984,14 @@ namespace Experilous.Topologies.Tests
 			var p1 = new Vector2(0f, -1f);
 			var p2a = new Vector2(1f, -2f);
 			var p2b = new Vector2(1f, 1f);
-			AssertTrue_CheckForMergeEvent(Vector2.zero, 1f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {2}, and line {3} -> {4}", new int[] { 0, 1, 2, 3, 4 }, p0a, p0b, p1, p2a, p2b);
+			try
+			{
+				AssertTrue_CheckForMergeEvent(Vector2.zero, 1f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {2}, and line {3} -> {4}", new int[] { 0, 1, 2, 3, 4 }, p0a, p0b, p1, p2a, p2b);
+			}
+			catch (System.NotImplementedException)
+			{
+				Assert.Inconclusive("Not Yet Implemented");
+			}
 		}
 
 		[TestCase(1f, 0f, 0f, 0f)]
@@ -986,7 +1007,14 @@ namespace Experilous.Topologies.Tests
 			var p1 = new Vector2(0f, -4f);
 			var p2a = new Vector2(5f, -5f);
 			var p2b = new Vector2(5f, 1f);
-			AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {2}, and line {3} -> {4}", new int[] { 0, 1, 2, 3, 4 }, p0a, p0b, p1, p2a, p2b);
+			try
+			{
+				AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {2}, and line {3} -> {4}", new int[] { 0, 1, 2, 3, 4 }, p0a, p0b, p1, p2a, p2b);
+			}
+			catch (System.NotImplementedException)
+			{
+				Assert.Inconclusive("Not Yet Implemented");
+			}
 		}
 
 		[TestCase(1f, 0f, 0f, 0f)]
@@ -1001,6 +1029,21 @@ namespace Experilous.Topologies.Tests
 			var p0b = new Vector2(10f, -5f);
 			var p2a = new Vector2(4f, 3f);
 			var p2b = new Vector2(-2f, 11f);
+			AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {2}, and line {2} -> {3}", new int[] { 0, 1, 2, 2, 3 }, p0a, p0b, p2a, p2b);
+		}
+
+		[TestCase(1f, 0f, 0f, 0f)]
+		[TestCase(2.5f, 0f, 0f, 0f)]
+		[TestCase(1f, 55f, 0f, 0f)]
+		[TestCase(1f, -55f, 0f, 0f)]
+		[TestCase(1f, 0f, 12f, -19f)]
+		[TestCase(2.5f, 55f, 12f, -19f)]
+		public void CheckForMergeEvent_1P2L_LineSourcePointLine_2(float s, float r, float dx, float dy)
+		{
+			var p0a = new Vector2(-5f, 10f);
+			var p0b = new Vector2(-5f, -10f);
+			var p2a = new Vector2(3f, 4f);
+			var p2b = new Vector2(-5f, 10f);
 			AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {2}, and line {2} -> {3}", new int[] { 0, 1, 2, 2, 3 }, p0a, p0b, p2a, p2b);
 		}
 
@@ -1046,6 +1089,21 @@ namespace Experilous.Topologies.Tests
 			var p0b = new Vector2(0f, -5f);
 			var p2a = new Vector2(10f, -5f);
 			var p2b = new Vector2(1f, 7f);
+			AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {1}, and line {2} -> {3}", new int[] { 0, 1, 1, 2, 3 }, p0a, p0b, p2a, p2b);
+		}
+
+		[TestCase(1f, 0f, 0f, 0f)]
+		[TestCase(2.5f, 0f, 0f, 0f)]
+		[TestCase(1f, 55f, 0f, 0f)]
+		[TestCase(1f, -55f, 0f, 0f)]
+		[TestCase(1f, 0f, 12f, -19f)]
+		[TestCase(2.5f, 55f, 12f, -19f)]
+		public void CheckForMergeEvent_1P2L_LineTargetPointLine_2(float s, float r, float dx, float dy)
+		{
+			var p0a = new Vector2(5f, 10f);
+			var p0b = new Vector2(-3f, 4f);
+			var p2a = new Vector2(5f, -10f);
+			var p2b = new Vector2(5f, 10f);
 			AssertTrue_CheckForMergeEvent(Vector2.zero, 5f, 0.0001f, new Transform2(s, r, dx, dy), "LinePointLine", "line {0} -> {1}, point {1}, and line {2} -> {3}", new int[] { 0, 1, 1, 2, 3 }, p0a, p0b, p2a, p2b);
 		}
 
