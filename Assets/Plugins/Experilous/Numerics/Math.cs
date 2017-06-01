@@ -79,6 +79,36 @@ namespace Experilous.Numerics
 			return n < 0f ? -1f : +1f;
 		}
 
+		public static bool ApproximateEqual(float lhs, float rhs, float epsilon = 0.0001f)
+		{
+			return Mathf.Abs(rhs - lhs) < epsilon;
+		}
+
+		public static bool ApproximateNotEqual(float lhs, float rhs, float epsilon = 0.0001f)
+		{
+			return Mathf.Abs(rhs - lhs) >= epsilon;
+		}
+
+		public static bool ApproximateLessThan(float lhs, float rhs, float epsilon = 0.0001f)
+		{
+			return rhs - lhs >= epsilon;
+		}
+
+		public static bool ApproximateLessOrEqual(float lhs, float rhs, float epsilon = 0.0001f)
+		{
+			return lhs - rhs < epsilon;
+		}
+
+		public static bool ApproximateGreaterThan(float lhs, float rhs, float epsilon = 0.0001f)
+		{
+			return lhs - rhs >= epsilon;
+		}
+
+		public static bool ApproximateGreaterOrEqual(float lhs, float rhs, float epsilon = 0.0001f)
+		{
+			return rhs - lhs < epsilon;
+		}
+
 		/// <summary>
 		/// Performs a linear interpolation from <paramref name="a"/> to <paramref name="b"/> using the interpolation parameter <paramref name="t"/>, which does not get clamped to the range [0, 1] first.
 		/// </summary>
