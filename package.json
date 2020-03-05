@@ -1,0 +1,25 @@
+{
+  "name": "com.andygainey.makeit.core",
+  "version": "1.0.0",
+  "displayName": "MakeIt.Core",
+  "description": "Shared support library for other MakeIt packages",
+  "unity": "2019.3",
+  "unityRelease": "3f1",
+  "keywords": [
+    "collections",
+    "containers",
+    "math",
+    "maths",
+    "mathematics",
+    "numerics",
+    "geometry",
+    "utility",
+    "utilities"
+  ],
+  "author": {
+    "name": "Andy Gainey"
+  },
+  "dependencies": {
+    "com.unity.test-framework": "1.1.11"
+  }
+}

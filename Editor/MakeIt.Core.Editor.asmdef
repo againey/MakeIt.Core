@@ -1,0 +1,18 @@
+{
+    "name": "MakeIt.Core.Editor",
+    "references": [
+        "GUID:b73327a116c48944e84d3ff2de834a07",
+        "GUID:b29e5b94a73ad954ca922da4c1587b97"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
