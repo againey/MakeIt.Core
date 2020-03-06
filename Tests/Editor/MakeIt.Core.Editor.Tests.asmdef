@@ -1,0 +1,22 @@
+{
+    "name": "MakeIt.Core.Editor.Tests",
+    "references": [
+        "GUID:b29e5b94a73ad954ca922da4c1587b97",
+        "GUID:3b39f206c84b1444fb3a781d5f6c4411",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:0acc523941302664db1f4e527237feb3"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
